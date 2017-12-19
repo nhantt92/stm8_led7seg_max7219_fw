@@ -116,25 +116,25 @@
       000049 6B 01            [ 1]  116 	ld	(0x01, sp), a
                                     117 ;	user/max7219.c: 27: for(cnt=0; cnt<8; cnt++)
       00004B AEr00r00         [ 2]  118 	ldw	x, #_max7seg+0
-      00004E 1F 03            [ 2]  119 	ldw	(0x03, sp), x
-      000050 1E 03            [ 2]  120 	ldw	x, (0x03, sp)
+      00004E 1F 05            [ 2]  119 	ldw	(0x05, sp), x
+      000050 1E 05            [ 2]  120 	ldw	x, (0x05, sp)
       000052 1C 00 04         [ 2]  121 	addw	x, #0x0004
-      000055 1F 05            [ 2]  122 	ldw	(0x05, sp), x
+      000055 1F 03            [ 2]  122 	ldw	(0x03, sp), x
       000057 0F 02            [ 1]  123 	clr	(0x02, sp)
       000059                        124 00105$:
                                     125 ;	user/max7219.c: 29: GPIO_WriteLow(max7seg.port, max7seg.clk);
-      000059 1E 05            [ 2]  126 	ldw	x, (0x05, sp)
+      000059 1E 03            [ 2]  126 	ldw	x, (0x03, sp)
       00005B F6               [ 1]  127 	ld	a, (x)
-      00005C 1E 03            [ 2]  128 	ldw	x, (0x03, sp)
+      00005C 1E 05            [ 2]  128 	ldw	x, (0x05, sp)
       00005E FE               [ 2]  129 	ldw	x, (x)
       00005F 88               [ 1]  130 	push	a
       000060 89               [ 2]  131 	pushw	x
       000061 CDr00r00         [ 4]  132 	call	_GPIO_WriteLow
       000064 5B 03            [ 2]  133 	addw	sp, #3
-      000066 1E 03            [ 2]  134 	ldw	x, (0x03, sp)
+      000066 1E 05            [ 2]  134 	ldw	x, (0x05, sp)
       000068 FE               [ 2]  135 	ldw	x, (x)
                                     136 ;	user/max7219.c: 31: GPIO_WriteHigh(max7seg.port, max7seg.data);
-      000069 16 03            [ 2]  137 	ldw	y, (0x03, sp)
+      000069 16 05            [ 2]  137 	ldw	y, (0x05, sp)
       00006B 90 E6 02         [ 1]  138 	ld	a, (0x2, y)
                                     139 ;	user/max7219.c: 30: if(dsent&0x80)
       00006E 0D 01            [ 1]  140 	tnz	(0x01, sp)
@@ -153,9 +153,9 @@
       000080 5B 03            [ 2]  153 	addw	sp, #3
       000082                        154 00103$:
                                     155 ;	user/max7219.c: 34: GPIO_WriteHigh(max7seg.port, max7seg.clk);
-      000082 1E 05            [ 2]  156 	ldw	x, (0x05, sp)
+      000082 1E 03            [ 2]  156 	ldw	x, (0x03, sp)
       000084 F6               [ 1]  157 	ld	a, (x)
-      000085 1E 03            [ 2]  158 	ldw	x, (0x03, sp)
+      000085 1E 05            [ 2]  158 	ldw	x, (0x05, sp)
       000087 FE               [ 2]  159 	ldw	x, (x)
       000088 88               [ 1]  160 	push	a
       000089 89               [ 2]  161 	pushw	x
@@ -227,18 +227,18 @@
       0000E0 52 04            [ 2]  227 	sub	sp, #4
                                     228 ;	user/max7219.c: 51: GPIO_Init(max7seg.port, max7seg.data|max7seg.cs|max7seg.clk, GPIO_MODE_OUT_PP_HIGH_FAST);
       0000E2 AEr00r00         [ 2]  229 	ldw	x, #_max7seg+0
-      0000E5 1F 03            [ 2]  230 	ldw	(0x03, sp), x
-      0000E7 1E 03            [ 2]  231 	ldw	x, (0x03, sp)
+      0000E5 1F 02            [ 2]  230 	ldw	(0x02, sp), x
+      0000E7 1E 02            [ 2]  231 	ldw	x, (0x02, sp)
       0000E9 E6 02            [ 1]  232 	ld	a, (0x2, x)
-      0000EB 6B 02            [ 1]  233 	ld	(0x02, sp), a
-      0000ED 1E 03            [ 2]  234 	ldw	x, (0x03, sp)
+      0000EB 6B 01            [ 1]  233 	ld	(0x01, sp), a
+      0000ED 1E 02            [ 2]  234 	ldw	x, (0x02, sp)
       0000EF E6 03            [ 1]  235 	ld	a, (0x3, x)
-      0000F1 1A 02            [ 1]  236 	or	a, (0x02, sp)
-      0000F3 6B 01            [ 1]  237 	ld	(0x01, sp), a
-      0000F5 1E 03            [ 2]  238 	ldw	x, (0x03, sp)
+      0000F1 1A 01            [ 1]  236 	or	a, (0x01, sp)
+      0000F3 6B 04            [ 1]  237 	ld	(0x04, sp), a
+      0000F5 1E 02            [ 2]  238 	ldw	x, (0x02, sp)
       0000F7 E6 04            [ 1]  239 	ld	a, (0x4, x)
-      0000F9 1A 01            [ 1]  240 	or	a, (0x01, sp)
-      0000FB 1E 03            [ 2]  241 	ldw	x, (0x03, sp)
+      0000F9 1A 04            [ 1]  240 	or	a, (0x04, sp)
+      0000FB 1E 02            [ 2]  241 	ldw	x, (0x02, sp)
       0000FD FE               [ 2]  242 	ldw	x, (x)
       0000FE 4B F0            [ 1]  243 	push	#0xf0
       000100 88               [ 1]  244 	push	a
@@ -265,8 +265,8 @@
       000121 4B 0F            [ 1]  265 	push	#0x0f
       000123 CDr00r9C         [ 4]  266 	call	_setCommand
       000126 85               [ 2]  267 	popw	x
-                                    268 ;	user/max7219.c: 56: setCommand(INTENSITY, 0x04); // brightness 9/32
-      000127 4B 04            [ 1]  269 	push	#0x04
+                                    268 ;	user/max7219.c: 56: setCommand(INTENSITY, 0x01); // brightness 9/32
+      000127 4B 01            [ 1]  269 	push	#0x01
       000129 4B 0A            [ 1]  270 	push	#0x0a
       00012B CDr00r9C         [ 4]  271 	call	_setCommand
       00012E 5B 06            [ 2]  272 	addw	sp, #6

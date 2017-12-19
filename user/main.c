@@ -20,6 +20,8 @@
 #include "timerTick.h"
 #include "stm8s_tim4.h"
 
+
+TIME tick;
 void GPIO_setup(void); 
 void SPI_setup(void);
 void delay(uint16_t x)
@@ -51,11 +53,9 @@ void IWDG_Config(void)
   IWDG_Enable();
 }
 
-
 void main() 
 {
-  uint8_t i;
-  const unsigned char data[11] = {0x7E, 0x30, 0x6D, 0x79, 0x33, 0x5B, 0x5F, 0x70,0x7F, 0x7B, 0x00}; 
+  uint8_t hh = 0, mm = 0, ss = 0;
   CLK_Config();
   // GPIO_setup(); 
   // SPI_setup(); 
@@ -64,14 +64,38 @@ void main()
   TIMER_Init();
   IWDG_Config();
   enableInterrupts();
-  GPIO_WriteLow(max7seg.port, max7seg.cs);
-  Max7219_Write_Byte(DIG0);
-  Max7219_Write_Byte(data[0]);
-  GPIO_WriteLow(max7seg.port, max7seg.cs);
-  GPIO_WriteHigh(max7seg.port, max7seg.cs);
+  setIntensity(0x03);
+  TIMER_InitTime(&tick);
+  //test
+  send7Seg(DIG7, 0);
+  send7Seg(DIG6, 0);
+  send7Seg(DIG5, 10);
+  send7Seg(DIG4, 0);
+  send7Seg(DIG3, 0);
+  send7Seg(DIG2, 10);
+  send7Seg(DIG1, 0);
+  send7Seg(DIG0, 0);
   while(TRUE) 
   {
-
+      if(TIMER_CheckTimeMS(&tick, 1000) == 0)
+      {
+        if(++ss >=60)
+        {
+          ss=0;
+          if(++mm >=60)
+          {
+            mm=0;
+            if(++hh >= 24)
+              hh = 0;
+          }
+        }
+        send7Seg(DIG0, ss%10);
+        send7Seg(DIG1, ss/10);
+        send7Seg(DIG3, mm%10);
+        send7Seg(DIG4, mm/10);
+        send7Seg(DIG6, hh%10);
+        send7Seg(DIG7, hh/10);
+      }
   }
 }
 

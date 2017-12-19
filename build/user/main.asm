@@ -11,25 +11,29 @@
 	.globl _main
 	.globl _TIM4_UPD_OVF_IRQHandler
 	.globl _delay
+	.globl _TIMER_CheckTimeMS
+	.globl _TIMER_InitTime
 	.globl _TIMER_Inc
 	.globl _TIMER_Init
+	.globl _send7Seg
+	.globl _setIntensity
 	.globl _Init
 	.globl _max7Seg
-	.globl _Max7219_Write_Byte
 	.globl _TIM4_ClearITPendingBit
 	.globl _IWDG_Enable
 	.globl _IWDG_ReloadCounter
 	.globl _IWDG_SetReload
 	.globl _IWDG_SetPrescaler
 	.globl _IWDG_WriteAccessCmd
-	.globl _GPIO_WriteLow
-	.globl _GPIO_WriteHigh
 	.globl _CLK_Config
+	.globl _tick
 	.globl _IWDG_Config
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
 	.area DATA
+_tick::
+	.ds 6
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
@@ -122,13 +126,13 @@ __sdcc_program_startup:
 ; code
 ;--------------------------------------------------------
 	.area CODE
-;	user/main.c: 25: void delay(uint16_t x)
+;	user/main.c: 27: void delay(uint16_t x)
 ;	-----------------------------------------
 ;	 function delay
 ;	-----------------------------------------
 _delay:
 	pushw	x
-;	user/main.c: 27: while(x--);
+;	user/main.c: 29: while(x--);
 	ldw	x, (0x05, sp)
 00101$:
 	ldw	(0x01, sp), x
@@ -137,88 +141,52 @@ _delay:
 	jrne	00101$
 	popw	x
 	ret
-;	user/main.c: 30: INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
+;	user/main.c: 32: INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
 ;	-----------------------------------------
 ;	 function TIM4_UPD_OVF_IRQHandler
 ;	-----------------------------------------
 _TIM4_UPD_OVF_IRQHandler:
 	div	x, a
-;	user/main.c: 32: TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
+;	user/main.c: 34: TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
 	push	#0x01
 	call	_TIM4_ClearITPendingBit
 	pop	a
-;	user/main.c: 33: TIMER_Inc();
+;	user/main.c: 35: TIMER_Inc();
 	call	_TIMER_Inc
-;	user/main.c: 34: IWDG_ReloadCounter();
+;	user/main.c: 36: IWDG_ReloadCounter();
 	call	_IWDG_ReloadCounter
 	iret
-;	user/main.c: 37: void IWDG_Config(void)
+;	user/main.c: 39: void IWDG_Config(void)
 ;	-----------------------------------------
 ;	 function IWDG_Config
 ;	-----------------------------------------
 _IWDG_Config:
-;	user/main.c: 41: IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
+;	user/main.c: 43: IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
 	push	#0x55
 	call	_IWDG_WriteAccessCmd
 	pop	a
-;	user/main.c: 43: IWDG_SetPrescaler(IWDG_Prescaler_256);
+;	user/main.c: 45: IWDG_SetPrescaler(IWDG_Prescaler_256);
 	push	#0x06
 	call	_IWDG_SetPrescaler
 	pop	a
-;	user/main.c: 47: IWDG_SetReload(250);
+;	user/main.c: 49: IWDG_SetReload(250);
 	push	#0xfa
 	call	_IWDG_SetReload
 	pop	a
-;	user/main.c: 49: IWDG_ReloadCounter();
+;	user/main.c: 51: IWDG_ReloadCounter();
 	call	_IWDG_ReloadCounter
-;	user/main.c: 51: IWDG_Enable();
+;	user/main.c: 53: IWDG_Enable();
 	jp	_IWDG_Enable
-;	user/main.c: 55: void main() 
+;	user/main.c: 56: void main() 
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
-	sub	sp, #17
-;	user/main.c: 58: const unsigned char data[11] = {0x7E, 0x30, 0x6D, 0x79, 0x33, 0x5B, 0x5F, 0x70,0x7F, 0x7B, 0x00}; 
-	ldw	x, sp
-	incw	x
-	ldw	(0x10, sp), x
-	ldw	x, (0x10, sp)
-	ld	a, #0x7e
-	ld	(x), a
-	ldw	x, (0x10, sp)
-	incw	x
-	ld	a, #0x30
-	ld	(x), a
-	ldw	x, (0x10, sp)
-	incw	x
-	incw	x
-	ld	a, #0x6d
-	ld	(x), a
-	ldw	x, (0x10, sp)
-	ld	a, #0x79
-	ld	(0x0003, x), a
-	ldw	x, (0x10, sp)
-	ld	a, #0x33
-	ld	(0x0004, x), a
-	ldw	x, (0x10, sp)
-	ld	a, #0x5b
-	ld	(0x0005, x), a
-	ldw	x, (0x10, sp)
-	ld	a, #0x5f
-	ld	(0x0006, x), a
-	ldw	x, (0x10, sp)
-	ld	a, #0x70
-	ld	(0x0007, x), a
-	ldw	x, (0x10, sp)
-	ld	a, #0x7f
-	ld	(0x0008, x), a
-	ldw	x, (0x10, sp)
-	ld	a, #0x7b
-	ld	(0x0009, x), a
-	ldw	x, (0x10, sp)
-	addw	x, #0x000a
-	clr	(x)
+	sub	sp, #5
+;	user/main.c: 58: uint8_t hh = 0, mm = 0, ss = 0;
+	clr	(0x02, sp)
+	clr	(0x03, sp)
+	clr	(0x01, sp)
 ;	user/main.c: 59: CLK_Config();
 	call	_CLK_Config
 ;	user/main.c: 62: max7Seg(GPIOC, GPIO_PIN_6, GPIO_PIN_4, GPIO_PIN_5, 8);
@@ -238,52 +206,157 @@ _main:
 	call	_IWDG_Config
 ;	user/main.c: 66: enableInterrupts();
 	rim
-;	user/main.c: 67: GPIO_WriteLow(max7seg.port, max7seg.cs);
-	ldw	x, #_max7seg+0
-	ldw	(0x0e, sp), x
-	ldw	x, (0x0e, sp)
-	addw	x, #0x0003
-	ldw	(0x0c, sp), x
-	ldw	x, (0x0c, sp)
-	ld	a, (x)
-	ldw	x, (0x0e, sp)
-	ldw	x, (x)
-	push	a
+;	user/main.c: 67: setIntensity(0x03);
+	push	#0x03
+	call	_setIntensity
+	pop	a
+;	user/main.c: 68: TIMER_InitTime(&tick);
+	ldw	x, #_tick+0
+	ldw	(0x04, sp), x
+	ldw	x, (0x04, sp)
 	pushw	x
-	call	_GPIO_WriteLow
-	addw	sp, #3
-;	user/main.c: 68: Max7219_Write_Byte(DIG0);
+	call	_TIMER_InitTime
+	popw	x
+;	user/main.c: 70: send7Seg(DIG7, 0);
+	push	#0x00
+	push	#0x08
+	call	_send7Seg
+	popw	x
+;	user/main.c: 71: send7Seg(DIG6, 0);
+	push	#0x00
+	push	#0x07
+	call	_send7Seg
+	popw	x
+;	user/main.c: 72: send7Seg(DIG5, 10);
+	push	#0x0a
+	push	#0x06
+	call	_send7Seg
+	popw	x
+;	user/main.c: 73: send7Seg(DIG4, 0);
+	push	#0x00
+	push	#0x05
+	call	_send7Seg
+	popw	x
+;	user/main.c: 74: send7Seg(DIG3, 0);
+	push	#0x00
+	push	#0x04
+	call	_send7Seg
+	popw	x
+;	user/main.c: 75: send7Seg(DIG2, 10);
+	push	#0x0a
+	push	#0x03
+	call	_send7Seg
+	popw	x
+;	user/main.c: 76: send7Seg(DIG1, 0);
+	push	#0x00
+	push	#0x02
+	call	_send7Seg
+	popw	x
+;	user/main.c: 77: send7Seg(DIG0, 0);
+	push	#0x00
 	push	#0x01
-	call	_Max7219_Write_Byte
-	pop	a
-;	user/main.c: 69: Max7219_Write_Byte(data[0]);
-	ldw	x, (0x10, sp)
-	ld	a, (x)
-	push	a
-	call	_Max7219_Write_Byte
-	pop	a
-;	user/main.c: 70: GPIO_WriteLow(max7seg.port, max7seg.cs);
-	ldw	x, (0x0c, sp)
-	ld	a, (x)
-	ldw	x, (0x0e, sp)
-	ldw	x, (x)
-	push	a
+	call	_send7Seg
+	popw	x
+;	user/main.c: 78: while(TRUE) 
+00110$:
+;	user/main.c: 80: if(TIMER_CheckTimeMS(&tick, 1000) == 0)
+	ldw	y, (0x04, sp)
+	push	#0xe8
+	push	#0x03
+	clrw	x
 	pushw	x
-	call	_GPIO_WriteLow
-	addw	sp, #3
-;	user/main.c: 71: GPIO_WriteHigh(max7seg.port, max7seg.cs);
-	ldw	x, (0x0c, sp)
-	ld	a, (x)
-	ldw	x, (0x0e, sp)
-	ldw	x, (x)
+	pushw	y
+	call	_TIMER_CheckTimeMS
+	addw	sp, #6
+	tnz	a
+	jrne	00110$
+;	user/main.c: 82: if(++ss >=60)
+	inc	(0x01, sp)
+	ld	a, (0x01, sp)
+	cp	a, #0x3c
+	jrc	00106$
+;	user/main.c: 84: ss=0;
+	clr	(0x01, sp)
+;	user/main.c: 85: if(++mm >=60)
+	inc	(0x03, sp)
+	ld	a, (0x03, sp)
+	cp	a, #0x3c
+	jrc	00106$
+;	user/main.c: 87: mm=0;
+	clr	(0x03, sp)
+;	user/main.c: 88: if(++hh >= 24)
+	inc	(0x02, sp)
+	ld	a, (0x02, sp)
+	cp	a, #0x18
+	jrc	00106$
+;	user/main.c: 89: hh = 0;
+	clr	(0x02, sp)
+00106$:
+;	user/main.c: 92: send7Seg(DIG0, ss%10);
+	clrw	x
+	ld	a, (0x01, sp)
+	ld	xl, a
+	ld	a, #0x0a
+	div	x, a
 	push	a
-	pushw	x
-	call	_GPIO_WriteHigh
-	addw	sp, #3
-;	user/main.c: 72: while(TRUE) 
-00102$:
-	jra	00102$
-	addw	sp, #17
+	push	#0x01
+	call	_send7Seg
+	popw	x
+;	user/main.c: 93: send7Seg(DIG1, ss/10);
+	clrw	x
+	ld	a, (0x01, sp)
+	ld	xl, a
+	ld	a, #0x0a
+	div	x, a
+	ld	a, xl
+	push	a
+	push	#0x02
+	call	_send7Seg
+	popw	x
+;	user/main.c: 94: send7Seg(DIG3, mm%10);
+	clrw	x
+	ld	a, (0x03, sp)
+	ld	xl, a
+	ld	a, #0x0a
+	div	x, a
+	push	a
+	push	#0x04
+	call	_send7Seg
+	popw	x
+;	user/main.c: 95: send7Seg(DIG4, mm/10);
+	clrw	x
+	ld	a, (0x03, sp)
+	ld	xl, a
+	ld	a, #0x0a
+	div	x, a
+	ld	a, xl
+	push	a
+	push	#0x05
+	call	_send7Seg
+	popw	x
+;	user/main.c: 96: send7Seg(DIG6, hh%10);
+	clrw	x
+	ld	a, (0x02, sp)
+	ld	xl, a
+	ld	a, #0x0a
+	div	x, a
+	push	a
+	push	#0x07
+	call	_send7Seg
+	popw	x
+;	user/main.c: 97: send7Seg(DIG7, hh/10);
+	clrw	x
+	ld	a, (0x02, sp)
+	ld	xl, a
+	ld	a, #0x0a
+	div	x, a
+	ld	a, xl
+	push	a
+	push	#0x08
+	call	_send7Seg
+	popw	x
+	jp	00110$
+	addw	sp, #5
 	ret
 	.area CODE
 	.area INITIALIZER

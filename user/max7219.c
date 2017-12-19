@@ -53,7 +53,7 @@ void Init(void)
 	setCommand(DECODEMODE, 0xff); // decode digit 7 -0
 	setCommand(SHUTDOWN, 0x01); // normal operator
 	setCommand(DISPLAYTEST, 0x00); //no display test
-	setCommand(INTENSITY, 0x04); // brightness 9/32
+	setCommand(INTENSITY, 0x01); // brightness 9/32
 }
 
 void setIntensity(uint8_t intensity)
@@ -70,7 +70,6 @@ void send7Seg(uint8_t led, uint8_t data)
 	GPIO_WriteLow(max7seg.port, max7seg.cs);
 	GPIO_WriteHigh(max7seg.port, max7seg.cs);
 }
-
 
 /* SPI
 // void Max7219_Init(uint8_t numled)
