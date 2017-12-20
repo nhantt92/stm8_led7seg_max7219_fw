@@ -48,104 +48,104 @@
                                      48 ;	-----------------------------------------
                                      49 ;	 function TIM4_DeInit
                                      50 ;	-----------------------------------------
-      008833                         51 _TIM4_DeInit:
+      008B7B                         51 _TIM4_DeInit:
                                      52 ;	lib/stm8s_tim4.c: 15: TIM4->CR1 = TIM4_CR1_RESET_VALUE;
-      008833 35 00 53 40      [ 1]   53 	mov	0x5340+0, #0x00
+      008B7B 35 00 53 40      [ 1]   53 	mov	0x5340+0, #0x00
                                      54 ;	lib/stm8s_tim4.c: 16: TIM4->IER = TIM4_IER_RESET_VALUE;
-      008837 35 00 53 43      [ 1]   55 	mov	0x5343+0, #0x00
+      008B7F 35 00 53 43      [ 1]   55 	mov	0x5343+0, #0x00
                                      56 ;	lib/stm8s_tim4.c: 17: TIM4->CNTR = TIM4_CNTR_RESET_VALUE;
-      00883B 35 00 53 46      [ 1]   57 	mov	0x5346+0, #0x00
+      008B83 35 00 53 46      [ 1]   57 	mov	0x5346+0, #0x00
                                      58 ;	lib/stm8s_tim4.c: 18: TIM4->PSCR = TIM4_PSCR_RESET_VALUE;
-      00883F 35 00 53 47      [ 1]   59 	mov	0x5347+0, #0x00
+      008B87 35 00 53 47      [ 1]   59 	mov	0x5347+0, #0x00
                                      60 ;	lib/stm8s_tim4.c: 19: TIM4->ARR = TIM4_ARR_RESET_VALUE;
-      008843 35 FF 53 48      [ 1]   61 	mov	0x5348+0, #0xff
+      008B8B 35 FF 53 48      [ 1]   61 	mov	0x5348+0, #0xff
                                      62 ;	lib/stm8s_tim4.c: 20: TIM4->SR1 = TIM4_SR1_RESET_VALUE;
-      008847 35 00 53 44      [ 1]   63 	mov	0x5344+0, #0x00
-      00884B 81               [ 4]   64 	ret
+      008B8F 35 00 53 44      [ 1]   63 	mov	0x5344+0, #0x00
+      008B93 81               [ 4]   64 	ret
                                      65 ;	lib/stm8s_tim4.c: 23: void TIM4_TimeBaseInit(TIM4_Prescaler_TypeDef TIM4_Prescaler, uint8_t TIM4_Period)
                                      66 ;	-----------------------------------------
                                      67 ;	 function TIM4_TimeBaseInit
                                      68 ;	-----------------------------------------
-      00884C                         69 _TIM4_TimeBaseInit:
+      008B94                         69 _TIM4_TimeBaseInit:
                                      70 ;	lib/stm8s_tim4.c: 26: TIM4->PSCR = (uint8_t)(TIM4_Prescaler);
-      00884C AE 53 47         [ 2]   71 	ldw	x, #0x5347
-      00884F 7B 03            [ 1]   72 	ld	a, (0x03, sp)
-      008851 F7               [ 1]   73 	ld	(x), a
+      008B94 AE 53 47         [ 2]   71 	ldw	x, #0x5347
+      008B97 7B 03            [ 1]   72 	ld	a, (0x03, sp)
+      008B99 F7               [ 1]   73 	ld	(x), a
                                      74 ;	lib/stm8s_tim4.c: 28: TIM4->ARR = (uint8_t)(TIM4_Period);
-      008852 AE 53 48         [ 2]   75 	ldw	x, #0x5348
-      008855 7B 04            [ 1]   76 	ld	a, (0x04, sp)
-      008857 F7               [ 1]   77 	ld	(x), a
-      008858 81               [ 4]   78 	ret
+      008B9A AE 53 48         [ 2]   75 	ldw	x, #0x5348
+      008B9D 7B 04            [ 1]   76 	ld	a, (0x04, sp)
+      008B9F F7               [ 1]   77 	ld	(x), a
+      008BA0 81               [ 4]   78 	ret
                                      79 ;	lib/stm8s_tim4.c: 31: void TIM4_Cmd(FunctionalState NewState)
                                      80 ;	-----------------------------------------
                                      81 ;	 function TIM4_Cmd
                                      82 ;	-----------------------------------------
-      008859                         83 _TIM4_Cmd:
+      008BA1                         83 _TIM4_Cmd:
                                      84 ;	lib/stm8s_tim4.c: 34: TIM4->CR1 |= TIM4_CR1_CEN;
-      008859 72 10 53 40      [ 1]   85 	bset	0x5340, #0
-      00885D 81               [ 4]   86 	ret
+      008BA1 72 10 53 40      [ 1]   85 	bset	0x5340, #0
+      008BA5 81               [ 4]   86 	ret
                                      87 ;	lib/stm8s_tim4.c: 37: void TIM4_ITConfig(TIM4_IT_TypeDef TIM4_IT, FunctionalState NewState)
                                      88 ;	-----------------------------------------
                                      89 ;	 function TIM4_ITConfig
                                      90 ;	-----------------------------------------
-      00885E                         91 _TIM4_ITConfig:
+      008BA6                         91 _TIM4_ITConfig:
                                      92 ;	lib/stm8s_tim4.c: 41: TIM4->IER |= (uint8_t)TIM4_IT;
-      00885E AE 53 43         [ 2]   93 	ldw	x, #0x5343
-      008861 F6               [ 1]   94 	ld	a, (x)
-      008862 1A 03            [ 1]   95 	or	a, (0x03, sp)
-      008864 AE 53 43         [ 2]   96 	ldw	x, #0x5343
-      008867 F7               [ 1]   97 	ld	(x), a
-      008868 81               [ 4]   98 	ret
+      008BA6 AE 53 43         [ 2]   93 	ldw	x, #0x5343
+      008BA9 F6               [ 1]   94 	ld	a, (x)
+      008BAA 1A 03            [ 1]   95 	or	a, (0x03, sp)
+      008BAC AE 53 43         [ 2]   96 	ldw	x, #0x5343
+      008BAF F7               [ 1]   97 	ld	(x), a
+      008BB0 81               [ 4]   98 	ret
                                      99 ;	lib/stm8s_tim4.c: 44: uint8_t TIM4_GetCounter(void)
                                     100 ;	-----------------------------------------
                                     101 ;	 function TIM4_GetCounter
                                     102 ;	-----------------------------------------
-      008869                        103 _TIM4_GetCounter:
+      008BB1                        103 _TIM4_GetCounter:
                                     104 ;	lib/stm8s_tim4.c: 47: return (uint8_t)(TIM4->CNTR);
-      008869 AE 53 46         [ 2]  105 	ldw	x, #0x5346
-      00886C F6               [ 1]  106 	ld	a, (x)
-      00886D 81               [ 4]  107 	ret
+      008BB1 AE 53 46         [ 2]  105 	ldw	x, #0x5346
+      008BB4 F6               [ 1]  106 	ld	a, (x)
+      008BB5 81               [ 4]  107 	ret
                                     108 ;	lib/stm8s_tim4.c: 50: FlagStatus TIM4_GetFlagStatus(TIM4_FLAG_TypeDef TIM4_FLAG)
                                     109 ;	-----------------------------------------
                                     110 ;	 function TIM4_GetFlagStatus
                                     111 ;	-----------------------------------------
-      00886E                        112 _TIM4_GetFlagStatus:
+      008BB6                        112 _TIM4_GetFlagStatus:
                                     113 ;	lib/stm8s_tim4.c: 53: if ((TIM4->SR1 & (uint8_t)TIM4_FLAG)  != 0)
-      00886E AE 53 44         [ 2]  114 	ldw	x, #0x5344
-      008871 F6               [ 1]  115 	ld	a, (x)
-      008872 14 03            [ 1]  116 	and	a, (0x03, sp)
-      008874 4D               [ 1]  117 	tnz	a
-      008875 27 03            [ 1]  118 	jreq	00102$
+      008BB6 AE 53 44         [ 2]  114 	ldw	x, #0x5344
+      008BB9 F6               [ 1]  115 	ld	a, (x)
+      008BBA 14 03            [ 1]  116 	and	a, (0x03, sp)
+      008BBC 4D               [ 1]  117 	tnz	a
+      008BBD 27 03            [ 1]  118 	jreq	00102$
                                     119 ;	lib/stm8s_tim4.c: 55: bitstatus = SET;
-      008877 A6 01            [ 1]  120 	ld	a, #0x01
-      008879 81               [ 4]  121 	ret
-      00887A                        122 00102$:
+      008BBF A6 01            [ 1]  120 	ld	a, #0x01
+      008BC1 81               [ 4]  121 	ret
+      008BC2                        122 00102$:
                                     123 ;	lib/stm8s_tim4.c: 59: bitstatus = RESET;
-      00887A 4F               [ 1]  124 	clr	a
+      008BC2 4F               [ 1]  124 	clr	a
                                     125 ;	lib/stm8s_tim4.c: 61: return ((FlagStatus)bitstatus);
-      00887B 81               [ 4]  126 	ret
+      008BC3 81               [ 4]  126 	ret
                                     127 ;	lib/stm8s_tim4.c: 64: void TIM4_ClearFlag(TIM4_FLAG_TypeDef TIM4_FLAG)
                                     128 ;	-----------------------------------------
                                     129 ;	 function TIM4_ClearFlag
                                     130 ;	-----------------------------------------
-      00887C                        131 _TIM4_ClearFlag:
+      008BC4                        131 _TIM4_ClearFlag:
                                     132 ;	lib/stm8s_tim4.c: 67: TIM4->SR1 = (uint8_t)(~TIM4_FLAG);
-      00887C 7B 03            [ 1]  133 	ld	a, (0x03, sp)
-      00887E 43               [ 1]  134 	cpl	a
-      00887F AE 53 44         [ 2]  135 	ldw	x, #0x5344
-      008882 F7               [ 1]  136 	ld	(x), a
-      008883 81               [ 4]  137 	ret
+      008BC4 7B 03            [ 1]  133 	ld	a, (0x03, sp)
+      008BC6 43               [ 1]  134 	cpl	a
+      008BC7 AE 53 44         [ 2]  135 	ldw	x, #0x5344
+      008BCA F7               [ 1]  136 	ld	(x), a
+      008BCB 81               [ 4]  137 	ret
                                     138 ;	lib/stm8s_tim4.c: 70: void TIM4_ClearITPendingBit(TIM4_IT_TypeDef TIM4_IT)
                                     139 ;	-----------------------------------------
                                     140 ;	 function TIM4_ClearITPendingBit
                                     141 ;	-----------------------------------------
-      008884                        142 _TIM4_ClearITPendingBit:
+      008BCC                        142 _TIM4_ClearITPendingBit:
                                     143 ;	lib/stm8s_tim4.c: 73: TIM4->SR1 = (uint8_t)(~TIM4_IT);
-      008884 7B 03            [ 1]  144 	ld	a, (0x03, sp)
-      008886 43               [ 1]  145 	cpl	a
-      008887 AE 53 44         [ 2]  146 	ldw	x, #0x5344
-      00888A F7               [ 1]  147 	ld	(x), a
-      00888B 81               [ 4]  148 	ret
+      008BCC 7B 03            [ 1]  144 	ld	a, (0x03, sp)
+      008BCE 43               [ 1]  145 	cpl	a
+      008BCF AE 53 44         [ 2]  146 	ldw	x, #0x5344
+      008BD2 F7               [ 1]  147 	ld	(x), a
+      008BD3 81               [ 4]  148 	ret
                                     149 	.area CODE
                                     150 	.area INITIALIZER
                                     151 	.area CABS (ABS)

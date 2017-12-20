@@ -102,7 +102,7 @@
       008211 4B 00            [ 1]  102 	push	#0x00
       008213 4B 00            [ 1]  103 	push	#0x00
       008215 89               [ 2]  104 	pushw	x
-      008216 CD 88 E6         [ 4]  105 	call	_memset
+      008216 CD 8C 2E         [ 4]  105 	call	_memset
       008219 5B 08            [ 2]  106 	addw	sp, #8
       00821B 81               [ 4]  107 	ret
                                     108 ;	user/max7219.c: 22: void Max7219_Write_Byte(uint8_t dat)

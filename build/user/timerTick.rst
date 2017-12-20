@@ -71,24 +71,24 @@
       00835A CD 84 D3         [ 4]   71 	call	_CLK_PeripheralClockConfig
       00835D 85               [ 2]   72 	popw	x
                                      73 ;	user/timerTick.c: 21: TIM4_DeInit(); 
-      00835E CD 88 33         [ 4]   74 	call	_TIM4_DeInit
+      00835E CD 8B 7B         [ 4]   74 	call	_TIM4_DeInit
                                      75 ;	user/timerTick.c: 23: TIM4_TimeBaseInit(TIM4_PRESCALER_16, CYCLE_US);
       008361 4B C8            [ 1]   76 	push	#0xc8
       008363 4B 04            [ 1]   77 	push	#0x04
-      008365 CD 88 4C         [ 4]   78 	call	_TIM4_TimeBaseInit
+      008365 CD 8B 94         [ 4]   78 	call	_TIM4_TimeBaseInit
       008368 85               [ 2]   79 	popw	x
                                      80 ;	user/timerTick.c: 24: TIM4_ClearFlag(TIM4_FLAG_UPDATE); 
       008369 4B 01            [ 1]   81 	push	#0x01
-      00836B CD 88 7C         [ 4]   82 	call	_TIM4_ClearFlag
+      00836B CD 8B C4         [ 4]   82 	call	_TIM4_ClearFlag
       00836E 84               [ 1]   83 	pop	a
                                      84 ;	user/timerTick.c: 25: TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);
       00836F 4B 01            [ 1]   85 	push	#0x01
       008371 4B 01            [ 1]   86 	push	#0x01
-      008373 CD 88 5E         [ 4]   87 	call	_TIM4_ITConfig
+      008373 CD 8B A6         [ 4]   87 	call	_TIM4_ITConfig
       008376 85               [ 2]   88 	popw	x
                                      89 ;	user/timerTick.c: 26: TIM4_Cmd(ENABLE);    // Enable TIM4 
       008377 4B 01            [ 1]   90 	push	#0x01
-      008379 CD 88 59         [ 4]   91 	call	_TIM4_Cmd
+      008379 CD 8B A1         [ 4]   91 	call	_TIM4_Cmd
       00837C 84               [ 1]   92 	pop	a
                                      93 ;	user/timerTick.c: 27: timeTickMs = 0;
       00837D 5F               [ 1]   94 	clrw	x
@@ -147,7 +147,7 @@
       0083C5                        147 _TIMER_CheckTimeUS:
       0083C5 52 04            [ 2]  148 	sub	sp, #4
                                     149 ;	user/timerTick.c: 46: timeGet = TIM4_GetCounter();
-      0083C7 CD 88 69         [ 4]  150 	call	_TIM4_GetCounter
+      0083C7 CD 8B B1         [ 4]  150 	call	_TIM4_GetCounter
       0083CA 5F               [ 1]  151 	clrw	x
       0083CB 97               [ 1]  152 	ld	xl, a
       0083CC CF 00 15         [ 2]  153 	ldw	_timeGet+0, x

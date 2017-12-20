@@ -241,7 +241,7 @@
       00858B 4B 24            [ 1]  241 	push	#0x24
       00858D 4B F4            [ 1]  242 	push	#0xf4
       00858F 4B 00            [ 1]  243 	push	#0x00
-      008591 CD 88 8C         [ 4]  244 	call	__divulong
+      008591 CD 8B D4         [ 4]  244 	call	__divulong
       008594 5B 08            [ 2]  245 	addw	sp, #8
       008596 1F 04            [ 2]  246 	ldw	(0x04, sp), x
       008598 20 1A            [ 2]  247 	jra	00106$

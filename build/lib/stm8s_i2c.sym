@@ -1,0 +1,49 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+  7 _I2C_AcknowledgeConfig                                         0001B3 GR
+  7 _I2C_CheckEvent                                                00022F GR
+  7 _I2C_ClearFlag                                                 0002E1 GR
+  7 _I2C_ClearITPendingBit                                         00033C GR
+  7 _I2C_Cmd                                                       000153 GR
+  7 _I2C_DeInit                                                    000000 GR
+  7 _I2C_FastModeDutyCycleConfig                                   0001FE GR
+  7 _I2C_GeneralCallCmd                                            000161 GR
+  7 _I2C_GenerateSTART                                             000175 GR
+  7 _I2C_GenerateSTOP                                              000183 GR
+  7 _I2C_GetFlagStatus                                             0002AA GR
+  7 _I2C_GetITStatus                                               0002ED GR
+  7 _I2C_GetLastEvent                                              00027A GR
+  7 _I2C_ITConfig                                                  0001DC GR
+  7 _I2C_Init                                                      000025 GR
+  7 _I2C_ReceiveData                                               000214 GR
+  7 _I2C_Send7bitAddress                                           000219 GR
+  7 _I2C_SendData                                                  000228 GR
+  7 _I2C_SoftwareResetCmd                                          000197 GR
+  7 _I2C_StretchClockCmd                                           0001A5 GR
+    __divsint                                                      ****** GX
+    __divulong                                                     ****** GX
+    __mullong                                                      ****** GX
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 2.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size      0   flags    0
+   2 INITIALIZED                                size      0   flags    0
+   3 DABS                                       size      0   flags    8
+   4 HOME                                       size      0   flags    0
+   5 GSINIT                                     size      0   flags    0
+   6 GSFINAL                                    size      0   flags    0
+   7 CODE                                       size    348   flags    0
+   8 INITIALIZER                                size      0   flags    0
+   9 CABS                                       size      0   flags    8
+

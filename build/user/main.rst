@@ -42,8 +42,8 @@
                                      42 ; Stack segment in internal ram 
                                      43 ;--------------------------------------------------------
                                      44 	.area	SSEG
-      00001E                         45 __start__stack:
-      00001E                         46 	.ds	1
+      008CDF                         45 __start__stack:
+      008CDF                         46 	.ds	1
                                      47 
                                      48 ;--------------------------------------------------------
                                      49 ; absolute external ram data
@@ -106,7 +106,7 @@
       00808F AE 00 00         [ 2]  106 	ldw	x, #l_INITIALIZER
       008092 27 09            [ 1]  107 	jreq	00004$
       008094                        108 00003$:
-      008094 D6 89 06         [ 1]  109 	ld	a, (s_INITIALIZER - 1, x)
+      008094 D6 8C DE         [ 1]  109 	ld	a, (s_INITIALIZER - 1, x)
       008097 D7 00 1D         [ 1]  110 	ld	(s_INITIALIZED - 1, x), a
       00809A 5A               [ 2]  111 	decw	x
       00809B 26 F7            [ 1]  112 	jrne	00003$
@@ -149,12 +149,12 @@
       0080AC 62               [ 2]  149 	div	x, a
                                     150 ;	user/main.c: 34: TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
       0080AD 4B 01            [ 1]  151 	push	#0x01
-      0080AF CD 88 84         [ 4]  152 	call	_TIM4_ClearITPendingBit
+      0080AF CD 8B CC         [ 4]  152 	call	_TIM4_ClearITPendingBit
       0080B2 84               [ 1]  153 	pop	a
                                     154 ;	user/main.c: 35: TIMER_Inc();
       0080B3 CD 83 89         [ 4]  155 	call	_TIMER_Inc
                                     156 ;	user/main.c: 36: IWDG_ReloadCounter();
-      0080B6 CD 86 AD         [ 4]  157 	call	_IWDG_ReloadCounter
+      0080B6 CD 89 F5         [ 4]  157 	call	_IWDG_ReloadCounter
       0080B9 80               [11]  158 	iret
                                     159 ;	user/main.c: 39: void IWDG_Config(void)
                                     160 ;	-----------------------------------------
@@ -163,20 +163,20 @@
       0080BA                        163 _IWDG_Config:
                                     164 ;	user/main.c: 43: IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
       0080BA 4B 55            [ 1]  165 	push	#0x55
-      0080BC CD 86 98         [ 4]  166 	call	_IWDG_WriteAccessCmd
+      0080BC CD 89 E0         [ 4]  166 	call	_IWDG_WriteAccessCmd
       0080BF 84               [ 1]  167 	pop	a
                                     168 ;	user/main.c: 45: IWDG_SetPrescaler(IWDG_Prescaler_256);
       0080C0 4B 06            [ 1]  169 	push	#0x06
-      0080C2 CD 86 9F         [ 4]  170 	call	_IWDG_SetPrescaler
+      0080C2 CD 89 E7         [ 4]  170 	call	_IWDG_SetPrescaler
       0080C5 84               [ 1]  171 	pop	a
                                     172 ;	user/main.c: 49: IWDG_SetReload(250);
       0080C6 4B FA            [ 1]  173 	push	#0xfa
-      0080C8 CD 86 A6         [ 4]  174 	call	_IWDG_SetReload
+      0080C8 CD 89 EE         [ 4]  174 	call	_IWDG_SetReload
       0080CB 84               [ 1]  175 	pop	a
                                     176 ;	user/main.c: 51: IWDG_ReloadCounter();
-      0080CC CD 86 AD         [ 4]  177 	call	_IWDG_ReloadCounter
+      0080CC CD 89 F5         [ 4]  177 	call	_IWDG_ReloadCounter
                                     178 ;	user/main.c: 53: IWDG_Enable();
-      0080CF CC 86 B2         [ 2]  179 	jp	_IWDG_Enable
+      0080CF CC 89 FA         [ 2]  179 	jp	_IWDG_Enable
                                     180 ;	user/main.c: 56: void main() 
                                     181 ;	-----------------------------------------
                                     182 ;	 function main
