@@ -11,6 +11,7 @@
 	.globl _main
 	.globl _TIM4_UPD_OVF_IRQHandler
 	.globl _delay
+	.globl _PCF_Init
 	.globl _TIMER_CheckTimeMS
 	.globl _TIMER_InitTime
 	.globl _TIMER_Inc
@@ -25,6 +26,7 @@
 	.globl _IWDG_SetReload
 	.globl _IWDG_SetPrescaler
 	.globl _IWDG_WriteAccessCmd
+	.globl _GPIO_Init
 	.globl _CLK_Config
 	.globl _tick
 	.globl _IWDG_Config
@@ -126,13 +128,33 @@ __sdcc_program_startup:
 ; code
 ;--------------------------------------------------------
 	.area CODE
-;	user/main.c: 27: void delay(uint16_t x)
+;	user/main.c: 25: static void GPIO_Config(void)
+;	-----------------------------------------
+;	 function GPIO_Config
+;	-----------------------------------------
+_GPIO_Config:
+;	user/main.c: 27: GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_FAST);
+	push	#0xb0
+	push	#0x10
+	push	#0x05
+	push	#0x50
+	call	_GPIO_Init
+	addw	sp, #4
+;	user/main.c: 28: GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_OD_HIZ_FAST);
+	push	#0xb0
+	push	#0x20
+	push	#0x05
+	push	#0x50
+	call	_GPIO_Init
+	addw	sp, #4
+	ret
+;	user/main.c: 31: void delay(uint16_t x)
 ;	-----------------------------------------
 ;	 function delay
 ;	-----------------------------------------
 _delay:
 	pushw	x
-;	user/main.c: 29: while(x--);
+;	user/main.c: 33: while(x--);
 	ldw	x, (0x05, sp)
 00101$:
 	ldw	(0x01, sp), x
@@ -141,55 +163,96 @@ _delay:
 	jrne	00101$
 	popw	x
 	ret
-;	user/main.c: 32: INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
+;	user/main.c: 36: INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
 ;	-----------------------------------------
 ;	 function TIM4_UPD_OVF_IRQHandler
 ;	-----------------------------------------
 _TIM4_UPD_OVF_IRQHandler:
 	div	x, a
-;	user/main.c: 34: TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
+;	user/main.c: 38: TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
 	push	#0x01
 	call	_TIM4_ClearITPendingBit
 	pop	a
-;	user/main.c: 35: TIMER_Inc();
+;	user/main.c: 39: TIMER_Inc();
 	call	_TIMER_Inc
-;	user/main.c: 36: IWDG_ReloadCounter();
+;	user/main.c: 40: IWDG_ReloadCounter();
 	call	_IWDG_ReloadCounter
 	iret
-;	user/main.c: 39: void IWDG_Config(void)
+;	user/main.c: 43: void IWDG_Config(void)
 ;	-----------------------------------------
 ;	 function IWDG_Config
 ;	-----------------------------------------
 _IWDG_Config:
-;	user/main.c: 43: IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
+;	user/main.c: 47: IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
 	push	#0x55
 	call	_IWDG_WriteAccessCmd
 	pop	a
-;	user/main.c: 45: IWDG_SetPrescaler(IWDG_Prescaler_256);
+;	user/main.c: 49: IWDG_SetPrescaler(IWDG_Prescaler_256);
 	push	#0x06
 	call	_IWDG_SetPrescaler
 	pop	a
-;	user/main.c: 49: IWDG_SetReload(250);
+;	user/main.c: 53: IWDG_SetReload(250);
 	push	#0xfa
 	call	_IWDG_SetReload
 	pop	a
-;	user/main.c: 51: IWDG_ReloadCounter();
+;	user/main.c: 55: IWDG_ReloadCounter();
 	call	_IWDG_ReloadCounter
-;	user/main.c: 53: IWDG_Enable();
+;	user/main.c: 57: IWDG_Enable();
 	jp	_IWDG_Enable
-;	user/main.c: 56: void main() 
+;	user/main.c: 60: void main() 
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
-	sub	sp, #5
-;	user/main.c: 58: uint8_t hh = 0, mm = 0, ss = 0;
-	clr	(0x02, sp)
-	clr	(0x03, sp)
+	sub	sp, #23
+;	user/main.c: 62: uint8_t hh = 0, mm = 0, ss = 0;
 	clr	(0x01, sp)
-;	user/main.c: 59: CLK_Config();
+	clr	(0x02, sp)
+	clr	(0x13, sp)
+;	user/main.c: 65: dateTime.second = 43;
+	ldw	x, sp
+	ld	a, #0x2b
+	ld	(11, x), a
+;	user/main.c: 66: dateTime.minute = 15;
+	ldw	x, sp
+	addw	x, #11
+	ldw	(0x16, sp), x
+	ldw	x, (0x16, sp)
+	incw	x
+	ld	a, #0x0f
+	ld	(x), a
+;	user/main.c: 67: dateTime.hour = 17;
+	ldw	x, (0x16, sp)
+	incw	x
+	incw	x
+	ld	a, #0x11
+	ld	(x), a
+;	user/main.c: 68: dateTime.day = 21;
+	ldw	x, (0x16, sp)
+	ld	a, #0x15
+	ld	(0x0003, x), a
+;	user/main.c: 69: dateTime.weekday = 5;
+	ldw	x, (0x16, sp)
+	ld	a, #0x05
+	ld	(0x0004, x), a
+;	user/main.c: 70: dateTime.month = 12;
+	ldw	x, (0x16, sp)
+	ld	a, #0x0c
+	ld	(0x0005, x), a
+;	user/main.c: 71: dateTime.year = 2017;
+	ldw	x, (0x16, sp)
+	addw	x, #0x0006
+	ldw	y, #0x07e1
+	ldw	(x), y
+;	user/main.c: 72: CLK_Config();
 	call	_CLK_Config
-;	user/main.c: 62: max7Seg(GPIOC, GPIO_PIN_6, GPIO_PIN_4, GPIO_PIN_5, 8);
+;	user/main.c: 73: GPIO_Config();
+	call	_GPIO_Config
+;	user/main.c: 74: PCF_Init(PCF_ALARM_INTERRUPT_ENABLE);
+	push	#0x02
+	call	_PCF_Init
+	pop	a
+;	user/main.c: 76: max7Seg(GPIOC, GPIO_PIN_6, GPIO_PIN_4, GPIO_PIN_5, 8);
 	push	#0x08
 	push	#0x20
 	push	#0x10
@@ -198,69 +261,69 @@ _main:
 	push	#0x50
 	call	_max7Seg
 	addw	sp, #6
-;	user/main.c: 63: Init();
+;	user/main.c: 77: Init();
 	call	_Init
-;	user/main.c: 64: TIMER_Init();
+;	user/main.c: 78: TIMER_Init();
 	call	_TIMER_Init
-;	user/main.c: 65: IWDG_Config();
+;	user/main.c: 81: IWDG_Config();
 	call	_IWDG_Config
-;	user/main.c: 66: enableInterrupts();
+;	user/main.c: 82: enableInterrupts();
 	rim
-;	user/main.c: 67: setIntensity(0x03);
+;	user/main.c: 83: setIntensity(0x03);
 	push	#0x03
 	call	_setIntensity
 	pop	a
-;	user/main.c: 68: TIMER_InitTime(&tick);
+;	user/main.c: 84: TIMER_InitTime(&tick);
 	ldw	x, #_tick+0
-	ldw	(0x04, sp), x
-	ldw	x, (0x04, sp)
+	ldw	(0x14, sp), x
+	ldw	x, (0x14, sp)
 	pushw	x
 	call	_TIMER_InitTime
 	popw	x
-;	user/main.c: 70: send7Seg(DIG7, 0);
+;	user/main.c: 86: send7Seg(DIG7, 0);
 	push	#0x00
 	push	#0x08
 	call	_send7Seg
 	popw	x
-;	user/main.c: 71: send7Seg(DIG6, 0);
+;	user/main.c: 87: send7Seg(DIG6, 0);
 	push	#0x00
 	push	#0x07
 	call	_send7Seg
 	popw	x
-;	user/main.c: 72: send7Seg(DIG5, 10);
+;	user/main.c: 88: send7Seg(DIG5, 10);
 	push	#0x0a
 	push	#0x06
 	call	_send7Seg
 	popw	x
-;	user/main.c: 73: send7Seg(DIG4, 0);
+;	user/main.c: 89: send7Seg(DIG4, 0);
 	push	#0x00
 	push	#0x05
 	call	_send7Seg
 	popw	x
-;	user/main.c: 74: send7Seg(DIG3, 0);
+;	user/main.c: 90: send7Seg(DIG3, 0);
 	push	#0x00
 	push	#0x04
 	call	_send7Seg
 	popw	x
-;	user/main.c: 75: send7Seg(DIG2, 10);
+;	user/main.c: 91: send7Seg(DIG2, 10);
 	push	#0x0a
 	push	#0x03
 	call	_send7Seg
 	popw	x
-;	user/main.c: 76: send7Seg(DIG1, 0);
+;	user/main.c: 92: send7Seg(DIG1, 0);
 	push	#0x00
 	push	#0x02
 	call	_send7Seg
 	popw	x
-;	user/main.c: 77: send7Seg(DIG0, 0);
+;	user/main.c: 93: send7Seg(DIG0, 0);
 	push	#0x00
 	push	#0x01
 	call	_send7Seg
 	popw	x
-;	user/main.c: 78: while(TRUE) 
+;	user/main.c: 94: while(TRUE) 
 00110$:
-;	user/main.c: 80: if(TIMER_CheckTimeMS(&tick, 1000) == 0)
-	ldw	y, (0x04, sp)
+;	user/main.c: 96: if(TIMER_CheckTimeMS(&tick, 1000) == 0)
+	ldw	y, (0x14, sp)
 	push	#0xe8
 	push	#0x03
 	clrw	x
@@ -270,31 +333,31 @@ _main:
 	addw	sp, #6
 	tnz	a
 	jrne	00110$
-;	user/main.c: 82: if(++ss >=60)
-	inc	(0x01, sp)
-	ld	a, (0x01, sp)
+;	user/main.c: 98: if(++ss >=60)
+	inc	(0x13, sp)
+	ld	a, (0x13, sp)
 	cp	a, #0x3c
 	jrc	00106$
-;	user/main.c: 84: ss=0;
-	clr	(0x01, sp)
-;	user/main.c: 85: if(++mm >=60)
-	inc	(0x03, sp)
-	ld	a, (0x03, sp)
-	cp	a, #0x3c
-	jrc	00106$
-;	user/main.c: 87: mm=0;
-	clr	(0x03, sp)
-;	user/main.c: 88: if(++hh >= 24)
+;	user/main.c: 100: ss=0;
+	clr	(0x13, sp)
+;	user/main.c: 101: if(++mm >=60)
 	inc	(0x02, sp)
 	ld	a, (0x02, sp)
+	cp	a, #0x3c
+	jrc	00106$
+;	user/main.c: 103: mm=0;
+	clr	(0x02, sp)
+;	user/main.c: 104: if(++hh >= 24)
+	inc	(0x01, sp)
+	ld	a, (0x01, sp)
 	cp	a, #0x18
 	jrc	00106$
-;	user/main.c: 89: hh = 0;
-	clr	(0x02, sp)
+;	user/main.c: 105: hh = 0;
+	clr	(0x01, sp)
 00106$:
-;	user/main.c: 92: send7Seg(DIG0, ss%10);
+;	user/main.c: 108: send7Seg(DIG0, ss%10);
 	clrw	x
-	ld	a, (0x01, sp)
+	ld	a, (0x13, sp)
 	ld	xl, a
 	ld	a, #0x0a
 	div	x, a
@@ -302,9 +365,9 @@ _main:
 	push	#0x01
 	call	_send7Seg
 	popw	x
-;	user/main.c: 93: send7Seg(DIG1, ss/10);
+;	user/main.c: 109: send7Seg(DIG1, ss/10);
 	clrw	x
-	ld	a, (0x01, sp)
+	ld	a, (0x13, sp)
 	ld	xl, a
 	ld	a, #0x0a
 	div	x, a
@@ -313,9 +376,9 @@ _main:
 	push	#0x02
 	call	_send7Seg
 	popw	x
-;	user/main.c: 94: send7Seg(DIG3, mm%10);
+;	user/main.c: 110: send7Seg(DIG3, mm%10);
 	clrw	x
-	ld	a, (0x03, sp)
+	ld	a, (0x02, sp)
 	ld	xl, a
 	ld	a, #0x0a
 	div	x, a
@@ -323,9 +386,9 @@ _main:
 	push	#0x04
 	call	_send7Seg
 	popw	x
-;	user/main.c: 95: send7Seg(DIG4, mm/10);
+;	user/main.c: 111: send7Seg(DIG4, mm/10);
 	clrw	x
-	ld	a, (0x03, sp)
+	ld	a, (0x02, sp)
 	ld	xl, a
 	ld	a, #0x0a
 	div	x, a
@@ -334,9 +397,9 @@ _main:
 	push	#0x05
 	call	_send7Seg
 	popw	x
-;	user/main.c: 96: send7Seg(DIG6, hh%10);
+;	user/main.c: 112: send7Seg(DIG6, hh%10);
 	clrw	x
-	ld	a, (0x02, sp)
+	ld	a, (0x01, sp)
 	ld	xl, a
 	ld	a, #0x0a
 	div	x, a
@@ -344,9 +407,9 @@ _main:
 	push	#0x07
 	call	_send7Seg
 	popw	x
-;	user/main.c: 97: send7Seg(DIG7, hh/10);
+;	user/main.c: 113: send7Seg(DIG7, hh/10);
 	clrw	x
-	ld	a, (0x02, sp)
+	ld	a, (0x01, sp)
 	ld	xl, a
 	ld	a, #0x0a
 	div	x, a
@@ -356,7 +419,7 @@ _main:
 	call	_send7Seg
 	popw	x
 	jp	00110$
-	addw	sp, #5
+	addw	sp, #23
 	ret
 	.area CODE
 	.area INITIALIZER

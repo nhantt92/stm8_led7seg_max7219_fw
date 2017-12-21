@@ -247,7 +247,7 @@
       00011B F7               [ 1]  247 	ld	(x), a
                                     248 ;	lib/stm8s_i2c.c: 149: I2C->CCRH = (uint8_t)((uint8_t)((uint8_t)(result >> 8) & I2C_CCRH_CCR) | tmpccrh);
       00011C 7B 02            [ 1]  249 	ld	a, (0x02, sp)
-      00011E 0F 04            [ 1]  250 	clr	(0x04, sp)
+      00011E 0F 05            [ 1]  250 	clr	(0x05, sp)
       000120 A4 0F            [ 1]  251 	and	a, #0x0f
       000122 1A 01            [ 1]  252 	or	a, (0x01, sp)
       000124 AE 52 1C         [ 2]  253 	ldw	x, #0x521c
@@ -266,7 +266,7 @@
                                     266 ;	lib/stm8s_i2c.c: 159: I2C->OARH = (uint8_t)((uint8_t)(AddMode | I2C_OARH_ADDCONF) |
       000139 7B 15            [ 1]  267 	ld	a, (0x15, sp)
       00013B AA 40            [ 1]  268 	or	a, #0x40
-      00013D 6B 06            [ 1]  269 	ld	(0x06, sp), a
+      00013D 6B 04            [ 1]  269 	ld	(0x04, sp), a
                                     270 ;	lib/stm8s_i2c.c: 160: (uint8_t)((OwnAddress & (uint16_t)0x0300) >> (uint8_t)7));
       00013F 4F               [ 1]  271 	clr	a
       000140 97               [ 1]  272 	ld	xl, a
@@ -276,7 +276,7 @@
       000146 A6 80            [ 1]  276 	ld	a, #0x80
       000148 62               [ 2]  277 	div	x, a
       000149 9F               [ 1]  278 	ld	a, xl
-      00014A 1A 06            [ 1]  279 	or	a, (0x06, sp)
+      00014A 1A 04            [ 1]  279 	or	a, (0x04, sp)
       00014C AE 52 14         [ 2]  280 	ldw	x, #0x5214
       00014F F7               [ 1]  281 	ld	(x), a
       000150 5B 0A            [ 2]  282 	addw	sp, #10
@@ -537,15 +537,15 @@
       000250 97               [ 1]  537 	ld	xl, a
       000251 84               [ 1]  538 	pop	a
                                     539 ;	lib/stm8s_i2c.c: 530: lastevent = ((uint16_t)((uint16_t)flag2 << (uint16_t)8) | (uint16_t)flag1);
-      000252 0F 05            [ 1]  540 	clr	(0x05, sp)
-      000254 0F 04            [ 1]  541 	clr	(0x04, sp)
+      000252 0F 07            [ 1]  540 	clr	(0x07, sp)
+      000254 0F 06            [ 1]  541 	clr	(0x06, sp)
       000256 0F 09            [ 1]  542 	clr	(0x09, sp)
-      000258 1A 04            [ 1]  543 	or	a, (0x04, sp)
-      00025A 6B 08            [ 1]  544 	ld	(0x08, sp), a
+      000258 1A 06            [ 1]  543 	or	a, (0x06, sp)
+      00025A 6B 04            [ 1]  544 	ld	(0x04, sp), a
       00025C 9F               [ 1]  545 	ld	a, xl
       00025D 1A 09            [ 1]  546 	or	a, (0x09, sp)
-      00025F 6B 07            [ 1]  547 	ld	(0x07, sp), a
-      000261 16 07            [ 2]  548 	ldw	y, (0x07, sp)
+      00025F 6B 03            [ 1]  547 	ld	(0x03, sp), a
+      000261 16 03            [ 2]  548 	ldw	y, (0x03, sp)
       000263 17 01            [ 2]  549 	ldw	(0x01, sp), y
       000265                        550 00103$:
                                     551 ;	lib/stm8s_i2c.c: 533: if (((uint16_t)lastevent & (uint16_t)I2C_Event) == (uint16_t)I2C_Event)

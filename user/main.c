@@ -19,11 +19,15 @@
 #include <string.h>
 #include "timerTick.h"
 #include "stm8s_tim4.h"
+#include "RTC_pcf8563.h"
 
+TIME tick; 
+static void GPIO_Config(void)
+{
+  GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_FAST);
+  GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_OD_HIZ_FAST);
+}
 
-TIME tick;
-void GPIO_setup(void); 
-void SPI_setup(void);
 void delay(uint16_t x)
 {
     while(x--);
@@ -56,12 +60,24 @@ void IWDG_Config(void)
 void main() 
 {
   uint8_t hh = 0, mm = 0, ss = 0;
+  PCF_DateTime dateTime;
+  PCF_DateTime pcfDateTime;
+  dateTime.second = 43;
+  dateTime.minute = 15;
+  dateTime.hour = 17;
+  dateTime.day = 21;
+  dateTime.weekday = 5;
+  dateTime.month = 12;
+  dateTime.year = 2017;
   CLK_Config();
-  // GPIO_setup(); 
+  GPIO_Config();
+  PCF_Init(PCF_ALARM_INTERRUPT_ENABLE);
   // SPI_setup(); 
   max7Seg(GPIOC, GPIO_PIN_6, GPIO_PIN_4, GPIO_PIN_5, 8);
   Init();
   TIMER_Init();
+  //PCF_setClockOut(PCF_CLKOUT_1HZ);
+  //PCF_setDateTime(&dateTime);
   IWDG_Config();
   enableInterrupts();
   setIntensity(0x03);
@@ -96,6 +112,16 @@ void main()
         send7Seg(DIG6, hh%10);
         send7Seg(DIG7, hh/10);
       }
+    // if(TIMER_CheckTimeMS(&tick, 100) == 0)
+    // {
+    //   PCF_getDateTime(&pcfDateTime);
+    //   send7Seg(DIG0, pcfDateTime.second%10);
+    //   send7Seg(DIG1, pcfDateTime.second/10);
+    //   send7Seg(DIG3, pcfDateTime.minute%10);
+    //   send7Seg(DIG4, pcfDateTime.minute/10);
+    //   send7Seg(DIG6, pcfDateTime.hour%10);
+    //   send7Seg(DIG7, pcfDateTime.hour/10);
+    // }
   }
 }
 

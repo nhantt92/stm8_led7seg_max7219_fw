@@ -7,8 +7,21 @@ Symbol Table
     .__.ABS.                                                    =  000000 G
     .__.CPU.                                                    =  000000 L
     .__.H$L.                                                    =  000001 L
+  7 _BCD2BIN                                                       0004CA GR
+  7 _BIN2BCD                                                       0004E2 GR
     _CLK_GetClockFreq                                              ****** GX
     _CLK_PeripheralClockConfig                                     ****** GX
+  7 _DS1307_GetDate                                                0003FE GR
+  7 _DS1307_GetDateTime                                            0002CD GR
+  7 _DS1307_GetDay                                                 0003EE GR
+  7 _DS1307_GetHours                                               0003D1 GR
+  7 _DS1307_GetMinutes                                             0003C1 GR
+  7 _DS1307_GetMonth                                               00040E GR
+  7 _DS1307_GetSeconds                                             0003B1 GR
+  7 _DS1307_GetYear                                                00041E GR
+  7 _DS1307_Init                                                   000000 GR
+  7 _DS1307_SetTime                                                00017E GR
+  7 _DS1307_write_time                                             000041 GR
     _I2C_AcknowledgeConfig                                         ****** GX
     _I2C_CheckEvent                                                ****** GX
     _I2C_Cmd                                                       ****** GX
@@ -20,19 +33,9 @@ Symbol Table
     _I2C_ReceiveData                                               ****** GX
     _I2C_Send7bitAddress                                           ****** GX
     _I2C_SendData                                                  ****** GX
-  7 _IIC_Init                                                      000000 R
-  7 _PCF_Init                                                      000119 GR
-  7 _PCF_Read                                                      000070 GR
-  7 _PCF_Write                                                     00003B GR
-  7 _PCF_getAlarm                                                  0004FC GR
-  7 _PCF_getAndClearFlags                                          000594 GR
-  7 _PCF_getDateTime                                               0002D9 GR
-  7 _PCF_getTimer                                                  0004EA GR
-  7 _PCF_setAlarm                                                  0003E8 GR
-  7 _PCF_setClockOut                                               0005BA GR
-  7 _PCF_setDateTime                                               00013A GR
-  7 _PCF_setTimer                                                  0004C7 GR
     __divulong                                                     ****** GX
+  7 _read_ds1307                                                   00042C GR
+
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 2.
 Hexadecimal [24-Bits]
@@ -46,7 +49,7 @@ Area Table
    4 HOME                                       size      0   flags    0
    5 GSINIT                                     size      0   flags    0
    6 GSFINAL                                    size      0   flags    0
-   7 CODE                                       size    5CF   flags    0
+   7 CODE                                       size    500   flags    0
    8 INITIALIZER                                size      0   flags    0
    9 CABS                                       size      0   flags    8
 

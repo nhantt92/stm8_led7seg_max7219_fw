@@ -247,7 +247,7 @@ _I2C_Init:
 	ld	(x), a
 ;	lib/stm8s_i2c.c: 149: I2C->CCRH = (uint8_t)((uint8_t)((uint8_t)(result >> 8) & I2C_CCRH_CCR) | tmpccrh);
 	ld	a, (0x02, sp)
-	clr	(0x04, sp)
+	clr	(0x05, sp)
 	and	a, #0x0f
 	or	a, (0x01, sp)
 	ldw	x, #0x521c
@@ -266,7 +266,7 @@ _I2C_Init:
 ;	lib/stm8s_i2c.c: 159: I2C->OARH = (uint8_t)((uint8_t)(AddMode | I2C_OARH_ADDCONF) |
 	ld	a, (0x15, sp)
 	or	a, #0x40
-	ld	(0x06, sp), a
+	ld	(0x04, sp), a
 ;	lib/stm8s_i2c.c: 160: (uint8_t)((OwnAddress & (uint16_t)0x0300) >> (uint8_t)7));
 	clr	a
 	ld	xl, a
@@ -276,7 +276,7 @@ _I2C_Init:
 	ld	a, #0x80
 	div	x, a
 	ld	a, xl
-	or	a, (0x06, sp)
+	or	a, (0x04, sp)
 	ldw	x, #0x5214
 	ld	(x), a
 	addw	sp, #10
@@ -537,15 +537,15 @@ _I2C_CheckEvent:
 	ld	xl, a
 	pop	a
 ;	lib/stm8s_i2c.c: 530: lastevent = ((uint16_t)((uint16_t)flag2 << (uint16_t)8) | (uint16_t)flag1);
-	clr	(0x05, sp)
-	clr	(0x04, sp)
+	clr	(0x07, sp)
+	clr	(0x06, sp)
 	clr	(0x09, sp)
-	or	a, (0x04, sp)
-	ld	(0x08, sp), a
+	or	a, (0x06, sp)
+	ld	(0x04, sp), a
 	ld	a, xl
 	or	a, (0x09, sp)
-	ld	(0x07, sp), a
-	ldw	y, (0x07, sp)
+	ld	(0x03, sp), a
+	ldw	y, (0x03, sp)
 	ldw	(0x01, sp), y
 00103$:
 ;	lib/stm8s_i2c.c: 533: if (((uint16_t)lastevent & (uint16_t)I2C_Event) == (uint16_t)I2C_Event)
