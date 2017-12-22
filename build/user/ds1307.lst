@@ -116,72 +116,72 @@
                                     116 ;	user/ds1307.c: 20: data[0]=BIN2BCD(0x0);
       000043 96               [ 1]  117 	ldw	x, sp
       000044 5C               [ 2]  118 	incw	x
-      000045 1F 14            [ 2]  119 	ldw	(0x14, sp), x
+      000045 1F 0A            [ 2]  119 	ldw	(0x0a, sp), x
       000047 4B 00            [ 1]  120 	push	#0x00
       000049 CDr04rE2         [ 4]  121 	call	_BIN2BCD
       00004C 5B 01            [ 2]  122 	addw	sp, #1
-      00004E 1E 14            [ 2]  123 	ldw	x, (0x14, sp)
+      00004E 1E 0A            [ 2]  123 	ldw	x, (0x0a, sp)
       000050 F7               [ 1]  124 	ld	(x), a
                                     125 ;	user/ds1307.c: 21: data[1]=BIN2BCD(min1);
-      000051 1E 14            [ 2]  126 	ldw	x, (0x14, sp)
+      000051 1E 0A            [ 2]  126 	ldw	x, (0x0a, sp)
       000053 5C               [ 2]  127 	incw	x
-      000054 1F 0A            [ 2]  128 	ldw	(0x0a, sp), x
+      000054 1F 10            [ 2]  128 	ldw	(0x10, sp), x
       000056 7B 19            [ 1]  129 	ld	a, (0x19, sp)
       000058 88               [ 1]  130 	push	a
       000059 CDr04rE2         [ 4]  131 	call	_BIN2BCD
       00005C 5B 01            [ 2]  132 	addw	sp, #1
-      00005E 1E 0A            [ 2]  133 	ldw	x, (0x0a, sp)
+      00005E 1E 10            [ 2]  133 	ldw	x, (0x10, sp)
       000060 F7               [ 1]  134 	ld	(x), a
                                     135 ;	user/ds1307.c: 22: data[2]=BIN2BCD(hour1);
-      000061 1E 14            [ 2]  136 	ldw	x, (0x14, sp)
+      000061 1E 0A            [ 2]  136 	ldw	x, (0x0a, sp)
       000063 5C               [ 2]  137 	incw	x
       000064 5C               [ 2]  138 	incw	x
-      000065 1F 12            [ 2]  139 	ldw	(0x12, sp), x
+      000065 1F 0C            [ 2]  139 	ldw	(0x0c, sp), x
       000067 7B 18            [ 1]  140 	ld	a, (0x18, sp)
       000069 88               [ 1]  141 	push	a
       00006A CDr04rE2         [ 4]  142 	call	_BIN2BCD
       00006D 5B 01            [ 2]  143 	addw	sp, #1
-      00006F 1E 12            [ 2]  144 	ldw	x, (0x12, sp)
+      00006F 1E 0C            [ 2]  144 	ldw	x, (0x0c, sp)
       000071 F7               [ 1]  145 	ld	(x), a
                                     146 ;	user/ds1307.c: 23: data[3]=BIN2BCD(day1);
-      000072 1E 14            [ 2]  147 	ldw	x, (0x14, sp)
+      000072 1E 0A            [ 2]  147 	ldw	x, (0x0a, sp)
       000074 1C 00 03         [ 2]  148 	addw	x, #0x0003
-      000077 1F 0E            [ 2]  149 	ldw	(0x0e, sp), x
+      000077 1F 08            [ 2]  149 	ldw	(0x08, sp), x
       000079 7B 1A            [ 1]  150 	ld	a, (0x1a, sp)
       00007B 88               [ 1]  151 	push	a
       00007C CDr04rE2         [ 4]  152 	call	_BIN2BCD
       00007F 5B 01            [ 2]  153 	addw	sp, #1
-      000081 1E 0E            [ 2]  154 	ldw	x, (0x0e, sp)
+      000081 1E 08            [ 2]  154 	ldw	x, (0x08, sp)
       000083 F7               [ 1]  155 	ld	(x), a
                                     156 ;	user/ds1307.c: 24: data[4]=BIN2BCD(date1);
-      000084 1E 14            [ 2]  157 	ldw	x, (0x14, sp)
+      000084 1E 0A            [ 2]  157 	ldw	x, (0x0a, sp)
       000086 1C 00 04         [ 2]  158 	addw	x, #0x0004
-      000089 1F 08            [ 2]  159 	ldw	(0x08, sp), x
+      000089 1F 12            [ 2]  159 	ldw	(0x12, sp), x
       00008B 7B 1B            [ 1]  160 	ld	a, (0x1b, sp)
       00008D 88               [ 1]  161 	push	a
       00008E CDr04rE2         [ 4]  162 	call	_BIN2BCD
       000091 5B 01            [ 2]  163 	addw	sp, #1
-      000093 1E 08            [ 2]  164 	ldw	x, (0x08, sp)
+      000093 1E 12            [ 2]  164 	ldw	x, (0x12, sp)
       000095 F7               [ 1]  165 	ld	(x), a
                                     166 ;	user/ds1307.c: 25: data[5]=BIN2BCD(month1);
-      000096 1E 14            [ 2]  167 	ldw	x, (0x14, sp)
+      000096 1E 0A            [ 2]  167 	ldw	x, (0x0a, sp)
       000098 1C 00 05         [ 2]  168 	addw	x, #0x0005
-      00009B 1F 0C            [ 2]  169 	ldw	(0x0c, sp), x
+      00009B 1F 0E            [ 2]  169 	ldw	(0x0e, sp), x
       00009D 7B 1C            [ 1]  170 	ld	a, (0x1c, sp)
       00009F 88               [ 1]  171 	push	a
       0000A0 CDr04rE2         [ 4]  172 	call	_BIN2BCD
       0000A3 5B 01            [ 2]  173 	addw	sp, #1
-      0000A5 1E 0C            [ 2]  174 	ldw	x, (0x0c, sp)
+      0000A5 1E 0E            [ 2]  174 	ldw	x, (0x0e, sp)
       0000A7 F7               [ 1]  175 	ld	(x), a
                                     176 ;	user/ds1307.c: 26: data[6]=BIN2BCD(year1);
-      0000A8 1E 14            [ 2]  177 	ldw	x, (0x14, sp)
+      0000A8 1E 0A            [ 2]  177 	ldw	x, (0x0a, sp)
       0000AA 1C 00 06         [ 2]  178 	addw	x, #0x0006
-      0000AD 1F 10            [ 2]  179 	ldw	(0x10, sp), x
+      0000AD 1F 14            [ 2]  179 	ldw	(0x14, sp), x
       0000AF 7B 1D            [ 1]  180 	ld	a, (0x1d, sp)
       0000B1 88               [ 1]  181 	push	a
       0000B2 CDr04rE2         [ 4]  182 	call	_BIN2BCD
       0000B5 5B 01            [ 2]  183 	addw	sp, #1
-      0000B7 1E 10            [ 2]  184 	ldw	x, (0x10, sp)
+      0000B7 1E 14            [ 2]  184 	ldw	x, (0x14, sp)
       0000B9 F7               [ 1]  185 	ld	(x), a
                                     186 ;	user/ds1307.c: 28: while(I2C_GetFlagStatus( I2C_FLAG_BUSBUSY)==SET);
       0000BA                        187 00101$:
@@ -229,7 +229,7 @@
       0000F8 4D               [ 1]  229 	tnz	a
       0000F9 27 F5            [ 1]  230 	jreq	00110$
                                     231 ;	user/ds1307.c: 49: I2C_SendData( data[1]);
-      0000FB 1E 0A            [ 2]  232 	ldw	x, (0x0a, sp)
+      0000FB 1E 10            [ 2]  232 	ldw	x, (0x10, sp)
       0000FD F6               [ 1]  233 	ld	a, (x)
       0000FE 88               [ 1]  234 	push	a
       0000FF CDr00r00         [ 4]  235 	call	_I2C_SendData
@@ -243,7 +243,7 @@
       00010B 4D               [ 1]  243 	tnz	a
       00010C 27 F5            [ 1]  244 	jreq	00113$
                                     245 ;	user/ds1307.c: 55: I2C_SendData( data[2]);
-      00010E 1E 12            [ 2]  246 	ldw	x, (0x12, sp)
+      00010E 1E 0C            [ 2]  246 	ldw	x, (0x0c, sp)
       000110 F6               [ 1]  247 	ld	a, (x)
       000111 88               [ 1]  248 	push	a
       000112 CDr00r00         [ 4]  249 	call	_I2C_SendData
@@ -257,7 +257,7 @@
       00011E 4D               [ 1]  257 	tnz	a
       00011F 27 F5            [ 1]  258 	jreq	00116$
                                     259 ;	user/ds1307.c: 61: I2C_SendData( data[3]);
-      000121 1E 0E            [ 2]  260 	ldw	x, (0x0e, sp)
+      000121 1E 08            [ 2]  260 	ldw	x, (0x08, sp)
       000123 F6               [ 1]  261 	ld	a, (x)
       000124 88               [ 1]  262 	push	a
       000125 CDr00r00         [ 4]  263 	call	_I2C_SendData
@@ -271,7 +271,7 @@
       000131 4D               [ 1]  271 	tnz	a
       000132 27 F5            [ 1]  272 	jreq	00119$
                                     273 ;	user/ds1307.c: 67: I2C_SendData( data[4]);
-      000134 1E 08            [ 2]  274 	ldw	x, (0x08, sp)
+      000134 1E 12            [ 2]  274 	ldw	x, (0x12, sp)
       000136 F6               [ 1]  275 	ld	a, (x)
       000137 88               [ 1]  276 	push	a
       000138 CDr00r00         [ 4]  277 	call	_I2C_SendData
@@ -285,7 +285,7 @@
       000144 4D               [ 1]  285 	tnz	a
       000145 27 F5            [ 1]  286 	jreq	00122$
                                     287 ;	user/ds1307.c: 73: I2C_SendData( data[5]);
-      000147 1E 0C            [ 2]  288 	ldw	x, (0x0c, sp)
+      000147 1E 0E            [ 2]  288 	ldw	x, (0x0e, sp)
       000149 F6               [ 1]  289 	ld	a, (x)
       00014A 88               [ 1]  290 	push	a
       00014B CDr00r00         [ 4]  291 	call	_I2C_SendData
@@ -299,7 +299,7 @@
       000157 4D               [ 1]  299 	tnz	a
       000158 27 F5            [ 1]  300 	jreq	00125$
                                     301 ;	user/ds1307.c: 79: I2C_SendData( data[6]);
-      00015A 1E 10            [ 2]  302 	ldw	x, (0x10, sp)
+      00015A 1E 14            [ 2]  302 	ldw	x, (0x14, sp)
       00015C F6               [ 1]  303 	ld	a, (x)
       00015D 88               [ 1]  304 	push	a
       00015E CDr00r00         [ 4]  305 	call	_I2C_SendData
@@ -332,82 +332,82 @@
                                     332 ;	user/ds1307.c: 95: data[0]=BIN2BCD(time->seconds);
       000180 96               [ 1]  333 	ldw	x, sp
       000181 5C               [ 2]  334 	incw	x
-      000182 1F 14            [ 2]  335 	ldw	(0x14, sp), x
+      000182 1F 0C            [ 2]  335 	ldw	(0x0c, sp), x
       000184 16 1A            [ 2]  336 	ldw	y, (0x1a, sp)
-      000186 17 16            [ 2]  337 	ldw	(0x16, sp), y
-      000188 1E 16            [ 2]  338 	ldw	x, (0x16, sp)
+      000186 17 14            [ 2]  337 	ldw	(0x14, sp), y
+      000188 1E 14            [ 2]  338 	ldw	x, (0x14, sp)
       00018A F6               [ 1]  339 	ld	a, (x)
       00018B 88               [ 1]  340 	push	a
       00018C CDr04rE2         [ 4]  341 	call	_BIN2BCD
       00018F 5B 01            [ 2]  342 	addw	sp, #1
-      000191 1E 14            [ 2]  343 	ldw	x, (0x14, sp)
+      000191 1E 0C            [ 2]  343 	ldw	x, (0x0c, sp)
       000193 F7               [ 1]  344 	ld	(x), a
                                     345 ;	user/ds1307.c: 96: data[1]=BIN2BCD(time->minutes);
-      000194 1E 14            [ 2]  346 	ldw	x, (0x14, sp)
+      000194 1E 0C            [ 2]  346 	ldw	x, (0x0c, sp)
       000196 5C               [ 2]  347 	incw	x
-      000197 1F 10            [ 2]  348 	ldw	(0x10, sp), x
-      000199 1E 16            [ 2]  349 	ldw	x, (0x16, sp)
+      000197 1F 12            [ 2]  348 	ldw	(0x12, sp), x
+      000199 1E 14            [ 2]  349 	ldw	x, (0x14, sp)
       00019B E6 01            [ 1]  350 	ld	a, (0x1, x)
       00019D 88               [ 1]  351 	push	a
       00019E CDr04rE2         [ 4]  352 	call	_BIN2BCD
       0001A1 5B 01            [ 2]  353 	addw	sp, #1
-      0001A3 1E 10            [ 2]  354 	ldw	x, (0x10, sp)
+      0001A3 1E 12            [ 2]  354 	ldw	x, (0x12, sp)
       0001A5 F7               [ 1]  355 	ld	(x), a
                                     356 ;	user/ds1307.c: 97: data[2]=BIN2BCD(time->hours);
-      0001A6 1E 14            [ 2]  357 	ldw	x, (0x14, sp)
+      0001A6 1E 0C            [ 2]  357 	ldw	x, (0x0c, sp)
       0001A8 5C               [ 2]  358 	incw	x
       0001A9 5C               [ 2]  359 	incw	x
-      0001AA 1F 08            [ 2]  360 	ldw	(0x08, sp), x
-      0001AC 1E 16            [ 2]  361 	ldw	x, (0x16, sp)
+      0001AA 1F 0E            [ 2]  360 	ldw	(0x0e, sp), x
+      0001AC 1E 14            [ 2]  361 	ldw	x, (0x14, sp)
       0001AE E6 02            [ 1]  362 	ld	a, (0x2, x)
       0001B0 88               [ 1]  363 	push	a
       0001B1 CDr04rE2         [ 4]  364 	call	_BIN2BCD
       0001B4 5B 01            [ 2]  365 	addw	sp, #1
-      0001B6 1E 08            [ 2]  366 	ldw	x, (0x08, sp)
+      0001B6 1E 0E            [ 2]  366 	ldw	x, (0x0e, sp)
       0001B8 F7               [ 1]  367 	ld	(x), a
                                     368 ;	user/ds1307.c: 98: data[3]=BIN2BCD(time->day);
-      0001B9 1E 14            [ 2]  369 	ldw	x, (0x14, sp)
+      0001B9 1E 0C            [ 2]  369 	ldw	x, (0x0c, sp)
       0001BB 1C 00 03         [ 2]  370 	addw	x, #0x0003
-      0001BE 1F 0E            [ 2]  371 	ldw	(0x0e, sp), x
-      0001C0 1E 16            [ 2]  372 	ldw	x, (0x16, sp)
+      0001BE 1F 16            [ 2]  371 	ldw	(0x16, sp), x
+      0001C0 1E 14            [ 2]  372 	ldw	x, (0x14, sp)
       0001C2 E6 03            [ 1]  373 	ld	a, (0x3, x)
       0001C4 88               [ 1]  374 	push	a
       0001C5 CDr04rE2         [ 4]  375 	call	_BIN2BCD
       0001C8 5B 01            [ 2]  376 	addw	sp, #1
-      0001CA 1E 0E            [ 2]  377 	ldw	x, (0x0e, sp)
+      0001CA 1E 16            [ 2]  377 	ldw	x, (0x16, sp)
       0001CC F7               [ 1]  378 	ld	(x), a
                                     379 ;	user/ds1307.c: 99: data[4]=BIN2BCD(time->date);
-      0001CD 1E 14            [ 2]  380 	ldw	x, (0x14, sp)
+      0001CD 1E 0C            [ 2]  380 	ldw	x, (0x0c, sp)
       0001CF 1C 00 04         [ 2]  381 	addw	x, #0x0004
-      0001D2 1F 0C            [ 2]  382 	ldw	(0x0c, sp), x
-      0001D4 1E 16            [ 2]  383 	ldw	x, (0x16, sp)
+      0001D2 1F 0A            [ 2]  382 	ldw	(0x0a, sp), x
+      0001D4 1E 14            [ 2]  383 	ldw	x, (0x14, sp)
       0001D6 E6 04            [ 1]  384 	ld	a, (0x4, x)
       0001D8 88               [ 1]  385 	push	a
       0001D9 CDr04rE2         [ 4]  386 	call	_BIN2BCD
       0001DC 5B 01            [ 2]  387 	addw	sp, #1
-      0001DE 1E 0C            [ 2]  388 	ldw	x, (0x0c, sp)
+      0001DE 1E 0A            [ 2]  388 	ldw	x, (0x0a, sp)
       0001E0 F7               [ 1]  389 	ld	(x), a
                                     390 ;	user/ds1307.c: 100: data[5]=BIN2BCD(time->month);
-      0001E1 1E 14            [ 2]  391 	ldw	x, (0x14, sp)
+      0001E1 1E 0C            [ 2]  391 	ldw	x, (0x0c, sp)
       0001E3 1C 00 05         [ 2]  392 	addw	x, #0x0005
-      0001E6 1F 0A            [ 2]  393 	ldw	(0x0a, sp), x
-      0001E8 1E 16            [ 2]  394 	ldw	x, (0x16, sp)
+      0001E6 1F 10            [ 2]  393 	ldw	(0x10, sp), x
+      0001E8 1E 14            [ 2]  394 	ldw	x, (0x14, sp)
       0001EA E6 05            [ 1]  395 	ld	a, (0x5, x)
       0001EC 88               [ 1]  396 	push	a
       0001ED CDr04rE2         [ 4]  397 	call	_BIN2BCD
       0001F0 5B 01            [ 2]  398 	addw	sp, #1
-      0001F2 1E 0A            [ 2]  399 	ldw	x, (0x0a, sp)
+      0001F2 1E 10            [ 2]  399 	ldw	x, (0x10, sp)
       0001F4 F7               [ 1]  400 	ld	(x), a
                                     401 ;	user/ds1307.c: 101: data[6]=BIN2BCD(time->year);
-      0001F5 1E 14            [ 2]  402 	ldw	x, (0x14, sp)
+      0001F5 1E 0C            [ 2]  402 	ldw	x, (0x0c, sp)
       0001F7 1C 00 06         [ 2]  403 	addw	x, #0x0006
-      0001FA 1F 12            [ 2]  404 	ldw	(0x12, sp), x
-      0001FC 1E 16            [ 2]  405 	ldw	x, (0x16, sp)
+      0001FA 1F 08            [ 2]  404 	ldw	(0x08, sp), x
+      0001FC 1E 14            [ 2]  405 	ldw	x, (0x14, sp)
       0001FE E6 06            [ 1]  406 	ld	a, (0x6, x)
       000200 88               [ 1]  407 	push	a
       000201 CDr04rE2         [ 4]  408 	call	_BIN2BCD
       000204 5B 01            [ 2]  409 	addw	sp, #1
-      000206 1E 12            [ 2]  410 	ldw	x, (0x12, sp)
+      000206 1E 08            [ 2]  410 	ldw	x, (0x08, sp)
       000208 F7               [ 1]  411 	ld	(x), a
                                     412 ;	user/ds1307.c: 103: while(I2C_GetFlagStatus( I2C_FLAG_BUSBUSY)==SET);
       000209                        413 00101$:
@@ -455,7 +455,7 @@
       000247 4D               [ 1]  455 	tnz	a
       000248 27 F5            [ 1]  456 	jreq	00110$
                                     457 ;	user/ds1307.c: 123: I2C_SendData( data[1]);
-      00024A 1E 10            [ 2]  458 	ldw	x, (0x10, sp)
+      00024A 1E 12            [ 2]  458 	ldw	x, (0x12, sp)
       00024C F6               [ 1]  459 	ld	a, (x)
       00024D 88               [ 1]  460 	push	a
       00024E CDr00r00         [ 4]  461 	call	_I2C_SendData
@@ -469,7 +469,7 @@
       00025A 4D               [ 1]  469 	tnz	a
       00025B 27 F5            [ 1]  470 	jreq	00113$
                                     471 ;	user/ds1307.c: 129: I2C_SendData( data[2]);
-      00025D 1E 08            [ 2]  472 	ldw	x, (0x08, sp)
+      00025D 1E 0E            [ 2]  472 	ldw	x, (0x0e, sp)
       00025F F6               [ 1]  473 	ld	a, (x)
       000260 88               [ 1]  474 	push	a
       000261 CDr00r00         [ 4]  475 	call	_I2C_SendData
@@ -483,7 +483,7 @@
       00026D 4D               [ 1]  483 	tnz	a
       00026E 27 F5            [ 1]  484 	jreq	00116$
                                     485 ;	user/ds1307.c: 135: I2C_SendData( data[3]);
-      000270 1E 0E            [ 2]  486 	ldw	x, (0x0e, sp)
+      000270 1E 16            [ 2]  486 	ldw	x, (0x16, sp)
       000272 F6               [ 1]  487 	ld	a, (x)
       000273 88               [ 1]  488 	push	a
       000274 CDr00r00         [ 4]  489 	call	_I2C_SendData
@@ -497,7 +497,7 @@
       000280 4D               [ 1]  497 	tnz	a
       000281 27 F5            [ 1]  498 	jreq	00119$
                                     499 ;	user/ds1307.c: 141: I2C_SendData( data[4]);
-      000283 1E 0C            [ 2]  500 	ldw	x, (0x0c, sp)
+      000283 1E 0A            [ 2]  500 	ldw	x, (0x0a, sp)
       000285 F6               [ 1]  501 	ld	a, (x)
       000286 88               [ 1]  502 	push	a
       000287 CDr00r00         [ 4]  503 	call	_I2C_SendData
@@ -511,7 +511,7 @@
       000293 4D               [ 1]  511 	tnz	a
       000294 27 F5            [ 1]  512 	jreq	00122$
                                     513 ;	user/ds1307.c: 147: I2C_SendData( data[5]);
-      000296 1E 0A            [ 2]  514 	ldw	x, (0x0a, sp)
+      000296 1E 10            [ 2]  514 	ldw	x, (0x10, sp)
       000298 F6               [ 1]  515 	ld	a, (x)
       000299 88               [ 1]  516 	push	a
       00029A CDr00r00         [ 4]  517 	call	_I2C_SendData
@@ -525,7 +525,7 @@
       0002A6 4D               [ 1]  525 	tnz	a
       0002A7 27 F5            [ 1]  526 	jreq	00125$
                                     527 ;	user/ds1307.c: 153: I2C_SendData( data[6]);
-      0002A9 1E 12            [ 2]  528 	ldw	x, (0x12, sp)
+      0002A9 1E 08            [ 2]  528 	ldw	x, (0x08, sp)
       0002AB F6               [ 1]  529 	ld	a, (x)
       0002AC 88               [ 1]  530 	push	a
       0002AD CDr00r00         [ 4]  531 	call	_I2C_SendData
@@ -558,14 +558,14 @@
                                     558 ;	user/ds1307.c: 168: for(i=0;i<8;i++)
       0002CF 96               [ 1]  559 	ldw	x, sp
       0002D0 5C               [ 2]  560 	incw	x
-      0002D1 1F 13            [ 2]  561 	ldw	(0x13, sp), x
+      0002D1 1F 15            [ 2]  561 	ldw	(0x15, sp), x
       0002D3 0F 08            [ 1]  562 	clr	(0x08, sp)
       0002D5                        563 00105$:
                                     564 ;	user/ds1307.c: 170: data[i]=read_ds1307(i);
       0002D5 5F               [ 1]  565 	clrw	x
       0002D6 7B 08            [ 1]  566 	ld	a, (0x08, sp)
       0002D8 97               [ 1]  567 	ld	xl, a
-      0002D9 72 FB 13         [ 2]  568 	addw	x, (0x13, sp)
+      0002D9 72 FB 15         [ 2]  568 	addw	x, (0x15, sp)
       0002DC 89               [ 2]  569 	pushw	x
       0002DD 7B 0A            [ 1]  570 	ld	a, (0x0a, sp)
       0002DF 88               [ 1]  571 	push	a
@@ -580,22 +580,22 @@
       0002ED 25 E6            [ 1]  580 	jrc	00105$
                                     581 ;	user/ds1307.c: 173: time->seconds = BCD2BIN(data[0]&=0x7F);
       0002EF 16 1B            [ 2]  582 	ldw	y, (0x1b, sp)
-      0002F1 17 11            [ 2]  583 	ldw	(0x11, sp), y
-      0002F3 1E 13            [ 2]  584 	ldw	x, (0x13, sp)
+      0002F1 17 0F            [ 2]  583 	ldw	(0x0f, sp), y
+      0002F3 1E 15            [ 2]  584 	ldw	x, (0x15, sp)
       0002F5 F6               [ 1]  585 	ld	a, (x)
       0002F6 A4 7F            [ 1]  586 	and	a, #0x7f
-      0002F8 1E 13            [ 2]  587 	ldw	x, (0x13, sp)
+      0002F8 1E 15            [ 2]  587 	ldw	x, (0x15, sp)
       0002FA F7               [ 1]  588 	ld	(x), a
       0002FB 88               [ 1]  589 	push	a
       0002FC CDr04rCA         [ 4]  590 	call	_BCD2BIN
       0002FF 5B 01            [ 2]  591 	addw	sp, #1
-      000301 1E 11            [ 2]  592 	ldw	x, (0x11, sp)
+      000301 1E 0F            [ 2]  592 	ldw	x, (0x0f, sp)
       000303 F7               [ 1]  593 	ld	(x), a
                                     594 ;	user/ds1307.c: 175: time->minutes = BCD2BIN(data[1]&=0x7F);
-      000304 1E 11            [ 2]  595 	ldw	x, (0x11, sp)
+      000304 1E 0F            [ 2]  595 	ldw	x, (0x0f, sp)
       000306 5C               [ 2]  596 	incw	x
-      000307 1F 15            [ 2]  597 	ldw	(0x15, sp), x
-      000309 1E 13            [ 2]  598 	ldw	x, (0x13, sp)
+      000307 1F 17            [ 2]  597 	ldw	(0x17, sp), x
+      000309 1E 15            [ 2]  598 	ldw	x, (0x15, sp)
       00030B 5C               [ 2]  599 	incw	x
       00030C F6               [ 1]  600 	ld	a, (x)
       00030D A4 7F            [ 1]  601 	and	a, #0x7f
@@ -605,16 +605,16 @@
       000312 CDr04rCA         [ 4]  605 	call	_BCD2BIN
       000315 5B 01            [ 2]  606 	addw	sp, #1
       000317 85               [ 2]  607 	popw	x
-      000318 16 15            [ 2]  608 	ldw	y, (0x15, sp)
+      000318 16 17            [ 2]  608 	ldw	y, (0x17, sp)
       00031A 90 F7            [ 1]  609 	ld	(y), a
                                     610 ;	user/ds1307.c: 177: if((data[1]&0x40)!=0)    time->hours=BCD2BIN(data[2]&=0x1F);
       00031C F6               [ 1]  611 	ld	a, (x)
       00031D 90 97            [ 1]  612 	ld	yl, a
-      00031F 1E 11            [ 2]  613 	ldw	x, (0x11, sp)
+      00031F 1E 0F            [ 2]  613 	ldw	x, (0x0f, sp)
       000321 5C               [ 2]  614 	incw	x
       000322 5C               [ 2]  615 	incw	x
-      000323 1F 0B            [ 2]  616 	ldw	(0x0b, sp), x
-      000325 1E 13            [ 2]  617 	ldw	x, (0x13, sp)
+      000323 1F 09            [ 2]  616 	ldw	(0x09, sp), x
+      000325 1E 15            [ 2]  617 	ldw	x, (0x15, sp)
       000327 5C               [ 2]  618 	incw	x
       000328 5C               [ 2]  619 	incw	x
       000329 F6               [ 1]  620 	ld	a, (x)
@@ -628,7 +628,7 @@
       000335 88               [ 1]  628 	push	a
       000336 CDr04rCA         [ 4]  629 	call	_BCD2BIN
       000339 5B 01            [ 2]  630 	addw	sp, #1
-      00033B 1E 0B            [ 2]  631 	ldw	x, (0x0b, sp)
+      00033B 1E 09            [ 2]  631 	ldw	x, (0x09, sp)
       00033D F7               [ 1]  632 	ld	(x), a
       00033E 20 0C            [ 2]  633 	jra	00104$
       000340                        634 00103$:
@@ -638,14 +638,14 @@
       000343 88               [ 1]  638 	push	a
       000344 CDr04rCA         [ 4]  639 	call	_BCD2BIN
       000347 5B 01            [ 2]  640 	addw	sp, #1
-      000349 1E 0B            [ 2]  641 	ldw	x, (0x0b, sp)
+      000349 1E 09            [ 2]  641 	ldw	x, (0x09, sp)
       00034B F7               [ 1]  642 	ld	(x), a
       00034C                        643 00104$:
                                     644 ;	user/ds1307.c: 180: time->day = BCD2BIN(data[3]&=0x07);
-      00034C 1E 11            [ 2]  645 	ldw	x, (0x11, sp)
+      00034C 1E 0F            [ 2]  645 	ldw	x, (0x0f, sp)
       00034E 1C 00 03         [ 2]  646 	addw	x, #0x0003
-      000351 1F 0D            [ 2]  647 	ldw	(0x0d, sp), x
-      000353 1E 13            [ 2]  648 	ldw	x, (0x13, sp)
+      000351 1F 13            [ 2]  647 	ldw	(0x13, sp), x
+      000353 1E 15            [ 2]  648 	ldw	x, (0x15, sp)
       000355 1C 00 03         [ 2]  649 	addw	x, #0x0003
       000358 F6               [ 1]  650 	ld	a, (x)
       000359 A4 07            [ 1]  651 	and	a, #0x07
@@ -653,13 +653,13 @@
       00035C 88               [ 1]  653 	push	a
       00035D CDr04rCA         [ 4]  654 	call	_BCD2BIN
       000360 5B 01            [ 2]  655 	addw	sp, #1
-      000362 1E 0D            [ 2]  656 	ldw	x, (0x0d, sp)
+      000362 1E 13            [ 2]  656 	ldw	x, (0x13, sp)
       000364 F7               [ 1]  657 	ld	(x), a
                                     658 ;	user/ds1307.c: 181: time->date = BCD2BIN(data[4]&=0x3F);
-      000365 1E 11            [ 2]  659 	ldw	x, (0x11, sp)
+      000365 1E 0F            [ 2]  659 	ldw	x, (0x0f, sp)
       000367 1C 00 04         [ 2]  660 	addw	x, #0x0004
-      00036A 1F 17            [ 2]  661 	ldw	(0x17, sp), x
-      00036C 1E 13            [ 2]  662 	ldw	x, (0x13, sp)
+      00036A 1F 0D            [ 2]  661 	ldw	(0x0d, sp), x
+      00036C 1E 15            [ 2]  662 	ldw	x, (0x15, sp)
       00036E 1C 00 04         [ 2]  663 	addw	x, #0x0004
       000371 F6               [ 1]  664 	ld	a, (x)
       000372 A4 3F            [ 1]  665 	and	a, #0x3f
@@ -667,13 +667,13 @@
       000375 88               [ 1]  667 	push	a
       000376 CDr04rCA         [ 4]  668 	call	_BCD2BIN
       000379 5B 01            [ 2]  669 	addw	sp, #1
-      00037B 1E 17            [ 2]  670 	ldw	x, (0x17, sp)
+      00037B 1E 0D            [ 2]  670 	ldw	x, (0x0d, sp)
       00037D F7               [ 1]  671 	ld	(x), a
                                     672 ;	user/ds1307.c: 182: time->month = BCD2BIN(data[5]&=0x1F);
-      00037E 1E 11            [ 2]  673 	ldw	x, (0x11, sp)
+      00037E 1E 0F            [ 2]  673 	ldw	x, (0x0f, sp)
       000380 1C 00 05         [ 2]  674 	addw	x, #0x0005
-      000383 1F 0F            [ 2]  675 	ldw	(0x0f, sp), x
-      000385 1E 13            [ 2]  676 	ldw	x, (0x13, sp)
+      000383 1F 11            [ 2]  675 	ldw	(0x11, sp), x
+      000385 1E 15            [ 2]  676 	ldw	x, (0x15, sp)
       000387 1C 00 05         [ 2]  677 	addw	x, #0x0005
       00038A F6               [ 1]  678 	ld	a, (x)
       00038B A4 1F            [ 1]  679 	and	a, #0x1f
@@ -681,20 +681,20 @@
       00038E 88               [ 1]  681 	push	a
       00038F CDr04rCA         [ 4]  682 	call	_BCD2BIN
       000392 5B 01            [ 2]  683 	addw	sp, #1
-      000394 1E 0F            [ 2]  684 	ldw	x, (0x0f, sp)
+      000394 1E 11            [ 2]  684 	ldw	x, (0x11, sp)
       000396 F7               [ 1]  685 	ld	(x), a
                                     686 ;	user/ds1307.c: 183: time->year = BCD2BIN(data[6]&=0xFF);
-      000397 1E 11            [ 2]  687 	ldw	x, (0x11, sp)
+      000397 1E 0F            [ 2]  687 	ldw	x, (0x0f, sp)
       000399 1C 00 06         [ 2]  688 	addw	x, #0x0006
-      00039C 1F 09            [ 2]  689 	ldw	(0x09, sp), x
-      00039E 1E 13            [ 2]  690 	ldw	x, (0x13, sp)
+      00039C 1F 0B            [ 2]  689 	ldw	(0x0b, sp), x
+      00039E 1E 15            [ 2]  690 	ldw	x, (0x15, sp)
       0003A0 1C 00 06         [ 2]  691 	addw	x, #0x0006
       0003A3 F6               [ 1]  692 	ld	a, (x)
       0003A4 F7               [ 1]  693 	ld	(x), a
       0003A5 88               [ 1]  694 	push	a
       0003A6 CDr04rCA         [ 4]  695 	call	_BCD2BIN
       0003A9 5B 01            [ 2]  696 	addw	sp, #1
-      0003AB 1E 09            [ 2]  697 	ldw	x, (0x09, sp)
+      0003AB 1E 0B            [ 2]  697 	ldw	x, (0x0b, sp)
       0003AD F7               [ 1]  698 	ld	(x), a
       0003AE 5B 18            [ 2]  699 	addw	sp, #24
       0003B0 81               [ 4]  700 	ret

@@ -227,18 +227,18 @@ _Init:
 	sub	sp, #4
 ;	user/max7219.c: 51: GPIO_Init(max7seg.port, max7seg.data|max7seg.cs|max7seg.clk, GPIO_MODE_OUT_PP_HIGH_FAST);
 	ldw	x, #_max7seg+0
-	ldw	(0x02, sp), x
-	ldw	x, (0x02, sp)
+	ldw	(0x01, sp), x
+	ldw	x, (0x01, sp)
 	ld	a, (0x2, x)
-	ld	(0x01, sp), a
-	ldw	x, (0x02, sp)
-	ld	a, (0x3, x)
-	or	a, (0x01, sp)
 	ld	(0x04, sp), a
-	ldw	x, (0x02, sp)
-	ld	a, (0x4, x)
+	ldw	x, (0x01, sp)
+	ld	a, (0x3, x)
 	or	a, (0x04, sp)
-	ldw	x, (0x02, sp)
+	ld	(0x03, sp), a
+	ldw	x, (0x01, sp)
+	ld	a, (0x4, x)
+	or	a, (0x03, sp)
+	ldw	x, (0x01, sp)
 	ldw	x, (x)
 	push	#0xf0
 	push	a
@@ -291,13 +291,13 @@ _send7Seg:
 	sub	sp, #4
 ;	user/max7219.c: 67: GPIO_WriteLow(max7seg.port, max7seg.cs);
 	ldw	x, #_max7seg+0
-	ldw	(0x03, sp), x
-	ldw	x, (0x03, sp)
-	addw	x, #0x0003
 	ldw	(0x01, sp), x
 	ldw	x, (0x01, sp)
-	ld	a, (x)
+	addw	x, #0x0003
+	ldw	(0x03, sp), x
 	ldw	x, (0x03, sp)
+	ld	a, (x)
+	ldw	x, (0x01, sp)
 	ldw	x, (x)
 	push	a
 	pushw	x
@@ -314,18 +314,18 @@ _send7Seg:
 	call	_Max7219_Write_Byte
 	pop	a
 ;	user/max7219.c: 70: GPIO_WriteLow(max7seg.port, max7seg.cs);
-	ldw	x, (0x01, sp)
-	ld	a, (x)
 	ldw	x, (0x03, sp)
+	ld	a, (x)
+	ldw	x, (0x01, sp)
 	ldw	x, (x)
 	push	a
 	pushw	x
 	call	_GPIO_WriteLow
 	addw	sp, #3
 ;	user/max7219.c: 71: GPIO_WriteHigh(max7seg.port, max7seg.cs);
-	ldw	x, (0x01, sp)
-	ld	a, (x)
 	ldw	x, (0x03, sp)
+	ld	a, (x)
+	ldw	x, (0x01, sp)
 	ldw	x, (x)
 	push	a
 	pushw	x

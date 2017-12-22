@@ -11,416 +11,527 @@
                                      11 	.globl _main
                                      12 	.globl _TIM4_UPD_OVF_IRQHandler
                                      13 	.globl _delay
-                                     14 	.globl _PCF_Init
-                                     15 	.globl _TIMER_CheckTimeMS
-                                     16 	.globl _TIMER_InitTime
-                                     17 	.globl _TIMER_Inc
-                                     18 	.globl _TIMER_Init
-                                     19 	.globl _send7Seg
-                                     20 	.globl _setIntensity
-                                     21 	.globl _Init
-                                     22 	.globl _max7Seg
-                                     23 	.globl _TIM4_ClearITPendingBit
-                                     24 	.globl _IWDG_Enable
-                                     25 	.globl _IWDG_ReloadCounter
-                                     26 	.globl _IWDG_SetReload
-                                     27 	.globl _IWDG_SetPrescaler
-                                     28 	.globl _IWDG_WriteAccessCmd
-                                     29 	.globl _GPIO_Init
-                                     30 	.globl _CLK_Config
-                                     31 	.globl _tick
-                                     32 	.globl _IWDG_Config
-                                     33 ;--------------------------------------------------------
-                                     34 ; ram data
-                                     35 ;--------------------------------------------------------
-                                     36 	.area DATA
-      000000                         37 _tick::
-      000000                         38 	.ds 6
-                                     39 ;--------------------------------------------------------
-                                     40 ; ram data
-                                     41 ;--------------------------------------------------------
-                                     42 	.area INITIALIZED
-                                     43 ;--------------------------------------------------------
-                                     44 ; Stack segment in internal ram 
-                                     45 ;--------------------------------------------------------
-                                     46 	.area	SSEG
-      000000                         47 __start__stack:
-      000000                         48 	.ds	1
-                                     49 
-                                     50 ;--------------------------------------------------------
-                                     51 ; absolute external ram data
+                                     14 	.globl _clock_setup
+                                     15 	.globl _PCF_getDateTime
+                                     16 	.globl _PCF_setDateTime
+                                     17 	.globl _PCF_setClockOut
+                                     18 	.globl _PCF_Init
+                                     19 	.globl _TIMER_CheckTimeMS
+                                     20 	.globl _TIMER_InitTime
+                                     21 	.globl _TIMER_Inc
+                                     22 	.globl _TIMER_Init
+                                     23 	.globl _send7Seg
+                                     24 	.globl _setIntensity
+                                     25 	.globl _Init
+                                     26 	.globl _max7Seg
+                                     27 	.globl _TIM4_ClearITPendingBit
+                                     28 	.globl _IWDG_Enable
+                                     29 	.globl _IWDG_ReloadCounter
+                                     30 	.globl _IWDG_SetReload
+                                     31 	.globl _IWDG_SetPrescaler
+                                     32 	.globl _IWDG_WriteAccessCmd
+                                     33 	.globl _GPIO_Init
+                                     34 	.globl _CLK_GetFlagStatus
+                                     35 	.globl _CLK_SYSCLKConfig
+                                     36 	.globl _CLK_HSIPrescalerConfig
+                                     37 	.globl _CLK_ClockSwitchConfig
+                                     38 	.globl _CLK_PeripheralClockConfig
+                                     39 	.globl _CLK_ClockSwitchCmd
+                                     40 	.globl _CLK_LSICmd
+                                     41 	.globl _CLK_HSICmd
+                                     42 	.globl _CLK_HSECmd
+                                     43 	.globl _CLK_DeInit
+                                     44 	.globl _tick
+                                     45 	.globl _IWDG_Config
+                                     46 ;--------------------------------------------------------
+                                     47 ; ram data
+                                     48 ;--------------------------------------------------------
+                                     49 	.area DATA
+      000000                         50 _tick::
+      000000                         51 	.ds 6
                                      52 ;--------------------------------------------------------
-                                     53 	.area DABS (ABS)
+                                     53 ; ram data
                                      54 ;--------------------------------------------------------
-                                     55 ; interrupt vector 
+                                     55 	.area INITIALIZED
                                      56 ;--------------------------------------------------------
-                                     57 	.area HOME
-      000000                         58 __interrupt_vect:
-      000000 82v00u00u00             59 	int s_GSINIT ;reset
-      000004 82 00 00 00             60 	int 0x0000 ;trap
-      000008 82 00 00 00             61 	int 0x0000 ;int0
-      00000C 82 00 00 00             62 	int 0x0000 ;int1
-      000010 82 00 00 00             63 	int 0x0000 ;int2
-      000014 82 00 00 00             64 	int 0x0000 ;int3
-      000018 82 00 00 00             65 	int 0x0000 ;int4
-      00001C 82 00 00 00             66 	int 0x0000 ;int5
-      000020 82 00 00 00             67 	int 0x0000 ;int6
-      000024 82 00 00 00             68 	int 0x0000 ;int7
-      000028 82 00 00 00             69 	int 0x0000 ;int8
-      00002C 82 00 00 00             70 	int 0x0000 ;int9
-      000030 82 00 00 00             71 	int 0x0000 ;int10
-      000034 82 00 00 00             72 	int 0x0000 ;int11
-      000038 82 00 00 00             73 	int 0x0000 ;int12
-      00003C 82 00 00 00             74 	int 0x0000 ;int13
-      000040 82 00 00 00             75 	int 0x0000 ;int14
-      000044 82 00 00 00             76 	int 0x0000 ;int15
-      000048 82 00 00 00             77 	int 0x0000 ;int16
-      00004C 82 00 00 00             78 	int 0x0000 ;int17
-      000050 82 00 00 00             79 	int 0x0000 ;int18
-      000054 82 00 00 00             80 	int 0x0000 ;int19
-      000058 82 00 00 00             81 	int 0x0000 ;int20
-      00005C 82 00 00 00             82 	int 0x0000 ;int21
-      000060 82 00 00 00             83 	int 0x0000 ;int22
-      000064 82v00u00u27             84 	int _TIM4_UPD_OVF_IRQHandler ;int23
-      000068 82 00 00 00             85 	int 0x0000 ;int24
-      00006C 82 00 00 00             86 	int 0x0000 ;int25
-      000070 82 00 00 00             87 	int 0x0000 ;int26
-      000074 82 00 00 00             88 	int 0x0000 ;int27
-      000078 82 00 00 00             89 	int 0x0000 ;int28
-      00007C 82 00 00 00             90 	int 0x0000 ;int29
-                                     91 ;--------------------------------------------------------
-                                     92 ; global & static initialisations
-                                     93 ;--------------------------------------------------------
-                                     94 	.area HOME
-                                     95 	.area GSINIT
-                                     96 	.area GSFINAL
-                                     97 	.area GSINIT
-      000000                         98 __sdcc_gs_init_startup:
-      000000                         99 __sdcc_init_data:
-                                    100 ; stm8_genXINIT() start
-      000000 AEr00r00         [ 2]  101 	ldw x, #l_DATA
-      000003 27 07            [ 1]  102 	jreq	00002$
-      000005                        103 00001$:
-      000005 72 4FuFFuFF      [ 1]  104 	clr (s_DATA - 1, x)
-      000009 5A               [ 2]  105 	decw x
-      00000A 26 F9            [ 1]  106 	jrne	00001$
-      00000C                        107 00002$:
-      00000C AEr00r00         [ 2]  108 	ldw	x, #l_INITIALIZER
-      00000F 27 09            [ 1]  109 	jreq	00004$
-      000011                        110 00003$:
-      000011 D6uFFuFF         [ 1]  111 	ld	a, (s_INITIALIZER - 1, x)
-      000014 D7uFFuFF         [ 1]  112 	ld	(s_INITIALIZED - 1, x), a
-      000017 5A               [ 2]  113 	decw	x
-      000018 26 F7            [ 1]  114 	jrne	00003$
-      00001A                        115 00004$:
-                                    116 ; stm8_genXINIT() end
-                                    117 	.area GSFINAL
-      000000 CCr00r80         [ 2]  118 	jp	__sdcc_program_startup
-                                    119 ;--------------------------------------------------------
-                                    120 ; Home
-                                    121 ;--------------------------------------------------------
-                                    122 	.area HOME
-                                    123 	.area HOME
-      000080                        124 __sdcc_program_startup:
-      000080 CCr00r4D         [ 2]  125 	jp	_main
-                                    126 ;	return from main will return to caller
-                                    127 ;--------------------------------------------------------
-                                    128 ; code
-                                    129 ;--------------------------------------------------------
-                                    130 	.area CODE
-                                    131 ;	user/main.c: 25: static void GPIO_Config(void)
-                                    132 ;	-----------------------------------------
-                                    133 ;	 function GPIO_Config
-                                    134 ;	-----------------------------------------
-      000000                        135 _GPIO_Config:
-                                    136 ;	user/main.c: 27: GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_FAST);
-      000000 4B B0            [ 1]  137 	push	#0xb0
-      000002 4B 10            [ 1]  138 	push	#0x10
-      000004 4B 05            [ 1]  139 	push	#0x05
-      000006 4B 50            [ 1]  140 	push	#0x50
-      000008 CDr00r00         [ 4]  141 	call	_GPIO_Init
-      00000B 5B 04            [ 2]  142 	addw	sp, #4
-                                    143 ;	user/main.c: 28: GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_OD_HIZ_FAST);
-      00000D 4B B0            [ 1]  144 	push	#0xb0
-      00000F 4B 20            [ 1]  145 	push	#0x20
-      000011 4B 05            [ 1]  146 	push	#0x05
-      000013 4B 50            [ 1]  147 	push	#0x50
-      000015 CDr00r00         [ 4]  148 	call	_GPIO_Init
-      000018 5B 04            [ 2]  149 	addw	sp, #4
-      00001A 81               [ 4]  150 	ret
-                                    151 ;	user/main.c: 31: void delay(uint16_t x)
-                                    152 ;	-----------------------------------------
-                                    153 ;	 function delay
-                                    154 ;	-----------------------------------------
-      00001B                        155 _delay:
-      00001B 89               [ 2]  156 	pushw	x
-                                    157 ;	user/main.c: 33: while(x--);
-      00001C 1E 05            [ 2]  158 	ldw	x, (0x05, sp)
-      00001E                        159 00101$:
-      00001E 1F 01            [ 2]  160 	ldw	(0x01, sp), x
-      000020 5A               [ 2]  161 	decw	x
-      000021 16 01            [ 2]  162 	ldw	y, (0x01, sp)
-      000023 26 F9            [ 1]  163 	jrne	00101$
-      000025 85               [ 2]  164 	popw	x
-      000026 81               [ 4]  165 	ret
-                                    166 ;	user/main.c: 36: INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
-                                    167 ;	-----------------------------------------
-                                    168 ;	 function TIM4_UPD_OVF_IRQHandler
-                                    169 ;	-----------------------------------------
-      000027                        170 _TIM4_UPD_OVF_IRQHandler:
-      000027 62               [ 2]  171 	div	x, a
-                                    172 ;	user/main.c: 38: TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
-      000028 4B 01            [ 1]  173 	push	#0x01
-      00002A CDr00r00         [ 4]  174 	call	_TIM4_ClearITPendingBit
-      00002D 84               [ 1]  175 	pop	a
-                                    176 ;	user/main.c: 39: TIMER_Inc();
-      00002E CDr00r00         [ 4]  177 	call	_TIMER_Inc
-                                    178 ;	user/main.c: 40: IWDG_ReloadCounter();
-      000031 CDr00r00         [ 4]  179 	call	_IWDG_ReloadCounter
-      000034 80               [11]  180 	iret
-                                    181 ;	user/main.c: 43: void IWDG_Config(void)
-                                    182 ;	-----------------------------------------
-                                    183 ;	 function IWDG_Config
-                                    184 ;	-----------------------------------------
-      000035                        185 _IWDG_Config:
-                                    186 ;	user/main.c: 47: IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
-      000035 4B 55            [ 1]  187 	push	#0x55
-      000037 CDr00r00         [ 4]  188 	call	_IWDG_WriteAccessCmd
-      00003A 84               [ 1]  189 	pop	a
-                                    190 ;	user/main.c: 49: IWDG_SetPrescaler(IWDG_Prescaler_256);
-      00003B 4B 06            [ 1]  191 	push	#0x06
-      00003D CDr00r00         [ 4]  192 	call	_IWDG_SetPrescaler
-      000040 84               [ 1]  193 	pop	a
-                                    194 ;	user/main.c: 53: IWDG_SetReload(250);
-      000041 4B FA            [ 1]  195 	push	#0xfa
-      000043 CDr00r00         [ 4]  196 	call	_IWDG_SetReload
-      000046 84               [ 1]  197 	pop	a
-                                    198 ;	user/main.c: 55: IWDG_ReloadCounter();
-      000047 CDr00r00         [ 4]  199 	call	_IWDG_ReloadCounter
-                                    200 ;	user/main.c: 57: IWDG_Enable();
-      00004A CCr00r00         [ 2]  201 	jp	_IWDG_Enable
-                                    202 ;	user/main.c: 60: void main() 
-                                    203 ;	-----------------------------------------
-                                    204 ;	 function main
-                                    205 ;	-----------------------------------------
-      00004D                        206 _main:
-      00004D 52 17            [ 2]  207 	sub	sp, #23
-                                    208 ;	user/main.c: 62: uint8_t hh = 0, mm = 0, ss = 0;
-      00004F 0F 01            [ 1]  209 	clr	(0x01, sp)
-      000051 0F 02            [ 1]  210 	clr	(0x02, sp)
-      000053 0F 13            [ 1]  211 	clr	(0x13, sp)
-                                    212 ;	user/main.c: 65: dateTime.second = 43;
-      000055 96               [ 1]  213 	ldw	x, sp
-      000056 A6 2B            [ 1]  214 	ld	a, #0x2b
-      000058 E7 0B            [ 1]  215 	ld	(11, x), a
-                                    216 ;	user/main.c: 66: dateTime.minute = 15;
-      00005A 96               [ 1]  217 	ldw	x, sp
-      00005B 1C 00 0B         [ 2]  218 	addw	x, #11
-      00005E 1F 16            [ 2]  219 	ldw	(0x16, sp), x
-      000060 1E 16            [ 2]  220 	ldw	x, (0x16, sp)
-      000062 5C               [ 2]  221 	incw	x
-      000063 A6 0F            [ 1]  222 	ld	a, #0x0f
-      000065 F7               [ 1]  223 	ld	(x), a
-                                    224 ;	user/main.c: 67: dateTime.hour = 17;
-      000066 1E 16            [ 2]  225 	ldw	x, (0x16, sp)
-      000068 5C               [ 2]  226 	incw	x
-      000069 5C               [ 2]  227 	incw	x
-      00006A A6 11            [ 1]  228 	ld	a, #0x11
-      00006C F7               [ 1]  229 	ld	(x), a
-                                    230 ;	user/main.c: 68: dateTime.day = 21;
-      00006D 1E 16            [ 2]  231 	ldw	x, (0x16, sp)
-      00006F A6 15            [ 1]  232 	ld	a, #0x15
-      000071 E7 03            [ 1]  233 	ld	(0x0003, x), a
-                                    234 ;	user/main.c: 69: dateTime.weekday = 5;
-      000073 1E 16            [ 2]  235 	ldw	x, (0x16, sp)
-      000075 A6 05            [ 1]  236 	ld	a, #0x05
-      000077 E7 04            [ 1]  237 	ld	(0x0004, x), a
-                                    238 ;	user/main.c: 70: dateTime.month = 12;
-      000079 1E 16            [ 2]  239 	ldw	x, (0x16, sp)
-      00007B A6 0C            [ 1]  240 	ld	a, #0x0c
-      00007D E7 05            [ 1]  241 	ld	(0x0005, x), a
-                                    242 ;	user/main.c: 71: dateTime.year = 2017;
-      00007F 1E 16            [ 2]  243 	ldw	x, (0x16, sp)
-      000081 1C 00 06         [ 2]  244 	addw	x, #0x0006
-      000084 90 AE 07 E1      [ 2]  245 	ldw	y, #0x07e1
-      000088 FF               [ 2]  246 	ldw	(x), y
-                                    247 ;	user/main.c: 72: CLK_Config();
-      000089 CDr00r00         [ 4]  248 	call	_CLK_Config
-                                    249 ;	user/main.c: 73: GPIO_Config();
-      00008C CDr00r00         [ 4]  250 	call	_GPIO_Config
-                                    251 ;	user/main.c: 74: PCF_Init(PCF_ALARM_INTERRUPT_ENABLE);
-      00008F 4B 02            [ 1]  252 	push	#0x02
-      000091 CDr00r00         [ 4]  253 	call	_PCF_Init
-      000094 84               [ 1]  254 	pop	a
-                                    255 ;	user/main.c: 76: max7Seg(GPIOC, GPIO_PIN_6, GPIO_PIN_4, GPIO_PIN_5, 8);
-      000095 4B 08            [ 1]  256 	push	#0x08
-      000097 4B 20            [ 1]  257 	push	#0x20
-      000099 4B 10            [ 1]  258 	push	#0x10
-      00009B 4B 40            [ 1]  259 	push	#0x40
-      00009D 4B 0A            [ 1]  260 	push	#0x0a
-      00009F 4B 50            [ 1]  261 	push	#0x50
-      0000A1 CDr00r00         [ 4]  262 	call	_max7Seg
-      0000A4 5B 06            [ 2]  263 	addw	sp, #6
-                                    264 ;	user/main.c: 77: Init();
-      0000A6 CDr00r00         [ 4]  265 	call	_Init
-                                    266 ;	user/main.c: 78: TIMER_Init();
-      0000A9 CDr00r00         [ 4]  267 	call	_TIMER_Init
-                                    268 ;	user/main.c: 81: IWDG_Config();
-      0000AC CDr00r35         [ 4]  269 	call	_IWDG_Config
-                                    270 ;	user/main.c: 82: enableInterrupts();
-      0000AF 9A               [ 1]  271 	rim
-                                    272 ;	user/main.c: 83: setIntensity(0x03);
-      0000B0 4B 03            [ 1]  273 	push	#0x03
-      0000B2 CDr00r00         [ 4]  274 	call	_setIntensity
-      0000B5 84               [ 1]  275 	pop	a
-                                    276 ;	user/main.c: 84: TIMER_InitTime(&tick);
-      0000B6 AEr00r00         [ 2]  277 	ldw	x, #_tick+0
-      0000B9 1F 14            [ 2]  278 	ldw	(0x14, sp), x
-      0000BB 1E 14            [ 2]  279 	ldw	x, (0x14, sp)
-      0000BD 89               [ 2]  280 	pushw	x
-      0000BE CDr00r00         [ 4]  281 	call	_TIMER_InitTime
-      0000C1 85               [ 2]  282 	popw	x
-                                    283 ;	user/main.c: 86: send7Seg(DIG7, 0);
-      0000C2 4B 00            [ 1]  284 	push	#0x00
-      0000C4 4B 08            [ 1]  285 	push	#0x08
-      0000C6 CDr00r00         [ 4]  286 	call	_send7Seg
-      0000C9 85               [ 2]  287 	popw	x
-                                    288 ;	user/main.c: 87: send7Seg(DIG6, 0);
-      0000CA 4B 00            [ 1]  289 	push	#0x00
-      0000CC 4B 07            [ 1]  290 	push	#0x07
-      0000CE CDr00r00         [ 4]  291 	call	_send7Seg
-      0000D1 85               [ 2]  292 	popw	x
-                                    293 ;	user/main.c: 88: send7Seg(DIG5, 10);
-      0000D2 4B 0A            [ 1]  294 	push	#0x0a
-      0000D4 4B 06            [ 1]  295 	push	#0x06
-      0000D6 CDr00r00         [ 4]  296 	call	_send7Seg
-      0000D9 85               [ 2]  297 	popw	x
-                                    298 ;	user/main.c: 89: send7Seg(DIG4, 0);
-      0000DA 4B 00            [ 1]  299 	push	#0x00
-      0000DC 4B 05            [ 1]  300 	push	#0x05
-      0000DE CDr00r00         [ 4]  301 	call	_send7Seg
-      0000E1 85               [ 2]  302 	popw	x
-                                    303 ;	user/main.c: 90: send7Seg(DIG3, 0);
-      0000E2 4B 00            [ 1]  304 	push	#0x00
-      0000E4 4B 04            [ 1]  305 	push	#0x04
-      0000E6 CDr00r00         [ 4]  306 	call	_send7Seg
-      0000E9 85               [ 2]  307 	popw	x
-                                    308 ;	user/main.c: 91: send7Seg(DIG2, 10);
-      0000EA 4B 0A            [ 1]  309 	push	#0x0a
-      0000EC 4B 03            [ 1]  310 	push	#0x03
-      0000EE CDr00r00         [ 4]  311 	call	_send7Seg
-      0000F1 85               [ 2]  312 	popw	x
-                                    313 ;	user/main.c: 92: send7Seg(DIG1, 0);
-      0000F2 4B 00            [ 1]  314 	push	#0x00
-      0000F4 4B 02            [ 1]  315 	push	#0x02
-      0000F6 CDr00r00         [ 4]  316 	call	_send7Seg
-      0000F9 85               [ 2]  317 	popw	x
-                                    318 ;	user/main.c: 93: send7Seg(DIG0, 0);
-      0000FA 4B 00            [ 1]  319 	push	#0x00
-      0000FC 4B 01            [ 1]  320 	push	#0x01
-      0000FE CDr00r00         [ 4]  321 	call	_send7Seg
-      000101 85               [ 2]  322 	popw	x
-                                    323 ;	user/main.c: 94: while(TRUE) 
-      000102                        324 00110$:
-                                    325 ;	user/main.c: 96: if(TIMER_CheckTimeMS(&tick, 1000) == 0)
-      000102 16 14            [ 2]  326 	ldw	y, (0x14, sp)
-      000104 4B E8            [ 1]  327 	push	#0xe8
-      000106 4B 03            [ 1]  328 	push	#0x03
-      000108 5F               [ 1]  329 	clrw	x
-      000109 89               [ 2]  330 	pushw	x
-      00010A 90 89            [ 2]  331 	pushw	y
-      00010C CDr00r00         [ 4]  332 	call	_TIMER_CheckTimeMS
-      00010F 5B 06            [ 2]  333 	addw	sp, #6
-      000111 4D               [ 1]  334 	tnz	a
-      000112 26 EE            [ 1]  335 	jrne	00110$
-                                    336 ;	user/main.c: 98: if(++ss >=60)
-      000114 0C 13            [ 1]  337 	inc	(0x13, sp)
-      000116 7B 13            [ 1]  338 	ld	a, (0x13, sp)
-      000118 A1 3C            [ 1]  339 	cp	a, #0x3c
-      00011A 25 16            [ 1]  340 	jrc	00106$
-                                    341 ;	user/main.c: 100: ss=0;
-      00011C 0F 13            [ 1]  342 	clr	(0x13, sp)
-                                    343 ;	user/main.c: 101: if(++mm >=60)
-      00011E 0C 02            [ 1]  344 	inc	(0x02, sp)
-      000120 7B 02            [ 1]  345 	ld	a, (0x02, sp)
-      000122 A1 3C            [ 1]  346 	cp	a, #0x3c
-      000124 25 0C            [ 1]  347 	jrc	00106$
-                                    348 ;	user/main.c: 103: mm=0;
-      000126 0F 02            [ 1]  349 	clr	(0x02, sp)
-                                    350 ;	user/main.c: 104: if(++hh >= 24)
-      000128 0C 01            [ 1]  351 	inc	(0x01, sp)
-      00012A 7B 01            [ 1]  352 	ld	a, (0x01, sp)
-      00012C A1 18            [ 1]  353 	cp	a, #0x18
-      00012E 25 02            [ 1]  354 	jrc	00106$
-                                    355 ;	user/main.c: 105: hh = 0;
-      000130 0F 01            [ 1]  356 	clr	(0x01, sp)
-      000132                        357 00106$:
-                                    358 ;	user/main.c: 108: send7Seg(DIG0, ss%10);
-      000132 5F               [ 1]  359 	clrw	x
-      000133 7B 13            [ 1]  360 	ld	a, (0x13, sp)
-      000135 97               [ 1]  361 	ld	xl, a
-      000136 A6 0A            [ 1]  362 	ld	a, #0x0a
-      000138 62               [ 2]  363 	div	x, a
-      000139 88               [ 1]  364 	push	a
-      00013A 4B 01            [ 1]  365 	push	#0x01
-      00013C CDr00r00         [ 4]  366 	call	_send7Seg
-      00013F 85               [ 2]  367 	popw	x
-                                    368 ;	user/main.c: 109: send7Seg(DIG1, ss/10);
-      000140 5F               [ 1]  369 	clrw	x
-      000141 7B 13            [ 1]  370 	ld	a, (0x13, sp)
-      000143 97               [ 1]  371 	ld	xl, a
-      000144 A6 0A            [ 1]  372 	ld	a, #0x0a
-      000146 62               [ 2]  373 	div	x, a
-      000147 9F               [ 1]  374 	ld	a, xl
-      000148 88               [ 1]  375 	push	a
-      000149 4B 02            [ 1]  376 	push	#0x02
-      00014B CDr00r00         [ 4]  377 	call	_send7Seg
-      00014E 85               [ 2]  378 	popw	x
-                                    379 ;	user/main.c: 110: send7Seg(DIG3, mm%10);
-      00014F 5F               [ 1]  380 	clrw	x
-      000150 7B 02            [ 1]  381 	ld	a, (0x02, sp)
-      000152 97               [ 1]  382 	ld	xl, a
-      000153 A6 0A            [ 1]  383 	ld	a, #0x0a
-      000155 62               [ 2]  384 	div	x, a
-      000156 88               [ 1]  385 	push	a
-      000157 4B 04            [ 1]  386 	push	#0x04
-      000159 CDr00r00         [ 4]  387 	call	_send7Seg
-      00015C 85               [ 2]  388 	popw	x
-                                    389 ;	user/main.c: 111: send7Seg(DIG4, mm/10);
-      00015D 5F               [ 1]  390 	clrw	x
-      00015E 7B 02            [ 1]  391 	ld	a, (0x02, sp)
-      000160 97               [ 1]  392 	ld	xl, a
-      000161 A6 0A            [ 1]  393 	ld	a, #0x0a
-      000163 62               [ 2]  394 	div	x, a
-      000164 9F               [ 1]  395 	ld	a, xl
-      000165 88               [ 1]  396 	push	a
-      000166 4B 05            [ 1]  397 	push	#0x05
-      000168 CDr00r00         [ 4]  398 	call	_send7Seg
-      00016B 85               [ 2]  399 	popw	x
-                                    400 ;	user/main.c: 112: send7Seg(DIG6, hh%10);
-      00016C 5F               [ 1]  401 	clrw	x
-      00016D 7B 01            [ 1]  402 	ld	a, (0x01, sp)
-      00016F 97               [ 1]  403 	ld	xl, a
-      000170 A6 0A            [ 1]  404 	ld	a, #0x0a
-      000172 62               [ 2]  405 	div	x, a
-      000173 88               [ 1]  406 	push	a
-      000174 4B 07            [ 1]  407 	push	#0x07
-      000176 CDr00r00         [ 4]  408 	call	_send7Seg
-      000179 85               [ 2]  409 	popw	x
-                                    410 ;	user/main.c: 113: send7Seg(DIG7, hh/10);
-      00017A 5F               [ 1]  411 	clrw	x
-      00017B 7B 01            [ 1]  412 	ld	a, (0x01, sp)
-      00017D 97               [ 1]  413 	ld	xl, a
-      00017E A6 0A            [ 1]  414 	ld	a, #0x0a
-      000180 62               [ 2]  415 	div	x, a
-      000181 9F               [ 1]  416 	ld	a, xl
-      000182 88               [ 1]  417 	push	a
-      000183 4B 08            [ 1]  418 	push	#0x08
-      000185 CDr00r00         [ 4]  419 	call	_send7Seg
-      000188 85               [ 2]  420 	popw	x
-      000189 CCr01r02         [ 2]  421 	jp	00110$
-      00018C 5B 17            [ 2]  422 	addw	sp, #23
-      00018E 81               [ 4]  423 	ret
-                                    424 	.area CODE
-                                    425 	.area INITIALIZER
-                                    426 	.area CABS (ABS)
+                                     57 ; Stack segment in internal ram 
+                                     58 ;--------------------------------------------------------
+                                     59 	.area	SSEG
+      000000                         60 __start__stack:
+      000000                         61 	.ds	1
+                                     62 
+                                     63 ;--------------------------------------------------------
+                                     64 ; absolute external ram data
+                                     65 ;--------------------------------------------------------
+                                     66 	.area DABS (ABS)
+                                     67 ;--------------------------------------------------------
+                                     68 ; interrupt vector 
+                                     69 ;--------------------------------------------------------
+                                     70 	.area HOME
+      000000                         71 __interrupt_vect:
+      000000 82v00u00u00             72 	int s_GSINIT ;reset
+      000004 82 00 00 00             73 	int 0x0000 ;trap
+      000008 82 00 00 00             74 	int 0x0000 ;int0
+      00000C 82 00 00 00             75 	int 0x0000 ;int1
+      000010 82 00 00 00             76 	int 0x0000 ;int2
+      000014 82 00 00 00             77 	int 0x0000 ;int3
+      000018 82 00 00 00             78 	int 0x0000 ;int4
+      00001C 82 00 00 00             79 	int 0x0000 ;int5
+      000020 82 00 00 00             80 	int 0x0000 ;int6
+      000024 82 00 00 00             81 	int 0x0000 ;int7
+      000028 82 00 00 00             82 	int 0x0000 ;int8
+      00002C 82 00 00 00             83 	int 0x0000 ;int9
+      000030 82 00 00 00             84 	int 0x0000 ;int10
+      000034 82 00 00 00             85 	int 0x0000 ;int11
+      000038 82 00 00 00             86 	int 0x0000 ;int12
+      00003C 82 00 00 00             87 	int 0x0000 ;int13
+      000040 82 00 00 00             88 	int 0x0000 ;int14
+      000044 82 00 00 00             89 	int 0x0000 ;int15
+      000048 82 00 00 00             90 	int 0x0000 ;int16
+      00004C 82 00 00 00             91 	int 0x0000 ;int17
+      000050 82 00 00 00             92 	int 0x0000 ;int18
+      000054 82 00 00 00             93 	int 0x0000 ;int19
+      000058 82 00 00 00             94 	int 0x0000 ;int20
+      00005C 82 00 00 00             95 	int 0x0000 ;int21
+      000060 82 00 00 00             96 	int 0x0000 ;int22
+      000064 82v00u00uA7             97 	int _TIM4_UPD_OVF_IRQHandler ;int23
+      000068 82 00 00 00             98 	int 0x0000 ;int24
+      00006C 82 00 00 00             99 	int 0x0000 ;int25
+      000070 82 00 00 00            100 	int 0x0000 ;int26
+      000074 82 00 00 00            101 	int 0x0000 ;int27
+      000078 82 00 00 00            102 	int 0x0000 ;int28
+      00007C 82 00 00 00            103 	int 0x0000 ;int29
+                                    104 ;--------------------------------------------------------
+                                    105 ; global & static initialisations
+                                    106 ;--------------------------------------------------------
+                                    107 	.area HOME
+                                    108 	.area GSINIT
+                                    109 	.area GSFINAL
+                                    110 	.area GSINIT
+      000000                        111 __sdcc_gs_init_startup:
+      000000                        112 __sdcc_init_data:
+                                    113 ; stm8_genXINIT() start
+      000000 AEr00r00         [ 2]  114 	ldw x, #l_DATA
+      000003 27 07            [ 1]  115 	jreq	00002$
+      000005                        116 00001$:
+      000005 72 4FuFFuFF      [ 1]  117 	clr (s_DATA - 1, x)
+      000009 5A               [ 2]  118 	decw x
+      00000A 26 F9            [ 1]  119 	jrne	00001$
+      00000C                        120 00002$:
+      00000C AEr00r00         [ 2]  121 	ldw	x, #l_INITIALIZER
+      00000F 27 09            [ 1]  122 	jreq	00004$
+      000011                        123 00003$:
+      000011 D6uFFuFF         [ 1]  124 	ld	a, (s_INITIALIZER - 1, x)
+      000014 D7uFFuFF         [ 1]  125 	ld	(s_INITIALIZED - 1, x), a
+      000017 5A               [ 2]  126 	decw	x
+      000018 26 F7            [ 1]  127 	jrne	00003$
+      00001A                        128 00004$:
+                                    129 ; stm8_genXINIT() end
+                                    130 	.area GSFINAL
+      000000 CCr00r80         [ 2]  131 	jp	__sdcc_program_startup
+                                    132 ;--------------------------------------------------------
+                                    133 ; Home
+                                    134 ;--------------------------------------------------------
+                                    135 	.area HOME
+                                    136 	.area HOME
+      000080                        137 __sdcc_program_startup:
+      000080 CCr00rCD         [ 2]  138 	jp	_main
+                                    139 ;	return from main will return to caller
+                                    140 ;--------------------------------------------------------
+                                    141 ; code
+                                    142 ;--------------------------------------------------------
+                                    143 	.area CODE
+                                    144 ;	user/main.c: 27: void clock_setup(void)
+                                    145 ;	-----------------------------------------
+                                    146 ;	 function clock_setup
+                                    147 ;	-----------------------------------------
+      000000                        148 _clock_setup:
+                                    149 ;	user/main.c: 29: CLK_DeInit();
+      000000 CDr00r00         [ 4]  150 	call	_CLK_DeInit
+                                    151 ;	user/main.c: 30: CLK_HSECmd(DISABLE);
+      000003 4B 00            [ 1]  152 	push	#0x00
+      000005 CDr00r00         [ 4]  153 	call	_CLK_HSECmd
+      000008 84               [ 1]  154 	pop	a
+                                    155 ;	user/main.c: 31: CLK_LSICmd(DISABLE);
+      000009 4B 00            [ 1]  156 	push	#0x00
+      00000B CDr00r00         [ 4]  157 	call	_CLK_LSICmd
+      00000E 84               [ 1]  158 	pop	a
+                                    159 ;	user/main.c: 32: CLK_HSICmd(ENABLE);
+      00000F 4B 01            [ 1]  160 	push	#0x01
+      000011 CDr00r00         [ 4]  161 	call	_CLK_HSICmd
+      000014 84               [ 1]  162 	pop	a
+                                    163 ;	user/main.c: 33: while(CLK_GetFlagStatus(CLK_FLAG_HSIRDY) == FALSE);
+      000015                        164 00101$:
+      000015 4B 02            [ 1]  165 	push	#0x02
+      000017 4B 01            [ 1]  166 	push	#0x01
+      000019 CDr00r00         [ 4]  167 	call	_CLK_GetFlagStatus
+      00001C 85               [ 2]  168 	popw	x
+      00001D 4D               [ 1]  169 	tnz	a
+      00001E 27 F5            [ 1]  170 	jreq	00101$
+                                    171 ;	user/main.c: 34: CLK_ClockSwitchCmd(ENABLE);
+      000020 4B 01            [ 1]  172 	push	#0x01
+      000022 CDr00r00         [ 4]  173 	call	_CLK_ClockSwitchCmd
+      000025 84               [ 1]  174 	pop	a
+                                    175 ;	user/main.c: 35: CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV8);
+      000026 4B 18            [ 1]  176 	push	#0x18
+      000028 CDr00r00         [ 4]  177 	call	_CLK_HSIPrescalerConfig
+      00002B 84               [ 1]  178 	pop	a
+                                    179 ;	user/main.c: 36: CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV2);
+      00002C 4B 81            [ 1]  180 	push	#0x81
+      00002E CDr00r00         [ 4]  181 	call	_CLK_SYSCLKConfig
+      000031 84               [ 1]  182 	pop	a
+                                    183 ;	user/main.c: 37: CLK_ClockSwitchConfig(CLK_SWITCHMODE_AUTO, CLK_SOURCE_HSI, DISABLE, CLK_CURRENTCLOCKSTATE_ENABLE);
+      000032 4B 01            [ 1]  184 	push	#0x01
+      000034 4B 00            [ 1]  185 	push	#0x00
+      000036 4B E1            [ 1]  186 	push	#0xe1
+      000038 4B 01            [ 1]  187 	push	#0x01
+      00003A CDr00r00         [ 4]  188 	call	_CLK_ClockSwitchConfig
+      00003D 5B 04            [ 2]  189 	addw	sp, #4
+                                    190 ;	user/main.c: 38: CLK_PeripheralClockConfig(CLK_PERIPHERAL_SPI, DISABLE);
+      00003F 4B 00            [ 1]  191 	push	#0x00
+      000041 4B 01            [ 1]  192 	push	#0x01
+      000043 CDr00r00         [ 4]  193 	call	_CLK_PeripheralClockConfig
+      000046 85               [ 2]  194 	popw	x
+                                    195 ;	user/main.c: 39: CLK_PeripheralClockConfig(CLK_PERIPHERAL_I2C, ENABLE);
+      000047 4B 01            [ 1]  196 	push	#0x01
+      000049 4B 00            [ 1]  197 	push	#0x00
+      00004B CDr00r00         [ 4]  198 	call	_CLK_PeripheralClockConfig
+      00004E 85               [ 2]  199 	popw	x
+                                    200 ;	user/main.c: 40: CLK_PeripheralClockConfig(CLK_PERIPHERAL_ADC, DISABLE);
+      00004F 4B 00            [ 1]  201 	push	#0x00
+      000051 4B 13            [ 1]  202 	push	#0x13
+      000053 CDr00r00         [ 4]  203 	call	_CLK_PeripheralClockConfig
+      000056 85               [ 2]  204 	popw	x
+                                    205 ;	user/main.c: 41: CLK_PeripheralClockConfig(CLK_PERIPHERAL_AWU, DISABLE);
+      000057 4B 00            [ 1]  206 	push	#0x00
+      000059 4B 12            [ 1]  207 	push	#0x12
+      00005B CDr00r00         [ 4]  208 	call	_CLK_PeripheralClockConfig
+      00005E 85               [ 2]  209 	popw	x
+                                    210 ;	user/main.c: 42: CLK_PeripheralClockConfig(CLK_PERIPHERAL_UART1, DISABLE);
+      00005F 4B 00            [ 1]  211 	push	#0x00
+      000061 4B 03            [ 1]  212 	push	#0x03
+      000063 CDr00r00         [ 4]  213 	call	_CLK_PeripheralClockConfig
+      000066 85               [ 2]  214 	popw	x
+                                    215 ;	user/main.c: 43: CLK_PeripheralClockConfig(CLK_PERIPHERAL_TIMER1, DISABLE);
+      000067 4B 00            [ 1]  216 	push	#0x00
+      000069 4B 07            [ 1]  217 	push	#0x07
+      00006B CDr00r00         [ 4]  218 	call	_CLK_PeripheralClockConfig
+      00006E 85               [ 2]  219 	popw	x
+                                    220 ;	user/main.c: 44: CLK_PeripheralClockConfig(CLK_PERIPHERAL_TIMER2, DISABLE);
+      00006F 4B 00            [ 1]  221 	push	#0x00
+      000071 4B 05            [ 1]  222 	push	#0x05
+      000073 CDr00r00         [ 4]  223 	call	_CLK_PeripheralClockConfig
+      000076 85               [ 2]  224 	popw	x
+                                    225 ;	user/main.c: 45: CLK_PeripheralClockConfig(CLK_PERIPHERAL_TIMER4, ENABLE);
+      000077 4B 01            [ 1]  226 	push	#0x01
+      000079 4B 04            [ 1]  227 	push	#0x04
+      00007B CDr00r00         [ 4]  228 	call	_CLK_PeripheralClockConfig
+      00007E 85               [ 2]  229 	popw	x
+      00007F 81               [ 4]  230 	ret
+                                    231 ;	user/main.c: 48: static void GPIO_Config(void)
+                                    232 ;	-----------------------------------------
+                                    233 ;	 function GPIO_Config
+                                    234 ;	-----------------------------------------
+      000080                        235 _GPIO_Config:
+                                    236 ;	user/main.c: 50: GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_FAST);
+      000080 4B B0            [ 1]  237 	push	#0xb0
+      000082 4B 10            [ 1]  238 	push	#0x10
+      000084 4B 05            [ 1]  239 	push	#0x05
+      000086 4B 50            [ 1]  240 	push	#0x50
+      000088 CDr00r00         [ 4]  241 	call	_GPIO_Init
+      00008B 5B 04            [ 2]  242 	addw	sp, #4
+                                    243 ;	user/main.c: 51: GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_OD_HIZ_FAST);
+      00008D 4B B0            [ 1]  244 	push	#0xb0
+      00008F 4B 20            [ 1]  245 	push	#0x20
+      000091 4B 05            [ 1]  246 	push	#0x05
+      000093 4B 50            [ 1]  247 	push	#0x50
+      000095 CDr00r00         [ 4]  248 	call	_GPIO_Init
+      000098 5B 04            [ 2]  249 	addw	sp, #4
+      00009A 81               [ 4]  250 	ret
+                                    251 ;	user/main.c: 54: void delay(uint16_t x)
+                                    252 ;	-----------------------------------------
+                                    253 ;	 function delay
+                                    254 ;	-----------------------------------------
+      00009B                        255 _delay:
+      00009B 89               [ 2]  256 	pushw	x
+                                    257 ;	user/main.c: 56: while(x--);
+      00009C 1E 05            [ 2]  258 	ldw	x, (0x05, sp)
+      00009E                        259 00101$:
+      00009E 1F 01            [ 2]  260 	ldw	(0x01, sp), x
+      0000A0 5A               [ 2]  261 	decw	x
+      0000A1 16 01            [ 2]  262 	ldw	y, (0x01, sp)
+      0000A3 26 F9            [ 1]  263 	jrne	00101$
+      0000A5 85               [ 2]  264 	popw	x
+      0000A6 81               [ 4]  265 	ret
+                                    266 ;	user/main.c: 59: INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
+                                    267 ;	-----------------------------------------
+                                    268 ;	 function TIM4_UPD_OVF_IRQHandler
+                                    269 ;	-----------------------------------------
+      0000A7                        270 _TIM4_UPD_OVF_IRQHandler:
+      0000A7 62               [ 2]  271 	div	x, a
+                                    272 ;	user/main.c: 61: TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
+      0000A8 4B 01            [ 1]  273 	push	#0x01
+      0000AA CDr00r00         [ 4]  274 	call	_TIM4_ClearITPendingBit
+      0000AD 84               [ 1]  275 	pop	a
+                                    276 ;	user/main.c: 62: TIMER_Inc();
+      0000AE CDr00r00         [ 4]  277 	call	_TIMER_Inc
+                                    278 ;	user/main.c: 63: IWDG_ReloadCounter();
+      0000B1 CDr00r00         [ 4]  279 	call	_IWDG_ReloadCounter
+      0000B4 80               [11]  280 	iret
+                                    281 ;	user/main.c: 66: void IWDG_Config(void)
+                                    282 ;	-----------------------------------------
+                                    283 ;	 function IWDG_Config
+                                    284 ;	-----------------------------------------
+      0000B5                        285 _IWDG_Config:
+                                    286 ;	user/main.c: 70: IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
+      0000B5 4B 55            [ 1]  287 	push	#0x55
+      0000B7 CDr00r00         [ 4]  288 	call	_IWDG_WriteAccessCmd
+      0000BA 84               [ 1]  289 	pop	a
+                                    290 ;	user/main.c: 72: IWDG_SetPrescaler(IWDG_Prescaler_256);
+      0000BB 4B 06            [ 1]  291 	push	#0x06
+      0000BD CDr00r00         [ 4]  292 	call	_IWDG_SetPrescaler
+      0000C0 84               [ 1]  293 	pop	a
+                                    294 ;	user/main.c: 76: IWDG_SetReload(250);
+      0000C1 4B FA            [ 1]  295 	push	#0xfa
+      0000C3 CDr00r00         [ 4]  296 	call	_IWDG_SetReload
+      0000C6 84               [ 1]  297 	pop	a
+                                    298 ;	user/main.c: 78: IWDG_ReloadCounter();
+      0000C7 CDr00r00         [ 4]  299 	call	_IWDG_ReloadCounter
+                                    300 ;	user/main.c: 80: IWDG_Enable();
+      0000CA CCr00r00         [ 2]  301 	jp	_IWDG_Enable
+                                    302 ;	user/main.c: 154: void main() 
+                                    303 ;	-----------------------------------------
+                                    304 ;	 function main
+                                    305 ;	-----------------------------------------
+      0000CD                        306 _main:
+      0000CD 52 16            [ 2]  307 	sub	sp, #22
+                                    308 ;	user/main.c: 159: dateTime.second = 40;
+      0000CF 96               [ 1]  309 	ldw	x, sp
+      0000D0 5C               [ 2]  310 	incw	x
+      0000D1 A6 28            [ 1]  311 	ld	a, #0x28
+      0000D3 F7               [ 1]  312 	ld	(x), a
+                                    313 ;	user/main.c: 160: dateTime.minute = 32;
+      0000D4 96               [ 1]  314 	ldw	x, sp
+      0000D5 5C               [ 2]  315 	incw	x
+      0000D6 1F 13            [ 2]  316 	ldw	(0x13, sp), x
+      0000D8 1E 13            [ 2]  317 	ldw	x, (0x13, sp)
+      0000DA 5C               [ 2]  318 	incw	x
+      0000DB A6 20            [ 1]  319 	ld	a, #0x20
+      0000DD F7               [ 1]  320 	ld	(x), a
+                                    321 ;	user/main.c: 161: dateTime.hour = 14;
+      0000DE 1E 13            [ 2]  322 	ldw	x, (0x13, sp)
+      0000E0 5C               [ 2]  323 	incw	x
+      0000E1 5C               [ 2]  324 	incw	x
+      0000E2 A6 0E            [ 1]  325 	ld	a, #0x0e
+      0000E4 F7               [ 1]  326 	ld	(x), a
+                                    327 ;	user/main.c: 162: dateTime.day = 22;
+      0000E5 1E 13            [ 2]  328 	ldw	x, (0x13, sp)
+      0000E7 A6 16            [ 1]  329 	ld	a, #0x16
+      0000E9 E7 03            [ 1]  330 	ld	(0x0003, x), a
+                                    331 ;	user/main.c: 163: dateTime.weekday = 6;
+      0000EB 1E 13            [ 2]  332 	ldw	x, (0x13, sp)
+      0000ED A6 06            [ 1]  333 	ld	a, #0x06
+      0000EF E7 04            [ 1]  334 	ld	(0x0004, x), a
+                                    335 ;	user/main.c: 164: dateTime.month = 12;
+      0000F1 1E 13            [ 2]  336 	ldw	x, (0x13, sp)
+      0000F3 A6 0C            [ 1]  337 	ld	a, #0x0c
+      0000F5 E7 05            [ 1]  338 	ld	(0x0005, x), a
+                                    339 ;	user/main.c: 165: dateTime.year = 2017;
+      0000F7 1E 13            [ 2]  340 	ldw	x, (0x13, sp)
+      0000F9 1C 00 06         [ 2]  341 	addw	x, #0x0006
+      0000FC 90 AE 07 E1      [ 2]  342 	ldw	y, #0x07e1
+      000100 FF               [ 2]  343 	ldw	(x), y
+                                    344 ;	user/main.c: 166: clock_setup();
+      000101 CDr00r00         [ 4]  345 	call	_clock_setup
+                                    346 ;	user/main.c: 170: PCF_Init(PCF_ALARM_INTERRUPT_ENABLE | PCF_TIMER_INTERRUPT_ENABLE);
+      000104 4B 03            [ 1]  347 	push	#0x03
+      000106 CDr00r00         [ 4]  348 	call	_PCF_Init
+      000109 84               [ 1]  349 	pop	a
+                                    350 ;	user/main.c: 173: max7Seg(GPIOC, GPIO_PIN_6, GPIO_PIN_4, GPIO_PIN_5, 8);
+      00010A 4B 08            [ 1]  351 	push	#0x08
+      00010C 4B 20            [ 1]  352 	push	#0x20
+      00010E 4B 10            [ 1]  353 	push	#0x10
+      000110 4B 40            [ 1]  354 	push	#0x40
+      000112 4B 0A            [ 1]  355 	push	#0x0a
+      000114 4B 50            [ 1]  356 	push	#0x50
+      000116 CDr00r00         [ 4]  357 	call	_max7Seg
+      000119 5B 06            [ 2]  358 	addw	sp, #6
+                                    359 ;	user/main.c: 174: Init();
+      00011B CDr00r00         [ 4]  360 	call	_Init
+                                    361 ;	user/main.c: 175: TIMER_Init();
+      00011E CDr00r00         [ 4]  362 	call	_TIMER_Init
+                                    363 ;	user/main.c: 176: PCF_setClockOut(PCF_CLKOUT_1HZ);
+      000121 4B 13            [ 1]  364 	push	#0x13
+      000123 CDr00r00         [ 4]  365 	call	_PCF_setClockOut
+      000126 84               [ 1]  366 	pop	a
+                                    367 ;	user/main.c: 177: delay(50);
+      000127 4B 32            [ 1]  368 	push	#0x32
+      000129 4B 00            [ 1]  369 	push	#0x00
+      00012B CDr00r9B         [ 4]  370 	call	_delay
+      00012E 85               [ 2]  371 	popw	x
+                                    372 ;	user/main.c: 178: PCF_setDateTime(&dateTime);
+      00012F 1E 13            [ 2]  373 	ldw	x, (0x13, sp)
+      000131 89               [ 2]  374 	pushw	x
+      000132 CDr00r00         [ 4]  375 	call	_PCF_setDateTime
+      000135 85               [ 2]  376 	popw	x
+                                    377 ;	user/main.c: 179: delay(50);
+      000136 4B 32            [ 1]  378 	push	#0x32
+      000138 4B 00            [ 1]  379 	push	#0x00
+      00013A CDr00r9B         [ 4]  380 	call	_delay
+      00013D 85               [ 2]  381 	popw	x
+                                    382 ;	user/main.c: 180: IWDG_Config();
+      00013E CDr00rB5         [ 4]  383 	call	_IWDG_Config
+                                    384 ;	user/main.c: 181: enableInterrupts();
+      000141 9A               [ 1]  385 	rim
+                                    386 ;	user/main.c: 182: setIntensity(0x03);
+      000142 4B 03            [ 1]  387 	push	#0x03
+      000144 CDr00r00         [ 4]  388 	call	_setIntensity
+      000147 84               [ 1]  389 	pop	a
+                                    390 ;	user/main.c: 183: TIMER_InitTime(&tick);
+      000148 AEr00r00         [ 2]  391 	ldw	x, #_tick+0
+      00014B 1F 11            [ 2]  392 	ldw	(0x11, sp), x
+      00014D 1E 11            [ 2]  393 	ldw	x, (0x11, sp)
+      00014F 89               [ 2]  394 	pushw	x
+      000150 CDr00r00         [ 4]  395 	call	_TIMER_InitTime
+      000153 85               [ 2]  396 	popw	x
+                                    397 ;	user/main.c: 184: send7Seg(DIG7, 0);
+      000154 4B 00            [ 1]  398 	push	#0x00
+      000156 4B 08            [ 1]  399 	push	#0x08
+      000158 CDr00r00         [ 4]  400 	call	_send7Seg
+      00015B 85               [ 2]  401 	popw	x
+                                    402 ;	user/main.c: 185: send7Seg(DIG6, 0);
+      00015C 4B 00            [ 1]  403 	push	#0x00
+      00015E 4B 07            [ 1]  404 	push	#0x07
+      000160 CDr00r00         [ 4]  405 	call	_send7Seg
+      000163 85               [ 2]  406 	popw	x
+                                    407 ;	user/main.c: 186: send7Seg(DIG5, 10);
+      000164 4B 0A            [ 1]  408 	push	#0x0a
+      000166 4B 06            [ 1]  409 	push	#0x06
+      000168 CDr00r00         [ 4]  410 	call	_send7Seg
+      00016B 85               [ 2]  411 	popw	x
+                                    412 ;	user/main.c: 187: send7Seg(DIG4, 0);
+      00016C 4B 00            [ 1]  413 	push	#0x00
+      00016E 4B 05            [ 1]  414 	push	#0x05
+      000170 CDr00r00         [ 4]  415 	call	_send7Seg
+      000173 85               [ 2]  416 	popw	x
+                                    417 ;	user/main.c: 188: send7Seg(DIG3, 0);
+      000174 4B 00            [ 1]  418 	push	#0x00
+      000176 4B 04            [ 1]  419 	push	#0x04
+      000178 CDr00r00         [ 4]  420 	call	_send7Seg
+      00017B 85               [ 2]  421 	popw	x
+                                    422 ;	user/main.c: 189: send7Seg(DIG2, 10);
+      00017C 4B 0A            [ 1]  423 	push	#0x0a
+      00017E 4B 03            [ 1]  424 	push	#0x03
+      000180 CDr00r00         [ 4]  425 	call	_send7Seg
+      000183 85               [ 2]  426 	popw	x
+                                    427 ;	user/main.c: 190: send7Seg(DIG1, 0);
+      000184 4B 00            [ 1]  428 	push	#0x00
+      000186 4B 02            [ 1]  429 	push	#0x02
+      000188 CDr00r00         [ 4]  430 	call	_send7Seg
+      00018B 85               [ 2]  431 	popw	x
+                                    432 ;	user/main.c: 191: send7Seg(DIG0, 0);
+      00018C 4B 00            [ 1]  433 	push	#0x00
+      00018E 4B 01            [ 1]  434 	push	#0x01
+      000190 CDr00r00         [ 4]  435 	call	_send7Seg
+      000193 85               [ 2]  436 	popw	x
+                                    437 ;	user/main.c: 192: while(TRUE) 
+      000194                        438 00104$:
+                                    439 ;	user/main.c: 214: if(TIMER_CheckTimeMS(&tick, 50) == 0)
+      000194 16 11            [ 2]  440 	ldw	y, (0x11, sp)
+      000196 4B 32            [ 1]  441 	push	#0x32
+      000198 5F               [ 1]  442 	clrw	x
+      000199 89               [ 2]  443 	pushw	x
+      00019A 4B 00            [ 1]  444 	push	#0x00
+      00019C 90 89            [ 2]  445 	pushw	y
+      00019E CDr00r00         [ 4]  446 	call	_TIMER_CheckTimeMS
+      0001A1 5B 06            [ 2]  447 	addw	sp, #6
+      0001A3 4D               [ 1]  448 	tnz	a
+      0001A4 26 EE            [ 1]  449 	jrne	00104$
+                                    450 ;	user/main.c: 216: PCF_getDateTime(&pcfDateTime);  
+      0001A6 96               [ 1]  451 	ldw	x, sp
+      0001A7 1C 00 09         [ 2]  452 	addw	x, #9
+      0001AA 1F 15            [ 2]  453 	ldw	(0x15, sp), x
+      0001AC 1E 15            [ 2]  454 	ldw	x, (0x15, sp)
+      0001AE 89               [ 2]  455 	pushw	x
+      0001AF CDr00r00         [ 4]  456 	call	_PCF_getDateTime
+      0001B2 85               [ 2]  457 	popw	x
+                                    458 ;	user/main.c: 217: send7Seg(DIG0, pcfDateTime.second%10);
+      0001B3 1E 15            [ 2]  459 	ldw	x, (0x15, sp)
+      0001B5 F6               [ 1]  460 	ld	a, (x)
+      0001B6 5F               [ 1]  461 	clrw	x
+      0001B7 97               [ 1]  462 	ld	xl, a
+      0001B8 A6 0A            [ 1]  463 	ld	a, #0x0a
+      0001BA 62               [ 2]  464 	div	x, a
+      0001BB 88               [ 1]  465 	push	a
+      0001BC 4B 01            [ 1]  466 	push	#0x01
+      0001BE CDr00r00         [ 4]  467 	call	_send7Seg
+      0001C1 85               [ 2]  468 	popw	x
+                                    469 ;	user/main.c: 218: send7Seg(DIG1, pcfDateTime.second/10);
+      0001C2 1E 15            [ 2]  470 	ldw	x, (0x15, sp)
+      0001C4 F6               [ 1]  471 	ld	a, (x)
+      0001C5 5F               [ 1]  472 	clrw	x
+      0001C6 97               [ 1]  473 	ld	xl, a
+      0001C7 A6 0A            [ 1]  474 	ld	a, #0x0a
+      0001C9 62               [ 2]  475 	div	x, a
+      0001CA 9F               [ 1]  476 	ld	a, xl
+      0001CB 88               [ 1]  477 	push	a
+      0001CC 4B 02            [ 1]  478 	push	#0x02
+      0001CE CDr00r00         [ 4]  479 	call	_send7Seg
+      0001D1 85               [ 2]  480 	popw	x
+                                    481 ;	user/main.c: 219: send7Seg(DIG3, pcfDateTime.minute%10);
+      0001D2 1E 15            [ 2]  482 	ldw	x, (0x15, sp)
+      0001D4 5C               [ 2]  483 	incw	x
+      0001D5 F6               [ 1]  484 	ld	a, (x)
+      0001D6 89               [ 2]  485 	pushw	x
+      0001D7 5F               [ 1]  486 	clrw	x
+      0001D8 97               [ 1]  487 	ld	xl, a
+      0001D9 A6 0A            [ 1]  488 	ld	a, #0x0a
+      0001DB 62               [ 2]  489 	div	x, a
+      0001DC 88               [ 1]  490 	push	a
+      0001DD 4B 04            [ 1]  491 	push	#0x04
+      0001DF CDr00r00         [ 4]  492 	call	_send7Seg
+      0001E2 85               [ 2]  493 	popw	x
+      0001E3 85               [ 2]  494 	popw	x
+                                    495 ;	user/main.c: 220: send7Seg(DIG4, pcfDateTime.minute/10);
+      0001E4 F6               [ 1]  496 	ld	a, (x)
+      0001E5 5F               [ 1]  497 	clrw	x
+      0001E6 97               [ 1]  498 	ld	xl, a
+      0001E7 A6 0A            [ 1]  499 	ld	a, #0x0a
+      0001E9 62               [ 2]  500 	div	x, a
+      0001EA 9F               [ 1]  501 	ld	a, xl
+      0001EB 88               [ 1]  502 	push	a
+      0001EC 4B 05            [ 1]  503 	push	#0x05
+      0001EE CDr00r00         [ 4]  504 	call	_send7Seg
+      0001F1 85               [ 2]  505 	popw	x
+                                    506 ;	user/main.c: 221: send7Seg(DIG6, pcfDateTime.hour%10);
+      0001F2 1E 15            [ 2]  507 	ldw	x, (0x15, sp)
+      0001F4 5C               [ 2]  508 	incw	x
+      0001F5 5C               [ 2]  509 	incw	x
+      0001F6 F6               [ 1]  510 	ld	a, (x)
+      0001F7 89               [ 2]  511 	pushw	x
+      0001F8 5F               [ 1]  512 	clrw	x
+      0001F9 97               [ 1]  513 	ld	xl, a
+      0001FA A6 0A            [ 1]  514 	ld	a, #0x0a
+      0001FC 62               [ 2]  515 	div	x, a
+      0001FD 88               [ 1]  516 	push	a
+      0001FE 4B 07            [ 1]  517 	push	#0x07
+      000200 CDr00r00         [ 4]  518 	call	_send7Seg
+      000203 85               [ 2]  519 	popw	x
+      000204 85               [ 2]  520 	popw	x
+                                    521 ;	user/main.c: 222: send7Seg(DIG7, pcfDateTime.hour/10);
+      000205 F6               [ 1]  522 	ld	a, (x)
+      000206 5F               [ 1]  523 	clrw	x
+      000207 97               [ 1]  524 	ld	xl, a
+      000208 A6 0A            [ 1]  525 	ld	a, #0x0a
+      00020A 62               [ 2]  526 	div	x, a
+      00020B 9F               [ 1]  527 	ld	a, xl
+      00020C 88               [ 1]  528 	push	a
+      00020D 4B 08            [ 1]  529 	push	#0x08
+      00020F CDr00r00         [ 4]  530 	call	_send7Seg
+      000212 85               [ 2]  531 	popw	x
+      000213 CCr01r94         [ 2]  532 	jp	00104$
+      000216 5B 16            [ 2]  533 	addw	sp, #22
+      000218 81               [ 4]  534 	ret
+                                    535 	.area CODE
+                                    536 	.area INITIALIZER
+                                    537 	.area CABS (ABS)

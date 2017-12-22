@@ -227,18 +227,18 @@
       0000E0 52 04            [ 2]  227 	sub	sp, #4
                                     228 ;	user/max7219.c: 51: GPIO_Init(max7seg.port, max7seg.data|max7seg.cs|max7seg.clk, GPIO_MODE_OUT_PP_HIGH_FAST);
       0000E2 AEr00r00         [ 2]  229 	ldw	x, #_max7seg+0
-      0000E5 1F 02            [ 2]  230 	ldw	(0x02, sp), x
-      0000E7 1E 02            [ 2]  231 	ldw	x, (0x02, sp)
+      0000E5 1F 01            [ 2]  230 	ldw	(0x01, sp), x
+      0000E7 1E 01            [ 2]  231 	ldw	x, (0x01, sp)
       0000E9 E6 02            [ 1]  232 	ld	a, (0x2, x)
-      0000EB 6B 01            [ 1]  233 	ld	(0x01, sp), a
-      0000ED 1E 02            [ 2]  234 	ldw	x, (0x02, sp)
+      0000EB 6B 04            [ 1]  233 	ld	(0x04, sp), a
+      0000ED 1E 01            [ 2]  234 	ldw	x, (0x01, sp)
       0000EF E6 03            [ 1]  235 	ld	a, (0x3, x)
-      0000F1 1A 01            [ 1]  236 	or	a, (0x01, sp)
-      0000F3 6B 04            [ 1]  237 	ld	(0x04, sp), a
-      0000F5 1E 02            [ 2]  238 	ldw	x, (0x02, sp)
+      0000F1 1A 04            [ 1]  236 	or	a, (0x04, sp)
+      0000F3 6B 03            [ 1]  237 	ld	(0x03, sp), a
+      0000F5 1E 01            [ 2]  238 	ldw	x, (0x01, sp)
       0000F7 E6 04            [ 1]  239 	ld	a, (0x4, x)
-      0000F9 1A 04            [ 1]  240 	or	a, (0x04, sp)
-      0000FB 1E 02            [ 2]  241 	ldw	x, (0x02, sp)
+      0000F9 1A 03            [ 1]  240 	or	a, (0x03, sp)
+      0000FB 1E 01            [ 2]  241 	ldw	x, (0x01, sp)
       0000FD FE               [ 2]  242 	ldw	x, (x)
       0000FE 4B F0            [ 1]  243 	push	#0xf0
       000100 88               [ 1]  244 	push	a
@@ -291,13 +291,13 @@
       00013B 52 04            [ 2]  291 	sub	sp, #4
                                     292 ;	user/max7219.c: 67: GPIO_WriteLow(max7seg.port, max7seg.cs);
       00013D AEr00r00         [ 2]  293 	ldw	x, #_max7seg+0
-      000140 1F 03            [ 2]  294 	ldw	(0x03, sp), x
-      000142 1E 03            [ 2]  295 	ldw	x, (0x03, sp)
+      000140 1F 01            [ 2]  294 	ldw	(0x01, sp), x
+      000142 1E 01            [ 2]  295 	ldw	x, (0x01, sp)
       000144 1C 00 03         [ 2]  296 	addw	x, #0x0003
-      000147 1F 01            [ 2]  297 	ldw	(0x01, sp), x
-      000149 1E 01            [ 2]  298 	ldw	x, (0x01, sp)
+      000147 1F 03            [ 2]  297 	ldw	(0x03, sp), x
+      000149 1E 03            [ 2]  298 	ldw	x, (0x03, sp)
       00014B F6               [ 1]  299 	ld	a, (x)
-      00014C 1E 03            [ 2]  300 	ldw	x, (0x03, sp)
+      00014C 1E 01            [ 2]  300 	ldw	x, (0x01, sp)
       00014E FE               [ 2]  301 	ldw	x, (x)
       00014F 88               [ 1]  302 	push	a
       000150 89               [ 2]  303 	pushw	x
@@ -314,18 +314,18 @@
       000160 CDr00r45         [ 4]  314 	call	_Max7219_Write_Byte
       000163 84               [ 1]  315 	pop	a
                                     316 ;	user/max7219.c: 70: GPIO_WriteLow(max7seg.port, max7seg.cs);
-      000164 1E 01            [ 2]  317 	ldw	x, (0x01, sp)
+      000164 1E 03            [ 2]  317 	ldw	x, (0x03, sp)
       000166 F6               [ 1]  318 	ld	a, (x)
-      000167 1E 03            [ 2]  319 	ldw	x, (0x03, sp)
+      000167 1E 01            [ 2]  319 	ldw	x, (0x01, sp)
       000169 FE               [ 2]  320 	ldw	x, (x)
       00016A 88               [ 1]  321 	push	a
       00016B 89               [ 2]  322 	pushw	x
       00016C CDr00r00         [ 4]  323 	call	_GPIO_WriteLow
       00016F 5B 03            [ 2]  324 	addw	sp, #3
                                     325 ;	user/max7219.c: 71: GPIO_WriteHigh(max7seg.port, max7seg.cs);
-      000171 1E 01            [ 2]  326 	ldw	x, (0x01, sp)
+      000171 1E 03            [ 2]  326 	ldw	x, (0x03, sp)
       000173 F6               [ 1]  327 	ld	a, (x)
-      000174 1E 03            [ 2]  328 	ldw	x, (0x03, sp)
+      000174 1E 01            [ 2]  328 	ldw	x, (0x01, sp)
       000176 FE               [ 2]  329 	ldw	x, (x)
       000177 88               [ 1]  330 	push	a
       000178 89               [ 2]  331 	pushw	x

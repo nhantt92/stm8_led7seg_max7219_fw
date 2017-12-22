@@ -116,72 +116,72 @@ _DS1307_write_time:
 ;	user/ds1307.c: 20: data[0]=BIN2BCD(0x0);
 	ldw	x, sp
 	incw	x
-	ldw	(0x14, sp), x
-	push	#0x00
-	call	_BIN2BCD
-	addw	sp, #1
-	ldw	x, (0x14, sp)
-	ld	(x), a
-;	user/ds1307.c: 21: data[1]=BIN2BCD(min1);
-	ldw	x, (0x14, sp)
-	incw	x
 	ldw	(0x0a, sp), x
-	ld	a, (0x19, sp)
-	push	a
+	push	#0x00
 	call	_BIN2BCD
 	addw	sp, #1
 	ldw	x, (0x0a, sp)
 	ld	(x), a
+;	user/ds1307.c: 21: data[1]=BIN2BCD(min1);
+	ldw	x, (0x0a, sp)
+	incw	x
+	ldw	(0x10, sp), x
+	ld	a, (0x19, sp)
+	push	a
+	call	_BIN2BCD
+	addw	sp, #1
+	ldw	x, (0x10, sp)
+	ld	(x), a
 ;	user/ds1307.c: 22: data[2]=BIN2BCD(hour1);
-	ldw	x, (0x14, sp)
+	ldw	x, (0x0a, sp)
 	incw	x
 	incw	x
-	ldw	(0x12, sp), x
-	ld	a, (0x18, sp)
-	push	a
-	call	_BIN2BCD
-	addw	sp, #1
-	ldw	x, (0x12, sp)
-	ld	(x), a
-;	user/ds1307.c: 23: data[3]=BIN2BCD(day1);
-	ldw	x, (0x14, sp)
-	addw	x, #0x0003
-	ldw	(0x0e, sp), x
-	ld	a, (0x1a, sp)
-	push	a
-	call	_BIN2BCD
-	addw	sp, #1
-	ldw	x, (0x0e, sp)
-	ld	(x), a
-;	user/ds1307.c: 24: data[4]=BIN2BCD(date1);
-	ldw	x, (0x14, sp)
-	addw	x, #0x0004
-	ldw	(0x08, sp), x
-	ld	a, (0x1b, sp)
-	push	a
-	call	_BIN2BCD
-	addw	sp, #1
-	ldw	x, (0x08, sp)
-	ld	(x), a
-;	user/ds1307.c: 25: data[5]=BIN2BCD(month1);
-	ldw	x, (0x14, sp)
-	addw	x, #0x0005
 	ldw	(0x0c, sp), x
-	ld	a, (0x1c, sp)
+	ld	a, (0x18, sp)
 	push	a
 	call	_BIN2BCD
 	addw	sp, #1
 	ldw	x, (0x0c, sp)
 	ld	(x), a
+;	user/ds1307.c: 23: data[3]=BIN2BCD(day1);
+	ldw	x, (0x0a, sp)
+	addw	x, #0x0003
+	ldw	(0x08, sp), x
+	ld	a, (0x1a, sp)
+	push	a
+	call	_BIN2BCD
+	addw	sp, #1
+	ldw	x, (0x08, sp)
+	ld	(x), a
+;	user/ds1307.c: 24: data[4]=BIN2BCD(date1);
+	ldw	x, (0x0a, sp)
+	addw	x, #0x0004
+	ldw	(0x12, sp), x
+	ld	a, (0x1b, sp)
+	push	a
+	call	_BIN2BCD
+	addw	sp, #1
+	ldw	x, (0x12, sp)
+	ld	(x), a
+;	user/ds1307.c: 25: data[5]=BIN2BCD(month1);
+	ldw	x, (0x0a, sp)
+	addw	x, #0x0005
+	ldw	(0x0e, sp), x
+	ld	a, (0x1c, sp)
+	push	a
+	call	_BIN2BCD
+	addw	sp, #1
+	ldw	x, (0x0e, sp)
+	ld	(x), a
 ;	user/ds1307.c: 26: data[6]=BIN2BCD(year1);
-	ldw	x, (0x14, sp)
+	ldw	x, (0x0a, sp)
 	addw	x, #0x0006
-	ldw	(0x10, sp), x
+	ldw	(0x14, sp), x
 	ld	a, (0x1d, sp)
 	push	a
 	call	_BIN2BCD
 	addw	sp, #1
-	ldw	x, (0x10, sp)
+	ldw	x, (0x14, sp)
 	ld	(x), a
 ;	user/ds1307.c: 28: while(I2C_GetFlagStatus( I2C_FLAG_BUSBUSY)==SET);
 00101$:
@@ -229,7 +229,7 @@ _DS1307_write_time:
 	tnz	a
 	jreq	00110$
 ;	user/ds1307.c: 49: I2C_SendData( data[1]);
-	ldw	x, (0x0a, sp)
+	ldw	x, (0x10, sp)
 	ld	a, (x)
 	push	a
 	call	_I2C_SendData
@@ -243,7 +243,7 @@ _DS1307_write_time:
 	tnz	a
 	jreq	00113$
 ;	user/ds1307.c: 55: I2C_SendData( data[2]);
-	ldw	x, (0x12, sp)
+	ldw	x, (0x0c, sp)
 	ld	a, (x)
 	push	a
 	call	_I2C_SendData
@@ -257,7 +257,7 @@ _DS1307_write_time:
 	tnz	a
 	jreq	00116$
 ;	user/ds1307.c: 61: I2C_SendData( data[3]);
-	ldw	x, (0x0e, sp)
+	ldw	x, (0x08, sp)
 	ld	a, (x)
 	push	a
 	call	_I2C_SendData
@@ -271,7 +271,7 @@ _DS1307_write_time:
 	tnz	a
 	jreq	00119$
 ;	user/ds1307.c: 67: I2C_SendData( data[4]);
-	ldw	x, (0x08, sp)
+	ldw	x, (0x12, sp)
 	ld	a, (x)
 	push	a
 	call	_I2C_SendData
@@ -285,7 +285,7 @@ _DS1307_write_time:
 	tnz	a
 	jreq	00122$
 ;	user/ds1307.c: 73: I2C_SendData( data[5]);
-	ldw	x, (0x0c, sp)
+	ldw	x, (0x0e, sp)
 	ld	a, (x)
 	push	a
 	call	_I2C_SendData
@@ -299,7 +299,7 @@ _DS1307_write_time:
 	tnz	a
 	jreq	00125$
 ;	user/ds1307.c: 79: I2C_SendData( data[6]);
-	ldw	x, (0x10, sp)
+	ldw	x, (0x14, sp)
 	ld	a, (x)
 	push	a
 	call	_I2C_SendData
@@ -332,82 +332,82 @@ _DS1307_SetTime:
 ;	user/ds1307.c: 95: data[0]=BIN2BCD(time->seconds);
 	ldw	x, sp
 	incw	x
-	ldw	(0x14, sp), x
-	ldw	y, (0x1a, sp)
-	ldw	(0x16, sp), y
-	ldw	x, (0x16, sp)
-	ld	a, (x)
-	push	a
-	call	_BIN2BCD
-	addw	sp, #1
-	ldw	x, (0x14, sp)
-	ld	(x), a
-;	user/ds1307.c: 96: data[1]=BIN2BCD(time->minutes);
-	ldw	x, (0x14, sp)
-	incw	x
-	ldw	(0x10, sp), x
-	ldw	x, (0x16, sp)
-	ld	a, (0x1, x)
-	push	a
-	call	_BIN2BCD
-	addw	sp, #1
-	ldw	x, (0x10, sp)
-	ld	(x), a
-;	user/ds1307.c: 97: data[2]=BIN2BCD(time->hours);
-	ldw	x, (0x14, sp)
-	incw	x
-	incw	x
-	ldw	(0x08, sp), x
-	ldw	x, (0x16, sp)
-	ld	a, (0x2, x)
-	push	a
-	call	_BIN2BCD
-	addw	sp, #1
-	ldw	x, (0x08, sp)
-	ld	(x), a
-;	user/ds1307.c: 98: data[3]=BIN2BCD(time->day);
-	ldw	x, (0x14, sp)
-	addw	x, #0x0003
-	ldw	(0x0e, sp), x
-	ldw	x, (0x16, sp)
-	ld	a, (0x3, x)
-	push	a
-	call	_BIN2BCD
-	addw	sp, #1
-	ldw	x, (0x0e, sp)
-	ld	(x), a
-;	user/ds1307.c: 99: data[4]=BIN2BCD(time->date);
-	ldw	x, (0x14, sp)
-	addw	x, #0x0004
 	ldw	(0x0c, sp), x
-	ldw	x, (0x16, sp)
-	ld	a, (0x4, x)
+	ldw	y, (0x1a, sp)
+	ldw	(0x14, sp), y
+	ldw	x, (0x14, sp)
+	ld	a, (x)
 	push	a
 	call	_BIN2BCD
 	addw	sp, #1
 	ldw	x, (0x0c, sp)
 	ld	(x), a
-;	user/ds1307.c: 100: data[5]=BIN2BCD(time->month);
+;	user/ds1307.c: 96: data[1]=BIN2BCD(time->minutes);
+	ldw	x, (0x0c, sp)
+	incw	x
+	ldw	(0x12, sp), x
 	ldw	x, (0x14, sp)
-	addw	x, #0x0005
-	ldw	(0x0a, sp), x
+	ld	a, (0x1, x)
+	push	a
+	call	_BIN2BCD
+	addw	sp, #1
+	ldw	x, (0x12, sp)
+	ld	(x), a
+;	user/ds1307.c: 97: data[2]=BIN2BCD(time->hours);
+	ldw	x, (0x0c, sp)
+	incw	x
+	incw	x
+	ldw	(0x0e, sp), x
+	ldw	x, (0x14, sp)
+	ld	a, (0x2, x)
+	push	a
+	call	_BIN2BCD
+	addw	sp, #1
+	ldw	x, (0x0e, sp)
+	ld	(x), a
+;	user/ds1307.c: 98: data[3]=BIN2BCD(time->day);
+	ldw	x, (0x0c, sp)
+	addw	x, #0x0003
+	ldw	(0x16, sp), x
+	ldw	x, (0x14, sp)
+	ld	a, (0x3, x)
+	push	a
+	call	_BIN2BCD
+	addw	sp, #1
 	ldw	x, (0x16, sp)
-	ld	a, (0x5, x)
+	ld	(x), a
+;	user/ds1307.c: 99: data[4]=BIN2BCD(time->date);
+	ldw	x, (0x0c, sp)
+	addw	x, #0x0004
+	ldw	(0x0a, sp), x
+	ldw	x, (0x14, sp)
+	ld	a, (0x4, x)
 	push	a
 	call	_BIN2BCD
 	addw	sp, #1
 	ldw	x, (0x0a, sp)
 	ld	(x), a
-;	user/ds1307.c: 101: data[6]=BIN2BCD(time->year);
+;	user/ds1307.c: 100: data[5]=BIN2BCD(time->month);
+	ldw	x, (0x0c, sp)
+	addw	x, #0x0005
+	ldw	(0x10, sp), x
 	ldw	x, (0x14, sp)
+	ld	a, (0x5, x)
+	push	a
+	call	_BIN2BCD
+	addw	sp, #1
+	ldw	x, (0x10, sp)
+	ld	(x), a
+;	user/ds1307.c: 101: data[6]=BIN2BCD(time->year);
+	ldw	x, (0x0c, sp)
 	addw	x, #0x0006
-	ldw	(0x12, sp), x
-	ldw	x, (0x16, sp)
+	ldw	(0x08, sp), x
+	ldw	x, (0x14, sp)
 	ld	a, (0x6, x)
 	push	a
 	call	_BIN2BCD
 	addw	sp, #1
-	ldw	x, (0x12, sp)
+	ldw	x, (0x08, sp)
 	ld	(x), a
 ;	user/ds1307.c: 103: while(I2C_GetFlagStatus( I2C_FLAG_BUSBUSY)==SET);
 00101$:
@@ -455,7 +455,7 @@ _DS1307_SetTime:
 	tnz	a
 	jreq	00110$
 ;	user/ds1307.c: 123: I2C_SendData( data[1]);
-	ldw	x, (0x10, sp)
+	ldw	x, (0x12, sp)
 	ld	a, (x)
 	push	a
 	call	_I2C_SendData
@@ -469,7 +469,7 @@ _DS1307_SetTime:
 	tnz	a
 	jreq	00113$
 ;	user/ds1307.c: 129: I2C_SendData( data[2]);
-	ldw	x, (0x08, sp)
+	ldw	x, (0x0e, sp)
 	ld	a, (x)
 	push	a
 	call	_I2C_SendData
@@ -483,7 +483,7 @@ _DS1307_SetTime:
 	tnz	a
 	jreq	00116$
 ;	user/ds1307.c: 135: I2C_SendData( data[3]);
-	ldw	x, (0x0e, sp)
+	ldw	x, (0x16, sp)
 	ld	a, (x)
 	push	a
 	call	_I2C_SendData
@@ -497,7 +497,7 @@ _DS1307_SetTime:
 	tnz	a
 	jreq	00119$
 ;	user/ds1307.c: 141: I2C_SendData( data[4]);
-	ldw	x, (0x0c, sp)
+	ldw	x, (0x0a, sp)
 	ld	a, (x)
 	push	a
 	call	_I2C_SendData
@@ -511,7 +511,7 @@ _DS1307_SetTime:
 	tnz	a
 	jreq	00122$
 ;	user/ds1307.c: 147: I2C_SendData( data[5]);
-	ldw	x, (0x0a, sp)
+	ldw	x, (0x10, sp)
 	ld	a, (x)
 	push	a
 	call	_I2C_SendData
@@ -525,7 +525,7 @@ _DS1307_SetTime:
 	tnz	a
 	jreq	00125$
 ;	user/ds1307.c: 153: I2C_SendData( data[6]);
-	ldw	x, (0x12, sp)
+	ldw	x, (0x08, sp)
 	ld	a, (x)
 	push	a
 	call	_I2C_SendData
@@ -558,14 +558,14 @@ _DS1307_GetDateTime:
 ;	user/ds1307.c: 168: for(i=0;i<8;i++)
 	ldw	x, sp
 	incw	x
-	ldw	(0x13, sp), x
+	ldw	(0x15, sp), x
 	clr	(0x08, sp)
 00105$:
 ;	user/ds1307.c: 170: data[i]=read_ds1307(i);
 	clrw	x
 	ld	a, (0x08, sp)
 	ld	xl, a
-	addw	x, (0x13, sp)
+	addw	x, (0x15, sp)
 	pushw	x
 	ld	a, (0x0a, sp)
 	push	a
@@ -580,22 +580,22 @@ _DS1307_GetDateTime:
 	jrc	00105$
 ;	user/ds1307.c: 173: time->seconds = BCD2BIN(data[0]&=0x7F);
 	ldw	y, (0x1b, sp)
-	ldw	(0x11, sp), y
-	ldw	x, (0x13, sp)
+	ldw	(0x0f, sp), y
+	ldw	x, (0x15, sp)
 	ld	a, (x)
 	and	a, #0x7f
-	ldw	x, (0x13, sp)
+	ldw	x, (0x15, sp)
 	ld	(x), a
 	push	a
 	call	_BCD2BIN
 	addw	sp, #1
-	ldw	x, (0x11, sp)
+	ldw	x, (0x0f, sp)
 	ld	(x), a
 ;	user/ds1307.c: 175: time->minutes = BCD2BIN(data[1]&=0x7F);
-	ldw	x, (0x11, sp)
+	ldw	x, (0x0f, sp)
 	incw	x
-	ldw	(0x15, sp), x
-	ldw	x, (0x13, sp)
+	ldw	(0x17, sp), x
+	ldw	x, (0x15, sp)
 	incw	x
 	ld	a, (x)
 	and	a, #0x7f
@@ -605,16 +605,16 @@ _DS1307_GetDateTime:
 	call	_BCD2BIN
 	addw	sp, #1
 	popw	x
-	ldw	y, (0x15, sp)
+	ldw	y, (0x17, sp)
 	ld	(y), a
 ;	user/ds1307.c: 177: if((data[1]&0x40)!=0)    time->hours=BCD2BIN(data[2]&=0x1F);
 	ld	a, (x)
 	ld	yl, a
-	ldw	x, (0x11, sp)
+	ldw	x, (0x0f, sp)
 	incw	x
 	incw	x
-	ldw	(0x0b, sp), x
-	ldw	x, (0x13, sp)
+	ldw	(0x09, sp), x
+	ldw	x, (0x15, sp)
 	incw	x
 	incw	x
 	ld	a, (x)
@@ -628,7 +628,7 @@ _DS1307_GetDateTime:
 	push	a
 	call	_BCD2BIN
 	addw	sp, #1
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	ld	(x), a
 	jra	00104$
 00103$:
@@ -638,14 +638,14 @@ _DS1307_GetDateTime:
 	push	a
 	call	_BCD2BIN
 	addw	sp, #1
-	ldw	x, (0x0b, sp)
+	ldw	x, (0x09, sp)
 	ld	(x), a
 00104$:
 ;	user/ds1307.c: 180: time->day = BCD2BIN(data[3]&=0x07);
-	ldw	x, (0x11, sp)
+	ldw	x, (0x0f, sp)
 	addw	x, #0x0003
-	ldw	(0x0d, sp), x
-	ldw	x, (0x13, sp)
+	ldw	(0x13, sp), x
+	ldw	x, (0x15, sp)
 	addw	x, #0x0003
 	ld	a, (x)
 	and	a, #0x07
@@ -653,13 +653,13 @@ _DS1307_GetDateTime:
 	push	a
 	call	_BCD2BIN
 	addw	sp, #1
-	ldw	x, (0x0d, sp)
+	ldw	x, (0x13, sp)
 	ld	(x), a
 ;	user/ds1307.c: 181: time->date = BCD2BIN(data[4]&=0x3F);
-	ldw	x, (0x11, sp)
+	ldw	x, (0x0f, sp)
 	addw	x, #0x0004
-	ldw	(0x17, sp), x
-	ldw	x, (0x13, sp)
+	ldw	(0x0d, sp), x
+	ldw	x, (0x15, sp)
 	addw	x, #0x0004
 	ld	a, (x)
 	and	a, #0x3f
@@ -667,13 +667,13 @@ _DS1307_GetDateTime:
 	push	a
 	call	_BCD2BIN
 	addw	sp, #1
-	ldw	x, (0x17, sp)
+	ldw	x, (0x0d, sp)
 	ld	(x), a
 ;	user/ds1307.c: 182: time->month = BCD2BIN(data[5]&=0x1F);
-	ldw	x, (0x11, sp)
+	ldw	x, (0x0f, sp)
 	addw	x, #0x0005
-	ldw	(0x0f, sp), x
-	ldw	x, (0x13, sp)
+	ldw	(0x11, sp), x
+	ldw	x, (0x15, sp)
 	addw	x, #0x0005
 	ld	a, (x)
 	and	a, #0x1f
@@ -681,20 +681,20 @@ _DS1307_GetDateTime:
 	push	a
 	call	_BCD2BIN
 	addw	sp, #1
-	ldw	x, (0x0f, sp)
+	ldw	x, (0x11, sp)
 	ld	(x), a
 ;	user/ds1307.c: 183: time->year = BCD2BIN(data[6]&=0xFF);
-	ldw	x, (0x11, sp)
+	ldw	x, (0x0f, sp)
 	addw	x, #0x0006
-	ldw	(0x09, sp), x
-	ldw	x, (0x13, sp)
+	ldw	(0x0b, sp), x
+	ldw	x, (0x15, sp)
 	addw	x, #0x0006
 	ld	a, (x)
 	ld	(x), a
 	push	a
 	call	_BCD2BIN
 	addw	sp, #1
-	ldw	x, (0x09, sp)
+	ldw	x, (0x0b, sp)
 	ld	(x), a
 	addw	sp, #24
 	ret

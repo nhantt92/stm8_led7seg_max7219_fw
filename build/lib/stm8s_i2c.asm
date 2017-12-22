@@ -537,15 +537,15 @@ _I2C_CheckEvent:
 	ld	xl, a
 	pop	a
 ;	lib/stm8s_i2c.c: 530: lastevent = ((uint16_t)((uint16_t)flag2 << (uint16_t)8) | (uint16_t)flag1);
+	clr	(0x05, sp)
+	clr	(0x04, sp)
 	clr	(0x07, sp)
-	clr	(0x06, sp)
-	clr	(0x09, sp)
-	or	a, (0x06, sp)
-	ld	(0x04, sp), a
+	or	a, (0x04, sp)
+	ld	(0x0a, sp), a
 	ld	a, xl
-	or	a, (0x09, sp)
-	ld	(0x03, sp), a
-	ldw	y, (0x03, sp)
+	or	a, (0x07, sp)
+	ld	(0x09, sp), a
+	ldw	y, (0x09, sp)
 	ldw	(0x01, sp), y
 00103$:
 ;	lib/stm8s_i2c.c: 533: if (((uint16_t)lastevent & (uint16_t)I2C_Event) == (uint16_t)I2C_Event)
@@ -575,7 +575,7 @@ _I2C_GetLastEvent:
 	sub	sp, #4
 ;	lib/stm8s_i2c.c: 564: __IO uint16_t lastevent = 0;
 	clrw	x
-	ldw	(0x01, sp), x
+	ldw	(0x03, sp), x
 ;	lib/stm8s_i2c.c: 568: if ((I2C->SR2 & I2C_SR2_AF) != 0x00)
 	ldw	x, #0x5218
 	ld	a, (x)
@@ -583,7 +583,7 @@ _I2C_GetLastEvent:
 	jreq	00102$
 ;	lib/stm8s_i2c.c: 570: lastevent = I2C_EVENT_SLAVE_ACK_FAILURE;
 	ldw	x, #0x0004
-	ldw	(0x01, sp), x
+	ldw	(0x03, sp), x
 	jra	00103$
 00102$:
 ;	lib/stm8s_i2c.c: 575: flag1 = I2C->SR1;
@@ -591,7 +591,7 @@ _I2C_GetLastEvent:
 	ld	a, (x)
 	clrw	x
 	ld	xl, a
-	ldw	(0x03, sp), x
+	ldw	(0x01, sp), x
 ;	lib/stm8s_i2c.c: 576: flag2 = I2C->SR3;
 	ldw	x, #0x5219
 	ld	a, (x)
@@ -599,14 +599,14 @@ _I2C_GetLastEvent:
 	clr	a
 ;	lib/stm8s_i2c.c: 579: lastevent = ((uint16_t)((uint16_t)flag2 << 8) | (uint16_t)flag1);
 	clr	a
-	or	a, (0x04, sp)
+	or	a, (0x02, sp)
 	rlwa	x
-	or	a, (0x03, sp)
+	or	a, (0x01, sp)
 	ld	xh, a
-	ldw	(0x01, sp), x
+	ldw	(0x03, sp), x
 00103$:
 ;	lib/stm8s_i2c.c: 582: return (I2C_Event_TypeDef)lastevent;
-	ldw	x, (0x01, sp)
+	ldw	x, (0x03, sp)
 	addw	sp, #4
 	ret
 ;	lib/stm8s_i2c.c: 613: FlagStatus I2C_GetFlagStatus(I2C_Flag_TypeDef I2C_Flag)

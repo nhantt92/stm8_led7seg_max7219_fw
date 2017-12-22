@@ -41,6 +41,9 @@ typedef struct {
 	uint16_t year;
 } PCF_DateTime;
 
+void I2C_setup(void);
+void I2C_Write_Byte(uint8_t data);
+
 void PCF_Write(uint8_t addr, uint8_t *data, uint8_t count);
 void PCF_Read(uint8_t addr, uint8_t *data, uint8_t count);
 

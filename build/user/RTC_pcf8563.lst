@@ -9,1082 +9,1319 @@
                                       9 ; Public variables in this module
                                      10 ;--------------------------------------------------------
                                      11 	.globl _PCF_getAndClearFlags
-                                     12 	.globl _I2C_GetFlagStatus
-                                     13 	.globl _I2C_CheckEvent
-                                     14 	.globl _I2C_SendData
-                                     15 	.globl _I2C_Send7bitAddress
-                                     16 	.globl _I2C_ReceiveData
-                                     17 	.globl _I2C_AcknowledgeConfig
-                                     18 	.globl _I2C_GenerateSTOP
-                                     19 	.globl _I2C_GenerateSTART
-                                     20 	.globl _I2C_Cmd
-                                     21 	.globl _I2C_Init
-                                     22 	.globl _I2C_DeInit
-                                     23 	.globl _CLK_GetClockFreq
-                                     24 	.globl _CLK_PeripheralClockConfig
-                                     25 	.globl _PCF_Write
-                                     26 	.globl _PCF_Read
-                                     27 	.globl _PCF_Init
-                                     28 	.globl _PCF_setDateTime
+                                     12 	.globl _read_pcf
+                                     13 	.globl _I2C_GetFlagStatus
+                                     14 	.globl _I2C_CheckEvent
+                                     15 	.globl _I2C_SendData
+                                     16 	.globl _I2C_Send7bitAddress
+                                     17 	.globl _I2C_ReceiveData
+                                     18 	.globl _I2C_AcknowledgeConfig
+                                     19 	.globl _I2C_GenerateSTOP
+                                     20 	.globl _I2C_GenerateSTART
+                                     21 	.globl _I2C_Cmd
+                                     22 	.globl _I2C_Init
+                                     23 	.globl _I2C_DeInit
+                                     24 	.globl _CLK_GetClockFreq
+                                     25 	.globl _I2C_setup
+                                     26 	.globl _I2C_Write_Byte
+                                     27 	.globl _PCF_Write
+                                     28 	.globl _PCF_Read
                                      29 	.globl _PCF_getDateTime
-                                     30 	.globl _PCF_setAlarm
-                                     31 	.globl _PCF_setTimer
-                                     32 	.globl _PCF_getTimer
-                                     33 	.globl _PCF_getAlarm
-                                     34 	.globl _PCF_setClockOut
-                                     35 ;--------------------------------------------------------
-                                     36 ; ram data
+                                     30 	.globl _PCF_Init
+                                     31 	.globl _PCF_setDateTime
+                                     32 	.globl _PCF_setAlarm
+                                     33 	.globl _PCF_setTimer
+                                     34 	.globl _PCF_getTimer
+                                     35 	.globl _PCF_getAlarm
+                                     36 	.globl _PCF_setClockOut
                                      37 ;--------------------------------------------------------
-                                     38 	.area DATA
+                                     38 ; ram data
                                      39 ;--------------------------------------------------------
-                                     40 ; ram data
+                                     40 	.area DATA
                                      41 ;--------------------------------------------------------
-                                     42 	.area INITIALIZED
+                                     42 ; ram data
                                      43 ;--------------------------------------------------------
-                                     44 ; absolute external ram data
+                                     44 	.area INITIALIZED
                                      45 ;--------------------------------------------------------
-                                     46 	.area DABS (ABS)
+                                     46 ; absolute external ram data
                                      47 ;--------------------------------------------------------
-                                     48 ; global & static initialisations
+                                     48 	.area DABS (ABS)
                                      49 ;--------------------------------------------------------
-                                     50 	.area HOME
-                                     51 	.area GSINIT
-                                     52 	.area GSFINAL
+                                     50 ; global & static initialisations
+                                     51 ;--------------------------------------------------------
+                                     52 	.area HOME
                                      53 	.area GSINIT
-                                     54 ;--------------------------------------------------------
-                                     55 ; Home
+                                     54 	.area GSFINAL
+                                     55 	.area GSINIT
                                      56 ;--------------------------------------------------------
-                                     57 	.area HOME
-                                     58 	.area HOME
-                                     59 ;--------------------------------------------------------
-                                     60 ; code
+                                     57 ; Home
+                                     58 ;--------------------------------------------------------
+                                     59 	.area HOME
+                                     60 	.area HOME
                                      61 ;--------------------------------------------------------
-                                     62 	.area CODE
-                                     63 ;	user/RTC_pcf8563.c: 7: static void IIC_Init(uint32_t clock_frequency, uint16_t own_addr)
-                                     64 ;	-----------------------------------------
-                                     65 ;	 function IIC_Init
+                                     62 ; code
+                                     63 ;--------------------------------------------------------
+                                     64 	.area CODE
+                                     65 ;	user/RTC_pcf8563.c: 8: void I2C_setup(void)
                                      66 ;	-----------------------------------------
-      000000                         67 _IIC_Init:
-                                     68 ;	user/RTC_pcf8563.c: 9: CLK_PeripheralClockConfig(CLK_PERIPHERAL_I2C, ENABLE);
-      000000 4B 01            [ 1]   69 	push	#0x01
-      000002 4B 00            [ 1]   70 	push	#0x00
-      000004 CDr00r00         [ 4]   71 	call	_CLK_PeripheralClockConfig
-      000007 85               [ 2]   72 	popw	x
-                                     73 ;	user/RTC_pcf8563.c: 10: I2C_DeInit();
-      000008 CDr00r00         [ 4]   74 	call	_I2C_DeInit
-                                     75 ;	user/RTC_pcf8563.c: 11: I2C_Init(clock_frequency, own_addr, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, (CLK_GetClockFreq()/1000000));
-      00000B CDr00r00         [ 4]   76 	call	_CLK_GetClockFreq
-      00000E 4B 40            [ 1]   77 	push	#0x40
-      000010 4B 42            [ 1]   78 	push	#0x42
-      000012 4B 0F            [ 1]   79 	push	#0x0f
-      000014 4B 00            [ 1]   80 	push	#0x00
-      000016 89               [ 2]   81 	pushw	x
-      000017 90 89            [ 2]   82 	pushw	y
-      000019 CDr00r00         [ 4]   83 	call	__divulong
-      00001C 5B 08            [ 2]   84 	addw	sp, #8
-      00001E 9F               [ 1]   85 	ld	a, xl
-      00001F 88               [ 1]   86 	push	a
-      000020 4B 00            [ 1]   87 	push	#0x00
-      000022 4B 01            [ 1]   88 	push	#0x01
-      000024 4B 00            [ 1]   89 	push	#0x00
-      000026 1E 0B            [ 2]   90 	ldw	x, (0x0b, sp)
-      000028 89               [ 2]   91 	pushw	x
-      000029 1E 0B            [ 2]   92 	ldw	x, (0x0b, sp)
-      00002B 89               [ 2]   93 	pushw	x
-      00002C 1E 0B            [ 2]   94 	ldw	x, (0x0b, sp)
-      00002E 89               [ 2]   95 	pushw	x
-      00002F CDr00r00         [ 4]   96 	call	_I2C_Init
-      000032 5B 0A            [ 2]   97 	addw	sp, #10
-                                     98 ;	user/RTC_pcf8563.c: 12: I2C_Cmd(ENABLE);
-      000034 4B 01            [ 1]   99 	push	#0x01
-      000036 CDr00r00         [ 4]  100 	call	_I2C_Cmd
-      000039 84               [ 1]  101 	pop	a
-      00003A 81               [ 4]  102 	ret
-                                    103 ;	user/RTC_pcf8563.c: 15: void PCF_Write(uint8_t addr, uint8_t *data, uint8_t count)
+                                     67 ;	 function I2C_setup
+                                     68 ;	-----------------------------------------
+      000000                         69 _I2C_setup:
+                                     70 ;	user/RTC_pcf8563.c: 11: I2C_DeInit();
+      000000 CDr00r00         [ 4]   71 	call	_I2C_DeInit
+                                     72 ;	user/RTC_pcf8563.c: 12: Input_Clock = CLK_GetClockFreq()/1000000;
+      000003 CDr00r00         [ 4]   73 	call	_CLK_GetClockFreq
+      000006 4B 40            [ 1]   74 	push	#0x40
+      000008 4B 42            [ 1]   75 	push	#0x42
+      00000A 4B 0F            [ 1]   76 	push	#0x0f
+      00000C 4B 00            [ 1]   77 	push	#0x00
+      00000E 89               [ 2]   78 	pushw	x
+      00000F 90 89            [ 2]   79 	pushw	y
+      000011 CDr00r00         [ 4]   80 	call	__divulong
+      000014 5B 08            [ 2]   81 	addw	sp, #8
+      000016 9F               [ 1]   82 	ld	a, xl
+                                     83 ;	user/RTC_pcf8563.c: 13: I2C_Cmd(ENABLE);
+      000017 88               [ 1]   84 	push	a
+      000018 4B 01            [ 1]   85 	push	#0x01
+      00001A CDr00r00         [ 4]   86 	call	_I2C_Cmd
+      00001D 84               [ 1]   87 	pop	a
+      00001E 84               [ 1]   88 	pop	a
+                                     89 ;	user/RTC_pcf8563.c: 14: I2C_Init(100000, PCF8563_WRITE_ADDR, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, Input_Clock);
+      00001F 88               [ 1]   90 	push	a
+      000020 4B 00            [ 1]   91 	push	#0x00
+      000022 4B 01            [ 1]   92 	push	#0x01
+      000024 4B 00            [ 1]   93 	push	#0x00
+      000026 4B A2            [ 1]   94 	push	#0xa2
+      000028 4B 00            [ 1]   95 	push	#0x00
+      00002A 4B A0            [ 1]   96 	push	#0xa0
+      00002C 4B 86            [ 1]   97 	push	#0x86
+      00002E 4B 01            [ 1]   98 	push	#0x01
+      000030 4B 00            [ 1]   99 	push	#0x00
+      000032 CDr00r00         [ 4]  100 	call	_I2C_Init
+      000035 5B 0A            [ 2]  101 	addw	sp, #10
+      000037 81               [ 4]  102 	ret
+                                    103 ;	user/RTC_pcf8563.c: 17: void I2C_Write_Byte(uint8_t data)
                                     104 ;	-----------------------------------------
-                                    105 ;	 function PCF_Write
+                                    105 ;	 function I2C_Write_Byte
                                     106 ;	-----------------------------------------
-      00003B                        107 _PCF_Write:
-      00003B 88               [ 1]  108 	push	a
-                                    109 ;	user/RTC_pcf8563.c: 19: I2C_GenerateSTART(ENABLE);
-      00003C 4B 01            [ 1]  110 	push	#0x01
-      00003E CDr00r00         [ 4]  111 	call	_I2C_GenerateSTART
-      000041 84               [ 1]  112 	pop	a
-                                    113 ;	user/RTC_pcf8563.c: 23: I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
-      000042 4B 00            [ 1]  114 	push	#0x00
-      000044 4B A2            [ 1]  115 	push	#0xa2
-      000046 CDr00r00         [ 4]  116 	call	_I2C_Send7bitAddress
-      000049 85               [ 2]  117 	popw	x
-                                    118 ;	user/RTC_pcf8563.c: 26: I2C_SendData(addr);
-      00004A 7B 04            [ 1]  119 	ld	a, (0x04, sp)
-      00004C 88               [ 1]  120 	push	a
-      00004D CDr00r00         [ 4]  121 	call	_I2C_SendData
-      000050 84               [ 1]  122 	pop	a
-                                    123 ;	user/RTC_pcf8563.c: 29: while(count){
-      000051 7B 07            [ 1]  124 	ld	a, (0x07, sp)
-      000053 6B 01            [ 1]  125 	ld	(0x01, sp), a
-      000055 1E 05            [ 2]  126 	ldw	x, (0x05, sp)
-      000057                        127 00101$:
-      000057 0D 01            [ 1]  128 	tnz	(0x01, sp)
-      000059 27 0D            [ 1]  129 	jreq	00103$
-                                    130 ;	user/RTC_pcf8563.c: 30: count--;
-      00005B 0A 01            [ 1]  131 	dec	(0x01, sp)
-                                    132 ;	user/RTC_pcf8563.c: 31: I2C_SendData(*data);
-      00005D F6               [ 1]  133 	ld	a, (x)
-      00005E 89               [ 2]  134 	pushw	x
-      00005F 88               [ 1]  135 	push	a
-      000060 CDr00r00         [ 4]  136 	call	_I2C_SendData
-      000063 84               [ 1]  137 	pop	a
-      000064 85               [ 2]  138 	popw	x
-                                    139 ;	user/RTC_pcf8563.c: 32: data++;
-      000065 5C               [ 2]  140 	incw	x
-      000066 20 EF            [ 2]  141 	jra	00101$
-      000068                        142 00103$:
-                                    143 ;	user/RTC_pcf8563.c: 35: I2C_GenerateSTOP(ENABLE);
-      000068 4B 01            [ 1]  144 	push	#0x01
-      00006A CDr00r00         [ 4]  145 	call	_I2C_GenerateSTOP
-      00006D 84               [ 1]  146 	pop	a
-      00006E 84               [ 1]  147 	pop	a
-      00006F 81               [ 4]  148 	ret
-                                    149 ;	user/RTC_pcf8563.c: 38: void PCF_Read(uint8_t addr, uint8_t *data, uint8_t count)
-                                    150 ;	-----------------------------------------
-                                    151 ;	 function PCF_Read
+      000038                        107 _I2C_Write_Byte:
+                                    108 ;	user/RTC_pcf8563.c: 19: I2C_GenerateSTART(ENABLE);
+      000038 4B 01            [ 1]  109 	push	#0x01
+      00003A CDr00r00         [ 4]  110 	call	_I2C_GenerateSTART
+      00003D 84               [ 1]  111 	pop	a
+                                    112 ;	user/RTC_pcf8563.c: 20: while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
+      00003E                        113 00101$:
+      00003E 4B 01            [ 1]  114 	push	#0x01
+      000040 4B 03            [ 1]  115 	push	#0x03
+      000042 CDr00r00         [ 4]  116 	call	_I2C_CheckEvent
+      000045 85               [ 2]  117 	popw	x
+      000046 4D               [ 1]  118 	tnz	a
+      000047 27 F5            [ 1]  119 	jreq	00101$
+                                    120 ;	user/RTC_pcf8563.c: 21: I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
+      000049 4B 00            [ 1]  121 	push	#0x00
+      00004B 4B A2            [ 1]  122 	push	#0xa2
+      00004D CDr00r00         [ 4]  123 	call	_I2C_Send7bitAddress
+      000050 85               [ 2]  124 	popw	x
+                                    125 ;	user/RTC_pcf8563.c: 22: while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+      000051                        126 00104$:
+      000051 4B 82            [ 1]  127 	push	#0x82
+      000053 4B 07            [ 1]  128 	push	#0x07
+      000055 CDr00r00         [ 4]  129 	call	_I2C_CheckEvent
+      000058 85               [ 2]  130 	popw	x
+      000059 4D               [ 1]  131 	tnz	a
+      00005A 27 F5            [ 1]  132 	jreq	00104$
+                                    133 ;	user/RTC_pcf8563.c: 23: I2C_SendData(data);
+      00005C 7B 03            [ 1]  134 	ld	a, (0x03, sp)
+      00005E 88               [ 1]  135 	push	a
+      00005F CDr00r00         [ 4]  136 	call	_I2C_SendData
+      000062 84               [ 1]  137 	pop	a
+                                    138 ;	user/RTC_pcf8563.c: 24: while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+      000063                        139 00107$:
+      000063 4B 84            [ 1]  140 	push	#0x84
+      000065 4B 07            [ 1]  141 	push	#0x07
+      000067 CDr00r00         [ 4]  142 	call	_I2C_CheckEvent
+      00006A 85               [ 2]  143 	popw	x
+      00006B 4D               [ 1]  144 	tnz	a
+      00006C 27 F5            [ 1]  145 	jreq	00107$
+                                    146 ;	user/RTC_pcf8563.c: 25: I2C_GenerateSTOP(ENABLE);
+      00006E 4B 01            [ 1]  147 	push	#0x01
+      000070 CDr00r00         [ 4]  148 	call	_I2C_GenerateSTOP
+      000073 84               [ 1]  149 	pop	a
+      000074 81               [ 4]  150 	ret
+                                    151 ;	user/RTC_pcf8563.c: 28: void PCF_Write(uint8_t addr, uint8_t *data, uint8_t count)
                                     152 ;	-----------------------------------------
-      000070                        153 _PCF_Read:
-      000070 52 03            [ 2]  154 	sub	sp, #3
-                                    155 ;	user/RTC_pcf8563.c: 40: while(!I2C_GetFlagStatus( I2C_FLAG_BUSBUSY));
-      000072                        156 00101$:
-      000072 4B 02            [ 1]  157 	push	#0x02
-      000074 4B 03            [ 1]  158 	push	#0x03
-      000076 CDr00r00         [ 4]  159 	call	_I2C_GetFlagStatus
-      000079 85               [ 2]  160 	popw	x
-      00007A 4D               [ 1]  161 	tnz	a
-      00007B 27 F5            [ 1]  162 	jreq	00101$
-                                    163 ;	user/RTC_pcf8563.c: 41: I2C_GenerateSTART(ENABLE);
-      00007D 4B 01            [ 1]  164 	push	#0x01
-      00007F CDr00r00         [ 4]  165 	call	_I2C_GenerateSTART
-      000082 84               [ 1]  166 	pop	a
-                                    167 ;	user/RTC_pcf8563.c: 43: while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
-      000083                        168 00104$:
-      000083 4B 01            [ 1]  169 	push	#0x01
-      000085 4B 03            [ 1]  170 	push	#0x03
-      000087 CDr00r00         [ 4]  171 	call	_I2C_CheckEvent
-      00008A 85               [ 2]  172 	popw	x
-      00008B 4D               [ 1]  173 	tnz	a
-      00008C 27 F5            [ 1]  174 	jreq	00104$
-                                    175 ;	user/RTC_pcf8563.c: 44: I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
-      00008E 4B 00            [ 1]  176 	push	#0x00
-      000090 4B A2            [ 1]  177 	push	#0xa2
-      000092 CDr00r00         [ 4]  178 	call	_I2C_Send7bitAddress
-      000095 85               [ 2]  179 	popw	x
-                                    180 ;	user/RTC_pcf8563.c: 45: while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
-      000096                        181 00107$:
-      000096 4B 82            [ 1]  182 	push	#0x82
-      000098 4B 07            [ 1]  183 	push	#0x07
-      00009A CDr00r00         [ 4]  184 	call	_I2C_CheckEvent
-      00009D 85               [ 2]  185 	popw	x
-      00009E 4D               [ 1]  186 	tnz	a
-      00009F 27 F5            [ 1]  187 	jreq	00107$
-                                    188 ;	user/RTC_pcf8563.c: 47: I2C_SendData(addr);
-      0000A1 7B 06            [ 1]  189 	ld	a, (0x06, sp)
-      0000A3 88               [ 1]  190 	push	a
-      0000A4 CDr00r00         [ 4]  191 	call	_I2C_SendData
-      0000A7 84               [ 1]  192 	pop	a
-                                    193 ;	user/RTC_pcf8563.c: 48: while(!I2C_CheckEvent(I2C_FLAG_TRANSFERFINISHED));
-      0000A8                        194 00110$:
-      0000A8 4B 04            [ 1]  195 	push	#0x04
-      0000AA 4B 01            [ 1]  196 	push	#0x01
-      0000AC CDr00r00         [ 4]  197 	call	_I2C_CheckEvent
-      0000AF 85               [ 2]  198 	popw	x
-      0000B0 4D               [ 1]  199 	tnz	a
-      0000B1 27 F5            [ 1]  200 	jreq	00110$
-                                    201 ;	user/RTC_pcf8563.c: 51: I2C_GenerateSTART(ENABLE);
-      0000B3 4B 01            [ 1]  202 	push	#0x01
-      0000B5 CDr00r00         [ 4]  203 	call	_I2C_GenerateSTART
-      0000B8 84               [ 1]  204 	pop	a
-                                    205 ;	user/RTC_pcf8563.c: 52: while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
-      0000B9                        206 00113$:
-      0000B9 4B 01            [ 1]  207 	push	#0x01
-      0000BB 4B 03            [ 1]  208 	push	#0x03
-      0000BD CDr00r00         [ 4]  209 	call	_I2C_CheckEvent
-      0000C0 85               [ 2]  210 	popw	x
-      0000C1 4D               [ 1]  211 	tnz	a
-      0000C2 27 F5            [ 1]  212 	jreq	00113$
-                                    213 ;	user/RTC_pcf8563.c: 54: I2C_Send7bitAddress(PCF8563_READ_ADDR, I2C_DIRECTION_RX);
-      0000C4 4B 01            [ 1]  214 	push	#0x01
-      0000C6 4B A3            [ 1]  215 	push	#0xa3
-      0000C8 CDr00r00         [ 4]  216 	call	_I2C_Send7bitAddress
-      0000CB 85               [ 2]  217 	popw	x
-                                    218 ;	user/RTC_pcf8563.c: 56: while(I2C_GetFlagStatus(I2C_FLAG_ADDRESSSENTMATCHED) == RESET);
-      0000CC                        219 00116$:
-      0000CC 4B 02            [ 1]  220 	push	#0x02
-      0000CE 4B 01            [ 1]  221 	push	#0x01
-      0000D0 CDr00r00         [ 4]  222 	call	_I2C_GetFlagStatus
-      0000D3 85               [ 2]  223 	popw	x
-      0000D4 4D               [ 1]  224 	tnz	a
-      0000D5 27 F5            [ 1]  225 	jreq	00116$
-                                    226 ;	user/RTC_pcf8563.c: 57: while(count)
-      0000D7 7B 09            [ 1]  227 	ld	a, (0x09, sp)
-      0000D9 6B 03            [ 1]  228 	ld	(0x03, sp), a
-      0000DB 16 07            [ 2]  229 	ldw	y, (0x07, sp)
-      0000DD 17 01            [ 2]  230 	ldw	(0x01, sp), y
-      0000DF                        231 00122$:
-      0000DF 0D 03            [ 1]  232 	tnz	(0x03, sp)
-      0000E1 27 2E            [ 1]  233 	jreq	00124$
-                                    234 ;	user/RTC_pcf8563.c: 59: count--;
-      0000E3 0A 03            [ 1]  235 	dec	(0x03, sp)
-                                    236 ;	user/RTC_pcf8563.c: 60: I2C_AcknowledgeConfig(I2C_ACK_NONE);
-      0000E5 4B 00            [ 1]  237 	push	#0x00
-      0000E7 CDr00r00         [ 4]  238 	call	_I2C_AcknowledgeConfig
-      0000EA 84               [ 1]  239 	pop	a
-                                    240 ;	user/RTC_pcf8563.c: 63: I2C->SR1;        I2C->SR3;
-      0000EB AE 52 17         [ 2]  241 	ldw	x, #0x5217
-      0000EE F6               [ 1]  242 	ld	a, (x)
-      0000EF AE 52 19         [ 2]  243 	ldw	x, #0x5219
-      0000F2 F6               [ 1]  244 	ld	a, (x)
-                                    245 ;	user/RTC_pcf8563.c: 64: while (I2C_GetFlagStatus( I2C_FLAG_RXNOTEMPTY) == RESET);
-      0000F3                        246 00119$:
-      0000F3 4B 40            [ 1]  247 	push	#0x40
-      0000F5 4B 01            [ 1]  248 	push	#0x01
-      0000F7 CDr00r00         [ 4]  249 	call	_I2C_GetFlagStatus
-      0000FA 85               [ 2]  250 	popw	x
-      0000FB 4D               [ 1]  251 	tnz	a
-      0000FC 27 F5            [ 1]  252 	jreq	00119$
-                                    253 ;	user/RTC_pcf8563.c: 65: *data = I2C_ReceiveData();
-      0000FE CDr00r00         [ 4]  254 	call	_I2C_ReceiveData
-      000101 1E 01            [ 2]  255 	ldw	x, (0x01, sp)
-      000103 F7               [ 1]  256 	ld	(x), a
-                                    257 ;	user/RTC_pcf8563.c: 66: data++;
-      000104 1E 01            [ 2]  258 	ldw	x, (0x01, sp)
-      000106 5C               [ 2]  259 	incw	x
-      000107 1F 01            [ 2]  260 	ldw	(0x01, sp), x
-                                    261 ;	user/RTC_pcf8563.c: 67: I2C_AcknowledgeConfig( I2C_ACK_CURR);
-      000109 4B 01            [ 1]  262 	push	#0x01
-      00010B CDr00r00         [ 4]  263 	call	_I2C_AcknowledgeConfig
-      00010E 84               [ 1]  264 	pop	a
-      00010F 20 CE            [ 2]  265 	jra	00122$
-      000111                        266 00124$:
-                                    267 ;	user/RTC_pcf8563.c: 69: I2C_GenerateSTOP(ENABLE);
-      000111 4B 01            [ 1]  268 	push	#0x01
-      000113 CDr00r00         [ 4]  269 	call	_I2C_GenerateSTOP
-      000116 5B 04            [ 2]  270 	addw	sp, #4
-      000118 81               [ 4]  271 	ret
-                                    272 ;	user/RTC_pcf8563.c: 72: void PCF_Init(uint8_t mode)
-                                    273 ;	-----------------------------------------
-                                    274 ;	 function PCF_Init
-                                    275 ;	-----------------------------------------
-      000119                        276 _PCF_Init:
-      000119 88               [ 1]  277 	push	a
-                                    278 ;	user/RTC_pcf8563.c: 74: uint8_t tmp = 0x00;
-      00011A 0F 01            [ 1]  279 	clr	(0x01, sp)
-                                    280 ;	user/RTC_pcf8563.c: 75: IIC_Init(100000, 0xA2);
-      00011C 4B A2            [ 1]  281 	push	#0xa2
-      00011E 4B 00            [ 1]  282 	push	#0x00
-      000120 4B A0            [ 1]  283 	push	#0xa0
-      000122 4B 86            [ 1]  284 	push	#0x86
-      000124 4B 01            [ 1]  285 	push	#0x01
-      000126 4B 00            [ 1]  286 	push	#0x00
-      000128 CDr00r00         [ 4]  287 	call	_IIC_Init
-      00012B 5B 06            [ 2]  288 	addw	sp, #6
-                                    289 ;	user/RTC_pcf8563.c: 76: PCF_Write(0x00, &tmp, 1);
-      00012D 96               [ 1]  290 	ldw	x, sp
-      00012E 5C               [ 2]  291 	incw	x
-      00012F 4B 01            [ 1]  292 	push	#0x01
-      000131 89               [ 2]  293 	pushw	x
-      000132 4B 00            [ 1]  294 	push	#0x00
-      000134 CDr00r3B         [ 4]  295 	call	_PCF_Write
-      000137 5B 05            [ 2]  296 	addw	sp, #5
-      000139 81               [ 4]  297 	ret
-                                    298 ;	user/RTC_pcf8563.c: 81: uint8_t PCF_setDateTime(PCF_DateTime *dateTime)
-                                    299 ;	-----------------------------------------
-                                    300 ;	 function PCF_setDateTime
-                                    301 ;	-----------------------------------------
-      00013A                        302 _PCF_setDateTime:
-      00013A 52 26            [ 2]  303 	sub	sp, #38
-                                    304 ;	user/RTC_pcf8563.c: 84: if (dateTime->second >= 60 || dateTime->minute >= 60 || dateTime->hour >= 24 || dateTime->day > 32 || dateTime->weekday > 6 || dateTime->month > 12 || dateTime->year < 1900 || dateTime->year >= 2100)
-      00013C 16 29            [ 2]  305 	ldw	y, (0x29, sp)
-      00013E 17 16            [ 2]  306 	ldw	(0x16, sp), y
-      000140 1E 16            [ 2]  307 	ldw	x, (0x16, sp)
-      000142 F6               [ 1]  308 	ld	a, (x)
-      000143 6B 23            [ 1]  309 	ld	(0x23, sp), a
-      000145 7B 23            [ 1]  310 	ld	a, (0x23, sp)
-      000147 A1 3C            [ 1]  311 	cp	a, #0x3c
-      000149 24 55            [ 1]  312 	jrnc	00101$
-      00014B 16 16            [ 2]  313 	ldw	y, (0x16, sp)
-      00014D 90 5C            [ 2]  314 	incw	y
-      00014F 90 F6            [ 1]  315 	ld	a, (y)
-      000151 A1 3C            [ 1]  316 	cp	a, #0x3c
-      000153 24 4B            [ 1]  317 	jrnc	00101$
-      000155 1E 16            [ 2]  318 	ldw	x, (0x16, sp)
-      000157 5C               [ 2]  319 	incw	x
-      000158 5C               [ 2]  320 	incw	x
-      000159 1F 14            [ 2]  321 	ldw	(0x14, sp), x
-      00015B 1E 14            [ 2]  322 	ldw	x, (0x14, sp)
-      00015D F6               [ 1]  323 	ld	a, (x)
-      00015E A1 18            [ 1]  324 	cp	a, #0x18
-      000160 24 3E            [ 1]  325 	jrnc	00101$
-      000162 1E 16            [ 2]  326 	ldw	x, (0x16, sp)
-      000164 1C 00 03         [ 2]  327 	addw	x, #0x0003
-      000167 1F 20            [ 2]  328 	ldw	(0x20, sp), x
-      000169 1E 20            [ 2]  329 	ldw	x, (0x20, sp)
-      00016B F6               [ 1]  330 	ld	a, (x)
-      00016C A1 20            [ 1]  331 	cp	a, #0x20
-      00016E 22 30            [ 1]  332 	jrugt	00101$
-      000170 1E 16            [ 2]  333 	ldw	x, (0x16, sp)
-      000172 1C 00 04         [ 2]  334 	addw	x, #0x0004
-      000175 1F 1E            [ 2]  335 	ldw	(0x1e, sp), x
-      000177 1E 1E            [ 2]  336 	ldw	x, (0x1e, sp)
-      000179 F6               [ 1]  337 	ld	a, (x)
-      00017A A1 06            [ 1]  338 	cp	a, #0x06
-      00017C 22 22            [ 1]  339 	jrugt	00101$
-      00017E 1E 16            [ 2]  340 	ldw	x, (0x16, sp)
-      000180 1C 00 05         [ 2]  341 	addw	x, #0x0005
-      000183 1F 0E            [ 2]  342 	ldw	(0x0e, sp), x
-      000185 1E 0E            [ 2]  343 	ldw	x, (0x0e, sp)
-      000187 F6               [ 1]  344 	ld	a, (x)
-      000188 A1 0C            [ 1]  345 	cp	a, #0x0c
-      00018A 22 14            [ 1]  346 	jrugt	00101$
-      00018C 1E 16            [ 2]  347 	ldw	x, (0x16, sp)
-      00018E 1C 00 06         [ 2]  348 	addw	x, #0x0006
-      000191 1F 0A            [ 2]  349 	ldw	(0x0a, sp), x
-      000193 1E 0A            [ 2]  350 	ldw	x, (0x0a, sp)
-      000195 FE               [ 2]  351 	ldw	x, (x)
-      000196 A3 07 6C         [ 2]  352 	cpw	x, #0x076c
-      000199 25 05            [ 1]  353 	jrc	00101$
-      00019B A3 08 34         [ 2]  354 	cpw	x, #0x0834
-      00019E 25 05            [ 1]  355 	jrc	00102$
-      0001A0                        356 00101$:
-                                    357 ;	user/RTC_pcf8563.c: 86: return 1;
-      0001A0 A6 01            [ 1]  358 	ld	a, #0x01
-      0001A2 CCr02rD6         [ 2]  359 	jp	00113$
-      0001A5                        360 00102$:
-                                    361 ;	user/RTC_pcf8563.c: 89: buffer[0] = BinToBCD(dateTime->second) & 0x7F;
-      0001A5 96               [ 1]  362 	ldw	x, sp
-      0001A6 5C               [ 2]  363 	incw	x
-      0001A7 1F 10            [ 2]  364 	ldw	(0x10, sp), x
-      0001A9 5F               [ 1]  365 	clrw	x
-      0001AA 7B 23            [ 1]  366 	ld	a, (0x23, sp)
-      0001AC 97               [ 1]  367 	ld	xl, a
-      0001AD A6 0A            [ 1]  368 	ld	a, #0x0a
-      0001AF 62               [ 2]  369 	div	x, a
-      0001B0 9F               [ 1]  370 	ld	a, xl
-      0001B1 4E               [ 1]  371 	swap	a
-      0001B2 A4 F0            [ 1]  372 	and	a, #0xf0
-      0001B4 6B 0D            [ 1]  373 	ld	(0x0d, sp), a
-      0001B6 5F               [ 1]  374 	clrw	x
-      0001B7 7B 23            [ 1]  375 	ld	a, (0x23, sp)
-      0001B9 97               [ 1]  376 	ld	xl, a
-      0001BA A6 0A            [ 1]  377 	ld	a, #0x0a
-      0001BC 62               [ 2]  378 	div	x, a
-      0001BD 1B 0D            [ 1]  379 	add	a, (0x0d, sp)
-      0001BF A4 7F            [ 1]  380 	and	a, #0x7f
-      0001C1 1E 10            [ 2]  381 	ldw	x, (0x10, sp)
-      0001C3 F7               [ 1]  382 	ld	(x), a
-                                    383 ;	user/RTC_pcf8563.c: 90: buffer[1] = BinToBCD(dateTime->minute) & 0x7F;
-      0001C4 1E 10            [ 2]  384 	ldw	x, (0x10, sp)
-      0001C6 5C               [ 2]  385 	incw	x
-      0001C7 1F 12            [ 2]  386 	ldw	(0x12, sp), x
-      0001C9 90 F6            [ 1]  387 	ld	a, (y)
-      0001CB 97               [ 1]  388 	ld	xl, a
-      0001CC 89               [ 2]  389 	pushw	x
-      0001CD 4F               [ 1]  390 	clr	a
-      0001CE 95               [ 1]  391 	ld	xh, a
-      0001CF A6 0A            [ 1]  392 	ld	a, #0x0a
-      0001D1 62               [ 2]  393 	div	x, a
-      0001D2 9F               [ 1]  394 	ld	a, xl
-      0001D3 85               [ 2]  395 	popw	x
-      0001D4 4E               [ 1]  396 	swap	a
-      0001D5 A4 F0            [ 1]  397 	and	a, #0xf0
-      0001D7 6B 1D            [ 1]  398 	ld	(0x1d, sp), a
-      0001D9 4F               [ 1]  399 	clr	a
-      0001DA 95               [ 1]  400 	ld	xh, a
-      0001DB A6 0A            [ 1]  401 	ld	a, #0x0a
-      0001DD 62               [ 2]  402 	div	x, a
-      0001DE 1B 1D            [ 1]  403 	add	a, (0x1d, sp)
-      0001E0 A4 7F            [ 1]  404 	and	a, #0x7f
-      0001E2 1E 12            [ 2]  405 	ldw	x, (0x12, sp)
-      0001E4 F7               [ 1]  406 	ld	(x), a
-                                    407 ;	user/RTC_pcf8563.c: 91: buffer[2] = BinToBCD(dateTime->hour) & 0x3F;
-      0001E5 16 10            [ 2]  408 	ldw	y, (0x10, sp)
-      0001E7 72 A9 00 02      [ 2]  409 	addw	y, #0x0002
-      0001EB 1E 14            [ 2]  410 	ldw	x, (0x14, sp)
-      0001ED F6               [ 1]  411 	ld	a, (x)
-      0001EE 97               [ 1]  412 	ld	xl, a
-      0001EF 89               [ 2]  413 	pushw	x
-      0001F0 4F               [ 1]  414 	clr	a
-      0001F1 95               [ 1]  415 	ld	xh, a
-      0001F2 A6 0A            [ 1]  416 	ld	a, #0x0a
-      0001F4 62               [ 2]  417 	div	x, a
-      0001F5 9F               [ 1]  418 	ld	a, xl
-      0001F6 85               [ 2]  419 	popw	x
-      0001F7 4E               [ 1]  420 	swap	a
-      0001F8 A4 F0            [ 1]  421 	and	a, #0xf0
-      0001FA 6B 0C            [ 1]  422 	ld	(0x0c, sp), a
-      0001FC 4F               [ 1]  423 	clr	a
-      0001FD 95               [ 1]  424 	ld	xh, a
-      0001FE A6 0A            [ 1]  425 	ld	a, #0x0a
-      000200 62               [ 2]  426 	div	x, a
-      000201 1B 0C            [ 1]  427 	add	a, (0x0c, sp)
-      000203 A4 3F            [ 1]  428 	and	a, #0x3f
-      000205 90 F7            [ 1]  429 	ld	(y), a
-                                    430 ;	user/RTC_pcf8563.c: 92: buffer[3] = BinToBCD(dateTime->day) & 0x3F;
-      000207 16 10            [ 2]  431 	ldw	y, (0x10, sp)
-      000209 72 A9 00 03      [ 2]  432 	addw	y, #0x0003
-      00020D 1E 20            [ 2]  433 	ldw	x, (0x20, sp)
-      00020F F6               [ 1]  434 	ld	a, (x)
-      000210 97               [ 1]  435 	ld	xl, a
-      000211 89               [ 2]  436 	pushw	x
-      000212 4F               [ 1]  437 	clr	a
-      000213 95               [ 1]  438 	ld	xh, a
-      000214 A6 0A            [ 1]  439 	ld	a, #0x0a
-      000216 62               [ 2]  440 	div	x, a
-      000217 9F               [ 1]  441 	ld	a, xl
-      000218 85               [ 2]  442 	popw	x
-      000219 4E               [ 1]  443 	swap	a
-      00021A A4 F0            [ 1]  444 	and	a, #0xf0
-      00021C 6B 09            [ 1]  445 	ld	(0x09, sp), a
-      00021E 4F               [ 1]  446 	clr	a
-      00021F 95               [ 1]  447 	ld	xh, a
-      000220 A6 0A            [ 1]  448 	ld	a, #0x0a
-      000222 62               [ 2]  449 	div	x, a
-      000223 1B 09            [ 1]  450 	add	a, (0x09, sp)
-      000225 A4 3F            [ 1]  451 	and	a, #0x3f
-      000227 90 F7            [ 1]  452 	ld	(y), a
-                                    453 ;	user/RTC_pcf8563.c: 93: buffer[4] = BinToBCD(dateTime->weekday) & 0x07;
-      000229 16 10            [ 2]  454 	ldw	y, (0x10, sp)
-      00022B 72 A9 00 04      [ 2]  455 	addw	y, #0x0004
-      00022F 1E 1E            [ 2]  456 	ldw	x, (0x1e, sp)
-      000231 F6               [ 1]  457 	ld	a, (x)
-      000232 97               [ 1]  458 	ld	xl, a
-      000233 89               [ 2]  459 	pushw	x
-      000234 4F               [ 1]  460 	clr	a
-      000235 95               [ 1]  461 	ld	xh, a
-      000236 A6 0A            [ 1]  462 	ld	a, #0x0a
-      000238 62               [ 2]  463 	div	x, a
-      000239 9F               [ 1]  464 	ld	a, xl
-      00023A 85               [ 2]  465 	popw	x
-      00023B 4E               [ 1]  466 	swap	a
-      00023C A4 F0            [ 1]  467 	and	a, #0xf0
-      00023E 6B 18            [ 1]  468 	ld	(0x18, sp), a
-      000240 4F               [ 1]  469 	clr	a
-      000241 95               [ 1]  470 	ld	xh, a
-      000242 A6 0A            [ 1]  471 	ld	a, #0x0a
-      000244 62               [ 2]  472 	div	x, a
-      000245 1B 18            [ 1]  473 	add	a, (0x18, sp)
-      000247 A4 07            [ 1]  474 	and	a, #0x07
-      000249 90 F7            [ 1]  475 	ld	(y), a
-                                    476 ;	user/RTC_pcf8563.c: 94: buffer[5] = BinToBCD(dateTime->month) & 0x1F;
-      00024B 1E 10            [ 2]  477 	ldw	x, (0x10, sp)
-      00024D 1C 00 05         [ 2]  478 	addw	x, #0x0005
-      000250 1F 24            [ 2]  479 	ldw	(0x24, sp), x
-      000252 1E 0E            [ 2]  480 	ldw	x, (0x0e, sp)
-      000254 F6               [ 1]  481 	ld	a, (x)
-      000255 97               [ 1]  482 	ld	xl, a
-      000256 89               [ 2]  483 	pushw	x
-      000257 4F               [ 1]  484 	clr	a
-      000258 95               [ 1]  485 	ld	xh, a
-      000259 A6 0A            [ 1]  486 	ld	a, #0x0a
-      00025B 62               [ 2]  487 	div	x, a
-      00025C 9F               [ 1]  488 	ld	a, xl
-      00025D 85               [ 2]  489 	popw	x
-      00025E 4E               [ 1]  490 	swap	a
-      00025F A4 F0            [ 1]  491 	and	a, #0xf0
-      000261 6B 22            [ 1]  492 	ld	(0x22, sp), a
-      000263 4F               [ 1]  493 	clr	a
-      000264 95               [ 1]  494 	ld	xh, a
-      000265 A6 0A            [ 1]  495 	ld	a, #0x0a
-      000267 62               [ 2]  496 	div	x, a
-      000268 1B 22            [ 1]  497 	add	a, (0x22, sp)
-      00026A A4 1F            [ 1]  498 	and	a, #0x1f
-      00026C 1E 24            [ 2]  499 	ldw	x, (0x24, sp)
-      00026E F7               [ 1]  500 	ld	(x), a
-                                    501 ;	user/RTC_pcf8563.c: 96: if (dateTime->year >= 2000)
-      00026F 1E 0A            [ 2]  502 	ldw	x, (0x0a, sp)
-      000271 FE               [ 2]  503 	ldw	x, (x)
-      000272 1F 19            [ 2]  504 	ldw	(0x19, sp), x
-                                    505 ;	user/RTC_pcf8563.c: 99: buffer[6] = BinToBCD(dateTime->year - 2000);
-      000274 1E 10            [ 2]  506 	ldw	x, (0x10, sp)
-      000276 1C 00 06         [ 2]  507 	addw	x, #0x0006
-      000279 1F 1B            [ 2]  508 	ldw	(0x1b, sp), x
-                                    509 ;	user/RTC_pcf8563.c: 96: if (dateTime->year >= 2000)
-      00027B 1E 19            [ 2]  510 	ldw	x, (0x19, sp)
-      00027D A3 07 D0         [ 2]  511 	cpw	x, #0x07d0
-      000280 25 29            [ 1]  512 	jrc	00111$
-                                    513 ;	user/RTC_pcf8563.c: 98: buffer[5] |= 0x80;
-      000282 1E 24            [ 2]  514 	ldw	x, (0x24, sp)
-      000284 F6               [ 1]  515 	ld	a, (x)
-      000285 AA 80            [ 1]  516 	or	a, #0x80
-      000287 1E 24            [ 2]  517 	ldw	x, (0x24, sp)
-      000289 F7               [ 1]  518 	ld	(x), a
-                                    519 ;	user/RTC_pcf8563.c: 99: buffer[6] = BinToBCD(dateTime->year - 2000);
-      00028A 1E 0A            [ 2]  520 	ldw	x, (0x0a, sp)
-      00028C FE               [ 2]  521 	ldw	x, (x)
-      00028D 1D 07 D0         [ 2]  522 	subw	x, #0x07d0
-      000290 89               [ 2]  523 	pushw	x
-      000291 90 AE 00 0A      [ 2]  524 	ldw	y, #0x000a
-      000295 65               [ 2]  525 	divw	x, y
-      000296 9F               [ 1]  526 	ld	a, xl
-      000297 85               [ 2]  527 	popw	x
-      000298 4E               [ 1]  528 	swap	a
-      000299 A4 F0            [ 1]  529 	and	a, #0xf0
-      00029B 6B 08            [ 1]  530 	ld	(0x08, sp), a
-      00029D 90 AE 00 0A      [ 2]  531 	ldw	y, #0x000a
-      0002A1 65               [ 2]  532 	divw	x, y
-      0002A2 90 9F            [ 1]  533 	ld	a, yl
-      0002A4 1B 08            [ 1]  534 	add	a, (0x08, sp)
-      0002A6 1E 1B            [ 2]  535 	ldw	x, (0x1b, sp)
-      0002A8 F7               [ 1]  536 	ld	(x), a
-      0002A9 20 1E            [ 2]  537 	jra	00112$
-      0002AB                        538 00111$:
-                                    539 ;	user/RTC_pcf8563.c: 103: buffer[6] = BinToBCD(dateTime->year - 1900);
-      0002AB 1E 19            [ 2]  540 	ldw	x, (0x19, sp)
-      0002AD 1D 07 6C         [ 2]  541 	subw	x, #0x076c
-      0002B0 89               [ 2]  542 	pushw	x
-      0002B1 90 AE 00 0A      [ 2]  543 	ldw	y, #0x000a
-      0002B5 65               [ 2]  544 	divw	x, y
-      0002B6 9F               [ 1]  545 	ld	a, xl
-      0002B7 85               [ 2]  546 	popw	x
-      0002B8 4E               [ 1]  547 	swap	a
-      0002B9 A4 F0            [ 1]  548 	and	a, #0xf0
-      0002BB 90 AE 00 0A      [ 2]  549 	ldw	y, #0x000a
-      0002BF 65               [ 2]  550 	divw	x, y
-      0002C0 61               [ 1]  551 	exg	a, yl
-      0002C1 6B 26            [ 1]  552 	ld	(0x26, sp), a
-      0002C3 61               [ 1]  553 	exg	a, yl
-      0002C4 1B 26            [ 1]  554 	add	a, (0x26, sp)
-      0002C6 1E 1B            [ 2]  555 	ldw	x, (0x1b, sp)
-      0002C8 F7               [ 1]  556 	ld	(x), a
-      0002C9                        557 00112$:
-                                    558 ;	user/RTC_pcf8563.c: 106: PCF_Write(0x02, buffer, sizeof(buffer));
-      0002C9 1E 10            [ 2]  559 	ldw	x, (0x10, sp)
-      0002CB 4B 07            [ 1]  560 	push	#0x07
-      0002CD 89               [ 2]  561 	pushw	x
-      0002CE 4B 02            [ 1]  562 	push	#0x02
-      0002D0 CDr00r3B         [ 4]  563 	call	_PCF_Write
-      0002D3 5B 04            [ 2]  564 	addw	sp, #4
-                                    565 ;	user/RTC_pcf8563.c: 108: return 0;
-      0002D5 4F               [ 1]  566 	clr	a
-      0002D6                        567 00113$:
-      0002D6 5B 26            [ 2]  568 	addw	sp, #38
-      0002D8 81               [ 4]  569 	ret
-                                    570 ;	user/RTC_pcf8563.c: 111: uint8_t PCF_getDateTime(PCF_DateTime *dateTime)
-                                    571 ;	-----------------------------------------
-                                    572 ;	 function PCF_getDateTime
-                                    573 ;	-----------------------------------------
-      0002D9                        574 _PCF_getDateTime:
-      0002D9 52 1C            [ 2]  575 	sub	sp, #28
-                                    576 ;	user/RTC_pcf8563.c: 115: PCF_Read(0x02, buffer, sizeof(buffer));
-      0002DB 96               [ 1]  577 	ldw	x, sp
-      0002DC 5C               [ 2]  578 	incw	x
-      0002DD 1F 12            [ 2]  579 	ldw	(0x12, sp), x
-      0002DF 1E 12            [ 2]  580 	ldw	x, (0x12, sp)
-      0002E1 4B 07            [ 1]  581 	push	#0x07
-      0002E3 89               [ 2]  582 	pushw	x
-      0002E4 4B 02            [ 1]  583 	push	#0x02
-      0002E6 CDr00r70         [ 4]  584 	call	_PCF_Read
-      0002E9 5B 04            [ 2]  585 	addw	sp, #4
-                                    586 ;	user/RTC_pcf8563.c: 117: dateTime->second = (((buffer[0] >> 4) & 0x07) * 10) + (buffer[0] & 0x0F);
-      0002EB 16 1F            [ 2]  587 	ldw	y, (0x1f, sp)
-      0002ED 17 0B            [ 2]  588 	ldw	(0x0b, sp), y
-      0002EF 1E 12            [ 2]  589 	ldw	x, (0x12, sp)
-      0002F1 F6               [ 1]  590 	ld	a, (x)
-      0002F2 6B 14            [ 1]  591 	ld	(0x14, sp), a
-      0002F4 7B 14            [ 1]  592 	ld	a, (0x14, sp)
-      0002F6 4E               [ 1]  593 	swap	a
-      0002F7 A4 0F            [ 1]  594 	and	a, #0x0f
-      0002F9 A4 07            [ 1]  595 	and	a, #0x07
-      0002FB 97               [ 1]  596 	ld	xl, a
-      0002FC A6 0A            [ 1]  597 	ld	a, #0x0a
-      0002FE 42               [ 4]  598 	mul	x, a
-      0002FF 7B 14            [ 1]  599 	ld	a, (0x14, sp)
-      000301 A4 0F            [ 1]  600 	and	a, #0x0f
-      000303 6B 15            [ 1]  601 	ld	(0x15, sp), a
-      000305 9F               [ 1]  602 	ld	a, xl
-      000306 1B 15            [ 1]  603 	add	a, (0x15, sp)
-      000308 1E 0B            [ 2]  604 	ldw	x, (0x0b, sp)
-      00030A F7               [ 1]  605 	ld	(x), a
-                                    606 ;	user/RTC_pcf8563.c: 118: dateTime->minute = (((buffer[1] >> 4) & 0x07) * 10) + (buffer[1] & 0x0F);
-      00030B 1E 0B            [ 2]  607 	ldw	x, (0x0b, sp)
-      00030D 5C               [ 2]  608 	incw	x
-      00030E 1F 0F            [ 2]  609 	ldw	(0x0f, sp), x
-      000310 1E 12            [ 2]  610 	ldw	x, (0x12, sp)
-      000312 E6 01            [ 1]  611 	ld	a, (0x1, x)
-      000314 6B 11            [ 1]  612 	ld	(0x11, sp), a
-      000316 7B 11            [ 1]  613 	ld	a, (0x11, sp)
-      000318 4E               [ 1]  614 	swap	a
-      000319 A4 0F            [ 1]  615 	and	a, #0x0f
-      00031B A4 07            [ 1]  616 	and	a, #0x07
-      00031D 97               [ 1]  617 	ld	xl, a
-      00031E A6 0A            [ 1]  618 	ld	a, #0x0a
-      000320 42               [ 4]  619 	mul	x, a
-      000321 7B 11            [ 1]  620 	ld	a, (0x11, sp)
-      000323 A4 0F            [ 1]  621 	and	a, #0x0f
-      000325 6B 18            [ 1]  622 	ld	(0x18, sp), a
-      000327 9F               [ 1]  623 	ld	a, xl
-      000328 1B 18            [ 1]  624 	add	a, (0x18, sp)
-      00032A 1E 0F            [ 2]  625 	ldw	x, (0x0f, sp)
-      00032C F7               [ 1]  626 	ld	(x), a
-                                    627 ;	user/RTC_pcf8563.c: 119: dateTime->hour = (((buffer[2] >> 4) & 0x03) * 10) + (buffer[2] & 0x0F);
-      00032D 16 0B            [ 2]  628 	ldw	y, (0x0b, sp)
-      00032F 72 A9 00 02      [ 2]  629 	addw	y, #0x0002
-      000333 1E 12            [ 2]  630 	ldw	x, (0x12, sp)
-      000335 E6 02            [ 1]  631 	ld	a, (0x2, x)
-      000337 6B 0A            [ 1]  632 	ld	(0x0a, sp), a
-      000339 7B 0A            [ 1]  633 	ld	a, (0x0a, sp)
-      00033B 4E               [ 1]  634 	swap	a
-      00033C A4 0F            [ 1]  635 	and	a, #0x0f
-      00033E A4 03            [ 1]  636 	and	a, #0x03
-      000340 97               [ 1]  637 	ld	xl, a
-      000341 A6 0A            [ 1]  638 	ld	a, #0x0a
-      000343 42               [ 4]  639 	mul	x, a
-      000344 7B 0A            [ 1]  640 	ld	a, (0x0a, sp)
-      000346 A4 0F            [ 1]  641 	and	a, #0x0f
-      000348 6B 0E            [ 1]  642 	ld	(0x0e, sp), a
-      00034A 9F               [ 1]  643 	ld	a, xl
-      00034B 1B 0E            [ 1]  644 	add	a, (0x0e, sp)
-      00034D 90 F7            [ 1]  645 	ld	(y), a
-                                    646 ;	user/RTC_pcf8563.c: 120: dateTime->day = (((buffer[3] >> 4) & 0x03) * 10) + (buffer[3] & 0x0F);
-      00034F 16 0B            [ 2]  647 	ldw	y, (0x0b, sp)
-      000351 72 A9 00 03      [ 2]  648 	addw	y, #0x0003
-      000355 1E 12            [ 2]  649 	ldw	x, (0x12, sp)
-      000357 E6 03            [ 1]  650 	ld	a, (0x3, x)
-      000359 6B 1A            [ 1]  651 	ld	(0x1a, sp), a
-      00035B 7B 1A            [ 1]  652 	ld	a, (0x1a, sp)
-      00035D 4E               [ 1]  653 	swap	a
-      00035E A4 0F            [ 1]  654 	and	a, #0x0f
-      000360 A4 03            [ 1]  655 	and	a, #0x03
-      000362 97               [ 1]  656 	ld	xl, a
-      000363 A6 0A            [ 1]  657 	ld	a, #0x0a
-      000365 42               [ 4]  658 	mul	x, a
-      000366 7B 1A            [ 1]  659 	ld	a, (0x1a, sp)
-      000368 A4 0F            [ 1]  660 	and	a, #0x0f
-      00036A 6B 19            [ 1]  661 	ld	(0x19, sp), a
-      00036C 9F               [ 1]  662 	ld	a, xl
-      00036D 1B 19            [ 1]  663 	add	a, (0x19, sp)
-      00036F 90 F7            [ 1]  664 	ld	(y), a
-                                    665 ;	user/RTC_pcf8563.c: 121: dateTime->weekday = (buffer[4] & 0x07);
-      000371 1E 0B            [ 2]  666 	ldw	x, (0x0b, sp)
-      000373 1C 00 04         [ 2]  667 	addw	x, #0x0004
-      000376 16 12            [ 2]  668 	ldw	y, (0x12, sp)
-      000378 90 E6 04         [ 1]  669 	ld	a, (0x4, y)
-      00037B A4 07            [ 1]  670 	and	a, #0x07
-      00037D F7               [ 1]  671 	ld	(x), a
-                                    672 ;	user/RTC_pcf8563.c: 122: dateTime->month = ((buffer[5] >> 4) & 0x01) * 10 + (buffer[5] & 0x0F);
-      00037E 16 0B            [ 2]  673 	ldw	y, (0x0b, sp)
-      000380 72 A9 00 05      [ 2]  674 	addw	y, #0x0005
-      000384 1E 12            [ 2]  675 	ldw	x, (0x12, sp)
-      000386 1C 00 05         [ 2]  676 	addw	x, #0x0005
-      000389 1F 08            [ 2]  677 	ldw	(0x08, sp), x
-      00038B 1E 08            [ 2]  678 	ldw	x, (0x08, sp)
-      00038D F6               [ 1]  679 	ld	a, (x)
-      00038E 88               [ 1]  680 	push	a
-      00038F 44               [ 1]  681 	srl	a
-      000390 44               [ 1]  682 	srl	a
-      000391 44               [ 1]  683 	srl	a
-      000392 44               [ 1]  684 	srl	a
-      000393 A4 01            [ 1]  685 	and	a, #0x01
-      000395 97               [ 1]  686 	ld	xl, a
-      000396 A6 0A            [ 1]  687 	ld	a, #0x0a
-      000398 42               [ 4]  688 	mul	x, a
-      000399 84               [ 1]  689 	pop	a
-      00039A A4 0F            [ 1]  690 	and	a, #0x0f
-      00039C 6B 0D            [ 1]  691 	ld	(0x0d, sp), a
-      00039E 9F               [ 1]  692 	ld	a, xl
-      00039F 1B 0D            [ 1]  693 	add	a, (0x0d, sp)
-      0003A1 90 F7            [ 1]  694 	ld	(y), a
-                                    695 ;	user/RTC_pcf8563.c: 123: dateTime->year = 1900 + ((buffer[6] >> 4) & 0x0F) * 10 + (buffer[6] & 0x0F);
-      0003A3 1E 0B            [ 2]  696 	ldw	x, (0x0b, sp)
-      0003A5 1C 00 06         [ 2]  697 	addw	x, #0x0006
-      0003A8 1F 1B            [ 2]  698 	ldw	(0x1b, sp), x
-      0003AA 1E 12            [ 2]  699 	ldw	x, (0x12, sp)
-      0003AC E6 06            [ 1]  700 	ld	a, (0x6, x)
-      0003AE 97               [ 1]  701 	ld	xl, a
-      0003AF 4E               [ 1]  702 	swap	a
-      0003B0 A4 0F            [ 1]  703 	and	a, #0x0f
-      0003B2 A4 0F            [ 1]  704 	and	a, #0x0f
-      0003B4 61               [ 1]  705 	exg	a, yl
-      0003B5 A6 0A            [ 1]  706 	ld	a, #0x0a
-      0003B7 61               [ 1]  707 	exg	a, yl
-      0003B8 90 42            [ 4]  708 	mul	y, a
-      0003BA 72 A9 07 6C      [ 2]  709 	addw	y, #0x076c
-      0003BE 9F               [ 1]  710 	ld	a, xl
-      0003BF A4 0F            [ 1]  711 	and	a, #0x0f
-      0003C1 6B 17            [ 1]  712 	ld	(0x17, sp), a
-      0003C3 0F 16            [ 1]  713 	clr	(0x16, sp)
-      0003C5 72 F9 16         [ 2]  714 	addw	y, (0x16, sp)
-      0003C8 1E 1B            [ 2]  715 	ldw	x, (0x1b, sp)
-      0003CA FF               [ 2]  716 	ldw	(x), y
-                                    717 ;	user/RTC_pcf8563.c: 125: if (buffer[5] &  0x80)
-      0003CB 1E 08            [ 2]  718 	ldw	x, (0x08, sp)
-      0003CD F6               [ 1]  719 	ld	a, (x)
-      0003CE 4D               [ 1]  720 	tnz	a
-      0003CF 2A 0A            [ 1]  721 	jrpl	00102$
-                                    722 ;	user/RTC_pcf8563.c: 127: dateTime->year += 100;
-      0003D1 1E 1B            [ 2]  723 	ldw	x, (0x1b, sp)
-      0003D3 FE               [ 2]  724 	ldw	x, (x)
-      0003D4 1C 00 64         [ 2]  725 	addw	x, #0x0064
-      0003D7 16 1B            [ 2]  726 	ldw	y, (0x1b, sp)
-      0003D9 90 FF            [ 2]  727 	ldw	(y), x
-      0003DB                        728 00102$:
-                                    729 ;	user/RTC_pcf8563.c: 130: if (buffer[0] & 0x80) //Clock integrity not guaranted
-      0003DB 1E 12            [ 2]  730 	ldw	x, (0x12, sp)
-      0003DD F6               [ 1]  731 	ld	a, (x)
-      0003DE 4D               [ 1]  732 	tnz	a
-      0003DF 2A 03            [ 1]  733 	jrpl	00104$
-                                    734 ;	user/RTC_pcf8563.c: 132: return 1;
-      0003E1 A6 01            [ 1]  735 	ld	a, #0x01
-                                    736 ;	user/RTC_pcf8563.c: 135: return 0;
-      0003E3 21                     737 	.byte 0x21
-      0003E4                        738 00104$:
-      0003E4 4F               [ 1]  739 	clr	a
-      0003E5                        740 00105$:
-      0003E5 5B 1C            [ 2]  741 	addw	sp, #28
-      0003E7 81               [ 4]  742 	ret
-                                    743 ;	user/RTC_pcf8563.c: 138: uint8_t PCF_setAlarm(PCF_Alarm *alarm)
-                                    744 ;	-----------------------------------------
-                                    745 ;	 function PCF_setAlarm
-                                    746 ;	-----------------------------------------
-      0003E8                        747 _PCF_setAlarm:
-      0003E8 52 13            [ 2]  748 	sub	sp, #19
-                                    749 ;	user/RTC_pcf8563.c: 141: if ((alarm->minute >= 60 && alarm->minute != 80) || (alarm->hour >= 24 && alarm->hour != 80) || (alarm->day > 32 && alarm->day != 80) || (alarm->weekday > 6 && alarm->weekday != 80))
-      0003EA 16 16            [ 2]  750 	ldw	y, (0x16, sp)
-      0003EC 17 0A            [ 2]  751 	ldw	(0x0a, sp), y
-      0003EE 1E 0A            [ 2]  752 	ldw	x, (0x0a, sp)
-      0003F0 F6               [ 1]  753 	ld	a, (x)
-      0003F1 6B 0F            [ 1]  754 	ld	(0x0f, sp), a
-      0003F3 7B 0F            [ 1]  755 	ld	a, (0x0f, sp)
-      0003F5 A1 3C            [ 1]  756 	cp	a, #0x3c
-      0003F7 25 06            [ 1]  757 	jrc	00105$
-      0003F9 7B 0F            [ 1]  758 	ld	a, (0x0f, sp)
-      0003FB A1 50            [ 1]  759 	cp	a, #0x50
-      0003FD 26 31            [ 1]  760 	jrne	00101$
-      0003FF                        761 00105$:
-      0003FF 16 0A            [ 2]  762 	ldw	y, (0x0a, sp)
-      000401 90 5C            [ 2]  763 	incw	y
-      000403 90 F6            [ 1]  764 	ld	a, (y)
-      000405 A1 18            [ 1]  765 	cp	a, #0x18
-      000407 25 04            [ 1]  766 	jrc	00107$
-      000409 A1 50            [ 1]  767 	cp	a, #0x50
-      00040B 26 23            [ 1]  768 	jrne	00101$
-      00040D                        769 00107$:
-      00040D 1E 0A            [ 2]  770 	ldw	x, (0x0a, sp)
-      00040F 5C               [ 2]  771 	incw	x
-      000410 5C               [ 2]  772 	incw	x
-      000411 1F 08            [ 2]  773 	ldw	(0x08, sp), x
-      000413 1E 08            [ 2]  774 	ldw	x, (0x08, sp)
-      000415 F6               [ 1]  775 	ld	a, (x)
-      000416 A1 20            [ 1]  776 	cp	a, #0x20
-      000418 23 04            [ 2]  777 	jrule	00109$
-      00041A A1 50            [ 1]  778 	cp	a, #0x50
-      00041C 26 12            [ 1]  779 	jrne	00101$
-      00041E                        780 00109$:
-      00041E 1E 0A            [ 2]  781 	ldw	x, (0x0a, sp)
-      000420 1C 00 03         [ 2]  782 	addw	x, #0x0003
-      000423 1F 06            [ 2]  783 	ldw	(0x06, sp), x
-      000425 1E 06            [ 2]  784 	ldw	x, (0x06, sp)
-      000427 F6               [ 1]  785 	ld	a, (x)
-      000428 A1 06            [ 1]  786 	cp	a, #0x06
-      00042A 23 09            [ 2]  787 	jrule	00102$
-      00042C A1 50            [ 1]  788 	cp	a, #0x50
-      00042E 27 05            [ 1]  789 	jreq	00102$
-      000430                        790 00101$:
-                                    791 ;	user/RTC_pcf8563.c: 143: return 1;
-      000430 A6 01            [ 1]  792 	ld	a, #0x01
-      000432 CCr04rC4         [ 2]  793 	jp	00110$
-      000435                        794 00102$:
-                                    795 ;	user/RTC_pcf8563.c: 146: buffer[0] = BinToBCD(alarm->minute) & 0xFF;
-      000435 96               [ 1]  796 	ldw	x, sp
-      000436 5C               [ 2]  797 	incw	x
-      000437 1F 0D            [ 2]  798 	ldw	(0x0d, sp), x
-      000439 5F               [ 1]  799 	clrw	x
-      00043A 7B 0F            [ 1]  800 	ld	a, (0x0f, sp)
-      00043C 97               [ 1]  801 	ld	xl, a
-      00043D A6 0A            [ 1]  802 	ld	a, #0x0a
-      00043F 62               [ 2]  803 	div	x, a
-      000440 9F               [ 1]  804 	ld	a, xl
-      000441 4E               [ 1]  805 	swap	a
-      000442 A4 F0            [ 1]  806 	and	a, #0xf0
-      000444 6B 10            [ 1]  807 	ld	(0x10, sp), a
-      000446 5F               [ 1]  808 	clrw	x
-      000447 7B 0F            [ 1]  809 	ld	a, (0x0f, sp)
-      000449 97               [ 1]  810 	ld	xl, a
-      00044A A6 0A            [ 1]  811 	ld	a, #0x0a
-      00044C 62               [ 2]  812 	div	x, a
-      00044D 1B 10            [ 1]  813 	add	a, (0x10, sp)
-      00044F 1E 0D            [ 2]  814 	ldw	x, (0x0d, sp)
-      000451 F7               [ 1]  815 	ld	(x), a
-                                    816 ;	user/RTC_pcf8563.c: 147: buffer[1] = BinToBCD(alarm->hour) & 0xBF;
-      000452 1E 0D            [ 2]  817 	ldw	x, (0x0d, sp)
-      000454 5C               [ 2]  818 	incw	x
-      000455 1F 11            [ 2]  819 	ldw	(0x11, sp), x
-      000457 90 F6            [ 1]  820 	ld	a, (y)
-      000459 97               [ 1]  821 	ld	xl, a
-      00045A 89               [ 2]  822 	pushw	x
-      00045B 4F               [ 1]  823 	clr	a
-      00045C 95               [ 1]  824 	ld	xh, a
-      00045D A6 0A            [ 1]  825 	ld	a, #0x0a
-      00045F 62               [ 2]  826 	div	x, a
-      000460 9F               [ 1]  827 	ld	a, xl
-      000461 85               [ 2]  828 	popw	x
-      000462 4E               [ 1]  829 	swap	a
-      000463 A4 F0            [ 1]  830 	and	a, #0xf0
-      000465 6B 05            [ 1]  831 	ld	(0x05, sp), a
-      000467 4F               [ 1]  832 	clr	a
-      000468 95               [ 1]  833 	ld	xh, a
-      000469 A6 0A            [ 1]  834 	ld	a, #0x0a
-      00046B 62               [ 2]  835 	div	x, a
-      00046C 1B 05            [ 1]  836 	add	a, (0x05, sp)
-      00046E A4 BF            [ 1]  837 	and	a, #0xbf
-      000470 1E 11            [ 2]  838 	ldw	x, (0x11, sp)
-      000472 F7               [ 1]  839 	ld	(x), a
-                                    840 ;	user/RTC_pcf8563.c: 148: buffer[2] = BinToBCD(alarm->day) & 0xBF;
-      000473 16 0D            [ 2]  841 	ldw	y, (0x0d, sp)
-      000475 72 A9 00 02      [ 2]  842 	addw	y, #0x0002
-      000479 1E 08            [ 2]  843 	ldw	x, (0x08, sp)
-      00047B F6               [ 1]  844 	ld	a, (x)
-      00047C 97               [ 1]  845 	ld	xl, a
-      00047D 89               [ 2]  846 	pushw	x
-      00047E 4F               [ 1]  847 	clr	a
-      00047F 95               [ 1]  848 	ld	xh, a
-      000480 A6 0A            [ 1]  849 	ld	a, #0x0a
-      000482 62               [ 2]  850 	div	x, a
-      000483 9F               [ 1]  851 	ld	a, xl
-      000484 85               [ 2]  852 	popw	x
-      000485 4E               [ 1]  853 	swap	a
-      000486 A4 F0            [ 1]  854 	and	a, #0xf0
-      000488 6B 13            [ 1]  855 	ld	(0x13, sp), a
-      00048A 4F               [ 1]  856 	clr	a
-      00048B 95               [ 1]  857 	ld	xh, a
-      00048C A6 0A            [ 1]  858 	ld	a, #0x0a
-      00048E 62               [ 2]  859 	div	x, a
-      00048F 1B 13            [ 1]  860 	add	a, (0x13, sp)
-      000491 A4 BF            [ 1]  861 	and	a, #0xbf
-      000493 90 F7            [ 1]  862 	ld	(y), a
-                                    863 ;	user/RTC_pcf8563.c: 149: buffer[3] = BinToBCD(alarm->weekday) & 0x87;
-      000495 16 0D            [ 2]  864 	ldw	y, (0x0d, sp)
-      000497 72 A9 00 03      [ 2]  865 	addw	y, #0x0003
-      00049B 1E 06            [ 2]  866 	ldw	x, (0x06, sp)
-      00049D F6               [ 1]  867 	ld	a, (x)
-      00049E 97               [ 1]  868 	ld	xl, a
-      00049F 89               [ 2]  869 	pushw	x
-      0004A0 4F               [ 1]  870 	clr	a
-      0004A1 95               [ 1]  871 	ld	xh, a
-      0004A2 A6 0A            [ 1]  872 	ld	a, #0x0a
-      0004A4 62               [ 2]  873 	div	x, a
-      0004A5 9F               [ 1]  874 	ld	a, xl
-      0004A6 85               [ 2]  875 	popw	x
-      0004A7 4E               [ 1]  876 	swap	a
-      0004A8 A4 F0            [ 1]  877 	and	a, #0xf0
-      0004AA 6B 0C            [ 1]  878 	ld	(0x0c, sp), a
-      0004AC 4F               [ 1]  879 	clr	a
-      0004AD 95               [ 1]  880 	ld	xh, a
-      0004AE A6 0A            [ 1]  881 	ld	a, #0x0a
-      0004B0 62               [ 2]  882 	div	x, a
-      0004B1 1B 0C            [ 1]  883 	add	a, (0x0c, sp)
-      0004B3 A4 87            [ 1]  884 	and	a, #0x87
-      0004B5 90 F7            [ 1]  885 	ld	(y), a
-                                    886 ;	user/RTC_pcf8563.c: 151: PCF_Write(0x09, buffer, sizeof(buffer));
-      0004B7 1E 0D            [ 2]  887 	ldw	x, (0x0d, sp)
-      0004B9 4B 04            [ 1]  888 	push	#0x04
-      0004BB 89               [ 2]  889 	pushw	x
-      0004BC 4B 09            [ 1]  890 	push	#0x09
-      0004BE CDr00r3B         [ 4]  891 	call	_PCF_Write
-      0004C1 5B 04            [ 2]  892 	addw	sp, #4
-                                    893 ;	user/RTC_pcf8563.c: 153: return 0;
-      0004C3 4F               [ 1]  894 	clr	a
-      0004C4                        895 00110$:
-      0004C4 5B 13            [ 2]  896 	addw	sp, #19
-      0004C6 81               [ 4]  897 	ret
-                                    898 ;	user/RTC_pcf8563.c: 156: void PCF_setTimer(uint8_t mode, uint8_t count)
-                                    899 ;	-----------------------------------------
-                                    900 ;	 function PCF_setTimer
-                                    901 ;	-----------------------------------------
-      0004C7                        902 _PCF_setTimer:
-                                    903 ;	user/RTC_pcf8563.c: 158: mode &= 0x13;
-      0004C7 7B 03            [ 1]  904 	ld	a, (0x03, sp)
-      0004C9 A4 13            [ 1]  905 	and	a, #0x13
-      0004CB 6B 03            [ 1]  906 	ld	(0x03, sp), a
-                                    907 ;	user/RTC_pcf8563.c: 159: PCF_Write(0x0E, &mode, 1);				//Timer_control
-      0004CD 96               [ 1]  908 	ldw	x, sp
-      0004CE 1C 00 03         [ 2]  909 	addw	x, #3
-      0004D1 4B 01            [ 1]  910 	push	#0x01
-      0004D3 89               [ 2]  911 	pushw	x
-      0004D4 4B 0E            [ 1]  912 	push	#0x0e
-      0004D6 CDr00r3B         [ 4]  913 	call	_PCF_Write
-      0004D9 5B 04            [ 2]  914 	addw	sp, #4
-                                    915 ;	user/RTC_pcf8563.c: 161: PCF_Write(0x0F, &count, 1);				//Timer
-      0004DB 96               [ 1]  916 	ldw	x, sp
-      0004DC 1C 00 04         [ 2]  917 	addw	x, #4
-      0004DF 4B 01            [ 1]  918 	push	#0x01
-      0004E1 89               [ 2]  919 	pushw	x
-      0004E2 4B 0F            [ 1]  920 	push	#0x0f
-      0004E4 CDr00r3B         [ 4]  921 	call	_PCF_Write
-      0004E7 5B 04            [ 2]  922 	addw	sp, #4
-      0004E9 81               [ 4]  923 	ret
-                                    924 ;	user/RTC_pcf8563.c: 164: uint8_t PCF_getTimer()
-                                    925 ;	-----------------------------------------
-                                    926 ;	 function PCF_getTimer
-                                    927 ;	-----------------------------------------
-      0004EA                        928 _PCF_getTimer:
-      0004EA 88               [ 1]  929 	push	a
-                                    930 ;	user/RTC_pcf8563.c: 167: PCF_Read(0x0F, &count, 1);				//Timer
-      0004EB 96               [ 1]  931 	ldw	x, sp
-      0004EC 5C               [ 2]  932 	incw	x
-      0004ED 4B 01            [ 1]  933 	push	#0x01
-      0004EF 89               [ 2]  934 	pushw	x
-      0004F0 4B 0F            [ 1]  935 	push	#0x0f
-      0004F2 CDr00r70         [ 4]  936 	call	_PCF_Read
-      0004F5 5B 04            [ 2]  937 	addw	sp, #4
-                                    938 ;	user/RTC_pcf8563.c: 169: return count;
-      0004F7 7B 01            [ 1]  939 	ld	a, (0x01, sp)
-      0004F9 5B 01            [ 2]  940 	addw	sp, #1
-      0004FB 81               [ 4]  941 	ret
-                                    942 ;	user/RTC_pcf8563.c: 172: uint8_t PCF_getAlarm(PCF_Alarm *alarm)
-                                    943 ;	-----------------------------------------
-                                    944 ;	 function PCF_getAlarm
-                                    945 ;	-----------------------------------------
-      0004FC                        946 _PCF_getAlarm:
-      0004FC 52 0F            [ 2]  947 	sub	sp, #15
-                                    948 ;	user/RTC_pcf8563.c: 176: PCF_Read(0x09, buffer, sizeof(buffer));
-      0004FE 96               [ 1]  949 	ldw	x, sp
-      0004FF 5C               [ 2]  950 	incw	x
-      000500 1F 0D            [ 2]  951 	ldw	(0x0d, sp), x
-      000502 1E 0D            [ 2]  952 	ldw	x, (0x0d, sp)
-      000504 4B 04            [ 1]  953 	push	#0x04
-      000506 89               [ 2]  954 	pushw	x
-      000507 4B 09            [ 1]  955 	push	#0x09
-      000509 CDr00r70         [ 4]  956 	call	_PCF_Read
-      00050C 5B 04            [ 2]  957 	addw	sp, #4
-                                    958 ;	user/RTC_pcf8563.c: 178: alarm->minute = (((buffer[0] >> 4) & 0x0F) * 10) + (buffer[0] & 0x0F);
-      00050E 16 12            [ 2]  959 	ldw	y, (0x12, sp)
-      000510 17 0B            [ 2]  960 	ldw	(0x0b, sp), y
-      000512 1E 0D            [ 2]  961 	ldw	x, (0x0d, sp)
-      000514 F6               [ 1]  962 	ld	a, (x)
-      000515 90 97            [ 1]  963 	ld	yl, a
-      000517 4E               [ 1]  964 	swap	a
-      000518 A4 0F            [ 1]  965 	and	a, #0x0f
-      00051A A4 0F            [ 1]  966 	and	a, #0x0f
-      00051C 97               [ 1]  967 	ld	xl, a
-      00051D A6 0A            [ 1]  968 	ld	a, #0x0a
-      00051F 42               [ 4]  969 	mul	x, a
-      000520 90 9F            [ 1]  970 	ld	a, yl
-      000522 A4 0F            [ 1]  971 	and	a, #0x0f
-      000524 6B 0A            [ 1]  972 	ld	(0x0a, sp), a
-      000526 9F               [ 1]  973 	ld	a, xl
-      000527 1B 0A            [ 1]  974 	add	a, (0x0a, sp)
-      000529 1E 0B            [ 2]  975 	ldw	x, (0x0b, sp)
-      00052B F7               [ 1]  976 	ld	(x), a
-                                    977 ;	user/RTC_pcf8563.c: 179: alarm->hour = (((buffer[1] >> 4) & 0x0B) * 10) + (buffer[1] & 0x0F);
-      00052C 16 0B            [ 2]  978 	ldw	y, (0x0b, sp)
-      00052E 90 5C            [ 2]  979 	incw	y
-      000530 1E 0D            [ 2]  980 	ldw	x, (0x0d, sp)
-      000532 E6 01            [ 1]  981 	ld	a, (0x1, x)
-      000534 6B 08            [ 1]  982 	ld	(0x08, sp), a
-      000536 7B 08            [ 1]  983 	ld	a, (0x08, sp)
-      000538 4E               [ 1]  984 	swap	a
-      000539 A4 0F            [ 1]  985 	and	a, #0x0f
-      00053B A4 0B            [ 1]  986 	and	a, #0x0b
-      00053D 97               [ 1]  987 	ld	xl, a
-      00053E A6 0A            [ 1]  988 	ld	a, #0x0a
-      000540 42               [ 4]  989 	mul	x, a
-      000541 7B 08            [ 1]  990 	ld	a, (0x08, sp)
-      000543 A4 0F            [ 1]  991 	and	a, #0x0f
-      000545 6B 0F            [ 1]  992 	ld	(0x0f, sp), a
-      000547 9F               [ 1]  993 	ld	a, xl
-      000548 1B 0F            [ 1]  994 	add	a, (0x0f, sp)
-      00054A 90 F7            [ 1]  995 	ld	(y), a
-                                    996 ;	user/RTC_pcf8563.c: 180: alarm->day = (((buffer[2] >> 4) & 0x0B) * 10) + (buffer[2] & 0x0F);
-      00054C 16 0B            [ 2]  997 	ldw	y, (0x0b, sp)
-      00054E 72 A9 00 02      [ 2]  998 	addw	y, #0x0002
-      000552 1E 0D            [ 2]  999 	ldw	x, (0x0d, sp)
-      000554 E6 02            [ 1] 1000 	ld	a, (0x2, x)
-      000556 6B 07            [ 1] 1001 	ld	(0x07, sp), a
-      000558 7B 07            [ 1] 1002 	ld	a, (0x07, sp)
-      00055A 4E               [ 1] 1003 	swap	a
-      00055B A4 0F            [ 1] 1004 	and	a, #0x0f
-      00055D A4 0B            [ 1] 1005 	and	a, #0x0b
-      00055F 97               [ 1] 1006 	ld	xl, a
-      000560 A6 0A            [ 1] 1007 	ld	a, #0x0a
-      000562 42               [ 4] 1008 	mul	x, a
-      000563 7B 07            [ 1] 1009 	ld	a, (0x07, sp)
-      000565 A4 0F            [ 1] 1010 	and	a, #0x0f
-      000567 6B 06            [ 1] 1011 	ld	(0x06, sp), a
-      000569 9F               [ 1] 1012 	ld	a, xl
-      00056A 1B 06            [ 1] 1013 	add	a, (0x06, sp)
-      00056C 90 F7            [ 1] 1014 	ld	(y), a
-                                   1015 ;	user/RTC_pcf8563.c: 181: alarm->weekday = (((buffer[3] >> 4) & 0x08) * 10) + (buffer[3] & 0x07);
-      00056E 16 0B            [ 2] 1016 	ldw	y, (0x0b, sp)
-      000570 72 A9 00 03      [ 2] 1017 	addw	y, #0x0003
-      000574 1E 0D            [ 2] 1018 	ldw	x, (0x0d, sp)
-      000576 E6 03            [ 1] 1019 	ld	a, (0x3, x)
-      000578 6B 05            [ 1] 1020 	ld	(0x05, sp), a
-      00057A 7B 05            [ 1] 1021 	ld	a, (0x05, sp)
-      00057C 4E               [ 1] 1022 	swap	a
-      00057D A4 0F            [ 1] 1023 	and	a, #0x0f
-      00057F A4 08            [ 1] 1024 	and	a, #0x08
-      000581 97               [ 1] 1025 	ld	xl, a
-      000582 A6 0A            [ 1] 1026 	ld	a, #0x0a
-      000584 42               [ 4] 1027 	mul	x, a
-      000585 7B 05            [ 1] 1028 	ld	a, (0x05, sp)
-      000587 A4 07            [ 1] 1029 	and	a, #0x07
-      000589 6B 09            [ 1] 1030 	ld	(0x09, sp), a
-      00058B 9F               [ 1] 1031 	ld	a, xl
-      00058C 1B 09            [ 1] 1032 	add	a, (0x09, sp)
-      00058E 90 F7            [ 1] 1033 	ld	(y), a
-                                   1034 ;	user/RTC_pcf8563.c: 183: return 0;
-      000590 4F               [ 1] 1035 	clr	a
-      000591 5B 0F            [ 2] 1036 	addw	sp, #15
-      000593 81               [ 4] 1037 	ret
-                                   1038 ;	user/RTC_pcf8563.c: 186: uint8_t PCF_getAndClearFlags()
-                                   1039 ;	-----------------------------------------
-                                   1040 ;	 function PCF_getAndClearFlags
-                                   1041 ;	-----------------------------------------
-      000594                       1042 _PCF_getAndClearFlags:
-      000594 89               [ 2] 1043 	pushw	x
-                                   1044 ;	user/RTC_pcf8563.c: 190: PCF_Read(0x01, &flags, 1);				//Control_status_2
-      000595 96               [ 1] 1045 	ldw	x, sp
-      000596 5C               [ 2] 1046 	incw	x
-      000597 5C               [ 2] 1047 	incw	x
-      000598 4B 01            [ 1] 1048 	push	#0x01
-      00059A 89               [ 2] 1049 	pushw	x
-      00059B 4B 01            [ 1] 1050 	push	#0x01
-      00059D CDr00r70         [ 4] 1051 	call	_PCF_Read
-      0005A0 5B 04            [ 2] 1052 	addw	sp, #4
-                                   1053 ;	user/RTC_pcf8563.c: 191: cleared = flags & 0x13;
-      0005A2 7B 02            [ 1] 1054 	ld	a, (0x02, sp)
-      0005A4 A4 13            [ 1] 1055 	and	a, #0x13
-      0005A6 6B 01            [ 1] 1056 	ld	(0x01, sp), a
-                                   1057 ;	user/RTC_pcf8563.c: 192: PCF_Write(0x01, &cleared, 1);			//Control_status_2
-      0005A8 96               [ 1] 1058 	ldw	x, sp
-      0005A9 5C               [ 2] 1059 	incw	x
-      0005AA 4B 01            [ 1] 1060 	push	#0x01
-      0005AC 89               [ 2] 1061 	pushw	x
-      0005AD 4B 01            [ 1] 1062 	push	#0x01
-      0005AF CDr00r3B         [ 4] 1063 	call	_PCF_Write
-      0005B2 5B 04            [ 2] 1064 	addw	sp, #4
-                                   1065 ;	user/RTC_pcf8563.c: 194: return flags & 0x0C;					//Mask unnecessary bits
-      0005B4 7B 02            [ 1] 1066 	ld	a, (0x02, sp)
-      0005B6 A4 0C            [ 1] 1067 	and	a, #0x0c
-      0005B8 85               [ 2] 1068 	popw	x
-      0005B9 81               [ 4] 1069 	ret
-                                   1070 ;	user/RTC_pcf8563.c: 197: void PCF_setClockOut(uint8_t mode)
-                                   1071 ;	-----------------------------------------
-                                   1072 ;	 function PCF_setClockOut
-                                   1073 ;	-----------------------------------------
-      0005BA                       1074 _PCF_setClockOut:
-                                   1075 ;	user/RTC_pcf8563.c: 199: mode &= 0x13;
-      0005BA 7B 03            [ 1] 1076 	ld	a, (0x03, sp)
-      0005BC A4 13            [ 1] 1077 	and	a, #0x13
-      0005BE 6B 03            [ 1] 1078 	ld	(0x03, sp), a
-                                   1079 ;	user/RTC_pcf8563.c: 200: PCF_Write(0x0D, &mode, 1);				//CLKOUT_control
-      0005C0 96               [ 1] 1080 	ldw	x, sp
-      0005C1 1C 00 03         [ 2] 1081 	addw	x, #3
-      0005C4 4B 01            [ 1] 1082 	push	#0x01
-      0005C6 89               [ 2] 1083 	pushw	x
-      0005C7 4B 0D            [ 1] 1084 	push	#0x0d
-      0005C9 CDr00r3B         [ 4] 1085 	call	_PCF_Write
-      0005CC 5B 04            [ 2] 1086 	addw	sp, #4
-      0005CE 81               [ 4] 1087 	ret
-                                   1088 	.area CODE
-                                   1089 	.area INITIALIZER
-                                   1090 	.area CABS (ABS)
+                                    153 ;	 function PCF_Write
+                                    154 ;	-----------------------------------------
+      000075                        155 _PCF_Write:
+      000075 88               [ 1]  156 	push	a
+                                    157 ;	user/RTC_pcf8563.c: 31: I2C_GenerateSTART(ENABLE);
+      000076 4B 01            [ 1]  158 	push	#0x01
+      000078 CDr00r00         [ 4]  159 	call	_I2C_GenerateSTART
+      00007B 84               [ 1]  160 	pop	a
+                                    161 ;	user/RTC_pcf8563.c: 33: while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
+      00007C                        162 00101$:
+      00007C 4B 01            [ 1]  163 	push	#0x01
+      00007E 4B 03            [ 1]  164 	push	#0x03
+      000080 CDr00r00         [ 4]  165 	call	_I2C_CheckEvent
+      000083 85               [ 2]  166 	popw	x
+      000084 4D               [ 1]  167 	tnz	a
+      000085 27 F5            [ 1]  168 	jreq	00101$
+                                    169 ;	user/RTC_pcf8563.c: 35: I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
+      000087 4B 00            [ 1]  170 	push	#0x00
+      000089 4B A2            [ 1]  171 	push	#0xa2
+      00008B CDr00r00         [ 4]  172 	call	_I2C_Send7bitAddress
+      00008E 85               [ 2]  173 	popw	x
+                                    174 ;	user/RTC_pcf8563.c: 36: while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+      00008F                        175 00104$:
+      00008F 4B 82            [ 1]  176 	push	#0x82
+      000091 4B 07            [ 1]  177 	push	#0x07
+      000093 CDr00r00         [ 4]  178 	call	_I2C_CheckEvent
+      000096 85               [ 2]  179 	popw	x
+      000097 4D               [ 1]  180 	tnz	a
+      000098 27 F5            [ 1]  181 	jreq	00104$
+                                    182 ;	user/RTC_pcf8563.c: 38: I2C_SendData(addr);
+      00009A 7B 04            [ 1]  183 	ld	a, (0x04, sp)
+      00009C 88               [ 1]  184 	push	a
+      00009D CDr00r00         [ 4]  185 	call	_I2C_SendData
+      0000A0 84               [ 1]  186 	pop	a
+                                    187 ;	user/RTC_pcf8563.c: 39: while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+      0000A1                        188 00107$:
+      0000A1 4B 84            [ 1]  189 	push	#0x84
+      0000A3 4B 07            [ 1]  190 	push	#0x07
+      0000A5 CDr00r00         [ 4]  191 	call	_I2C_CheckEvent
+      0000A8 85               [ 2]  192 	popw	x
+      0000A9 4D               [ 1]  193 	tnz	a
+      0000AA 27 F5            [ 1]  194 	jreq	00107$
+                                    195 ;	user/RTC_pcf8563.c: 41: while(count){
+      0000AC 7B 07            [ 1]  196 	ld	a, (0x07, sp)
+      0000AE 6B 01            [ 1]  197 	ld	(0x01, sp), a
+      0000B0 1E 05            [ 2]  198 	ldw	x, (0x05, sp)
+      0000B2                        199 00113$:
+      0000B2 0D 01            [ 1]  200 	tnz	(0x01, sp)
+      0000B4 27 1A            [ 1]  201 	jreq	00115$
+                                    202 ;	user/RTC_pcf8563.c: 42: count--;
+      0000B6 0A 01            [ 1]  203 	dec	(0x01, sp)
+                                    204 ;	user/RTC_pcf8563.c: 43: I2C_SendData(*data);
+      0000B8 F6               [ 1]  205 	ld	a, (x)
+      0000B9 89               [ 2]  206 	pushw	x
+      0000BA 88               [ 1]  207 	push	a
+      0000BB CDr00r00         [ 4]  208 	call	_I2C_SendData
+      0000BE 84               [ 1]  209 	pop	a
+      0000BF 85               [ 2]  210 	popw	x
+                                    211 ;	user/RTC_pcf8563.c: 44: while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+      0000C0                        212 00110$:
+      0000C0 89               [ 2]  213 	pushw	x
+      0000C1 4B 84            [ 1]  214 	push	#0x84
+      0000C3 4B 07            [ 1]  215 	push	#0x07
+      0000C5 CDr00r00         [ 4]  216 	call	_I2C_CheckEvent
+      0000C8 85               [ 2]  217 	popw	x
+      0000C9 85               [ 2]  218 	popw	x
+      0000CA 4D               [ 1]  219 	tnz	a
+      0000CB 27 F3            [ 1]  220 	jreq	00110$
+                                    221 ;	user/RTC_pcf8563.c: 45: data++;
+      0000CD 5C               [ 2]  222 	incw	x
+      0000CE 20 E2            [ 2]  223 	jra	00113$
+      0000D0                        224 00115$:
+                                    225 ;	user/RTC_pcf8563.c: 47: I2C_GenerateSTOP(ENABLE);
+      0000D0 4B 01            [ 1]  226 	push	#0x01
+      0000D2 CDr00r00         [ 4]  227 	call	_I2C_GenerateSTOP
+      0000D5 84               [ 1]  228 	pop	a
+      0000D6 84               [ 1]  229 	pop	a
+      0000D7 81               [ 4]  230 	ret
+                                    231 ;	user/RTC_pcf8563.c: 50: void PCF_Read(uint8_t addr, uint8_t *data, uint8_t count)
+                                    232 ;	-----------------------------------------
+                                    233 ;	 function PCF_Read
+                                    234 ;	-----------------------------------------
+      0000D8                        235 _PCF_Read:
+      0000D8 52 03            [ 2]  236 	sub	sp, #3
+                                    237 ;	user/RTC_pcf8563.c: 53: I2C_GenerateSTART(ENABLE);
+      0000DA 4B 01            [ 1]  238 	push	#0x01
+      0000DC CDr00r00         [ 4]  239 	call	_I2C_GenerateSTART
+      0000DF 84               [ 1]  240 	pop	a
+                                    241 ;	user/RTC_pcf8563.c: 55: while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
+      0000E0                        242 00101$:
+      0000E0 4B 01            [ 1]  243 	push	#0x01
+      0000E2 4B 03            [ 1]  244 	push	#0x03
+      0000E4 CDr00r00         [ 4]  245 	call	_I2C_CheckEvent
+      0000E7 85               [ 2]  246 	popw	x
+      0000E8 4D               [ 1]  247 	tnz	a
+      0000E9 27 F5            [ 1]  248 	jreq	00101$
+                                    249 ;	user/RTC_pcf8563.c: 57: I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
+      0000EB 4B 00            [ 1]  250 	push	#0x00
+      0000ED 4B A2            [ 1]  251 	push	#0xa2
+      0000EF CDr00r00         [ 4]  252 	call	_I2C_Send7bitAddress
+      0000F2 85               [ 2]  253 	popw	x
+                                    254 ;	user/RTC_pcf8563.c: 58: while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+      0000F3                        255 00104$:
+      0000F3 4B 82            [ 1]  256 	push	#0x82
+      0000F5 4B 07            [ 1]  257 	push	#0x07
+      0000F7 CDr00r00         [ 4]  258 	call	_I2C_CheckEvent
+      0000FA 85               [ 2]  259 	popw	x
+      0000FB 4D               [ 1]  260 	tnz	a
+      0000FC 27 F5            [ 1]  261 	jreq	00104$
+                                    262 ;	user/RTC_pcf8563.c: 60: I2C_SendData(addr);
+      0000FE 7B 06            [ 1]  263 	ld	a, (0x06, sp)
+      000100 88               [ 1]  264 	push	a
+      000101 CDr00r00         [ 4]  265 	call	_I2C_SendData
+      000104 84               [ 1]  266 	pop	a
+                                    267 ;	user/RTC_pcf8563.c: 61: while(!I2C_CheckEvent(I2C_FLAG_TRANSFERFINISHED));
+      000105                        268 00107$:
+      000105 4B 04            [ 1]  269 	push	#0x04
+      000107 4B 01            [ 1]  270 	push	#0x01
+      000109 CDr00r00         [ 4]  271 	call	_I2C_CheckEvent
+      00010C 85               [ 2]  272 	popw	x
+      00010D 4D               [ 1]  273 	tnz	a
+      00010E 27 F5            [ 1]  274 	jreq	00107$
+                                    275 ;	user/RTC_pcf8563.c: 64: I2C_GenerateSTART(ENABLE);
+      000110 4B 01            [ 1]  276 	push	#0x01
+      000112 CDr00r00         [ 4]  277 	call	_I2C_GenerateSTART
+      000115 84               [ 1]  278 	pop	a
+                                    279 ;	user/RTC_pcf8563.c: 65: while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
+      000116                        280 00110$:
+      000116 4B 01            [ 1]  281 	push	#0x01
+      000118 4B 03            [ 1]  282 	push	#0x03
+      00011A CDr00r00         [ 4]  283 	call	_I2C_CheckEvent
+      00011D 85               [ 2]  284 	popw	x
+      00011E 4D               [ 1]  285 	tnz	a
+      00011F 27 F5            [ 1]  286 	jreq	00110$
+                                    287 ;	user/RTC_pcf8563.c: 67: I2C_Send7bitAddress(PCF8563_READ_ADDR, I2C_DIRECTION_RX);
+      000121 4B 01            [ 1]  288 	push	#0x01
+      000123 4B A3            [ 1]  289 	push	#0xa3
+      000125 CDr00r00         [ 4]  290 	call	_I2C_Send7bitAddress
+      000128 85               [ 2]  291 	popw	x
+                                    292 ;	user/RTC_pcf8563.c: 69: while(!I2C_CheckEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
+      000129                        293 00113$:
+      000129 4B 02            [ 1]  294 	push	#0x02
+      00012B 4B 03            [ 1]  295 	push	#0x03
+      00012D CDr00r00         [ 4]  296 	call	_I2C_CheckEvent
+      000130 85               [ 2]  297 	popw	x
+      000131 4D               [ 1]  298 	tnz	a
+      000132 27 F5            [ 1]  299 	jreq	00113$
+                                    300 ;	user/RTC_pcf8563.c: 70: while(count)
+      000134 7B 09            [ 1]  301 	ld	a, (0x09, sp)
+      000136 6B 01            [ 1]  302 	ld	(0x01, sp), a
+      000138 16 07            [ 2]  303 	ldw	y, (0x07, sp)
+      00013A 17 02            [ 2]  304 	ldw	(0x02, sp), y
+      00013C                        305 00119$:
+      00013C 0D 01            [ 1]  306 	tnz	(0x01, sp)
+      00013E 27 2E            [ 1]  307 	jreq	00121$
+                                    308 ;	user/RTC_pcf8563.c: 73: count--;
+      000140 0A 01            [ 1]  309 	dec	(0x01, sp)
+                                    310 ;	user/RTC_pcf8563.c: 74: I2C_AcknowledgeConfig(I2C_ACK_NONE);
+      000142 4B 00            [ 1]  311 	push	#0x00
+      000144 CDr00r00         [ 4]  312 	call	_I2C_AcknowledgeConfig
+      000147 84               [ 1]  313 	pop	a
+                                    314 ;	user/RTC_pcf8563.c: 77: I2C->SR1;        
+      000148 AE 52 17         [ 2]  315 	ldw	x, #0x5217
+      00014B F6               [ 1]  316 	ld	a, (x)
+                                    317 ;	user/RTC_pcf8563.c: 78: I2C->SR3;
+      00014C AE 52 19         [ 2]  318 	ldw	x, #0x5219
+      00014F F6               [ 1]  319 	ld	a, (x)
+                                    320 ;	user/RTC_pcf8563.c: 79: while (I2C_GetFlagStatus(I2C_FLAG_RXNOTEMPTY) == RESET);
+      000150                        321 00116$:
+      000150 4B 40            [ 1]  322 	push	#0x40
+      000152 4B 01            [ 1]  323 	push	#0x01
+      000154 CDr00r00         [ 4]  324 	call	_I2C_GetFlagStatus
+      000157 85               [ 2]  325 	popw	x
+      000158 4D               [ 1]  326 	tnz	a
+      000159 27 F5            [ 1]  327 	jreq	00116$
+                                    328 ;	user/RTC_pcf8563.c: 80: *data = I2C_ReceiveData();
+      00015B CDr00r00         [ 4]  329 	call	_I2C_ReceiveData
+      00015E 1E 02            [ 2]  330 	ldw	x, (0x02, sp)
+      000160 F7               [ 1]  331 	ld	(x), a
+                                    332 ;	user/RTC_pcf8563.c: 81: I2C_AcknowledgeConfig(I2C_ACK_CURR);
+      000161 4B 01            [ 1]  333 	push	#0x01
+      000163 CDr00r00         [ 4]  334 	call	_I2C_AcknowledgeConfig
+      000166 84               [ 1]  335 	pop	a
+                                    336 ;	user/RTC_pcf8563.c: 82: data++;
+      000167 1E 02            [ 2]  337 	ldw	x, (0x02, sp)
+      000169 5C               [ 2]  338 	incw	x
+      00016A 1F 02            [ 2]  339 	ldw	(0x02, sp), x
+      00016C 20 CE            [ 2]  340 	jra	00119$
+      00016E                        341 00121$:
+                                    342 ;	user/RTC_pcf8563.c: 84: I2C_GenerateSTOP(ENABLE);
+      00016E 4B 01            [ 1]  343 	push	#0x01
+      000170 CDr00r00         [ 4]  344 	call	_I2C_GenerateSTOP
+      000173 5B 04            [ 2]  345 	addw	sp, #4
+      000175 81               [ 4]  346 	ret
+                                    347 ;	user/RTC_pcf8563.c: 88: uint8_t read_pcf(uint8_t regadd)
+                                    348 ;	-----------------------------------------
+                                    349 ;	 function read_pcf
+                                    350 ;	-----------------------------------------
+      000176                        351 _read_pcf:
+      000176 88               [ 1]  352 	push	a
+                                    353 ;	user/RTC_pcf8563.c: 92: while(I2C_GetFlagStatus( I2C_FLAG_BUSBUSY)==SET);
+      000177                        354 00101$:
+      000177 4B 02            [ 1]  355 	push	#0x02
+      000179 4B 03            [ 1]  356 	push	#0x03
+      00017B CDr00r00         [ 4]  357 	call	_I2C_GetFlagStatus
+      00017E 85               [ 2]  358 	popw	x
+      00017F A1 01            [ 1]  359 	cp	a, #0x01
+      000181 27 F4            [ 1]  360 	jreq	00101$
+                                    361 ;	user/RTC_pcf8563.c: 94: I2C_GenerateSTART(ENABLE);
+      000183 4B 01            [ 1]  362 	push	#0x01
+      000185 CDr00r00         [ 4]  363 	call	_I2C_GenerateSTART
+      000188 84               [ 1]  364 	pop	a
+                                    365 ;	user/RTC_pcf8563.c: 97: while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
+      000189                        366 00104$:
+      000189 4B 01            [ 1]  367 	push	#0x01
+      00018B 4B 03            [ 1]  368 	push	#0x03
+      00018D CDr00r00         [ 4]  369 	call	_I2C_CheckEvent
+      000190 85               [ 2]  370 	popw	x
+      000191 4D               [ 1]  371 	tnz	a
+      000192 27 F5            [ 1]  372 	jreq	00104$
+                                    373 ;	user/RTC_pcf8563.c: 100: I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
+      000194 4B 00            [ 1]  374 	push	#0x00
+      000196 4B A2            [ 1]  375 	push	#0xa2
+      000198 CDr00r00         [ 4]  376 	call	_I2C_Send7bitAddress
+      00019B 85               [ 2]  377 	popw	x
+                                    378 ;	user/RTC_pcf8563.c: 101: while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+      00019C                        379 00107$:
+      00019C 4B 82            [ 1]  380 	push	#0x82
+      00019E 4B 07            [ 1]  381 	push	#0x07
+      0001A0 CDr00r00         [ 4]  382 	call	_I2C_CheckEvent
+      0001A3 85               [ 2]  383 	popw	x
+      0001A4 4D               [ 1]  384 	tnz	a
+      0001A5 27 F5            [ 1]  385 	jreq	00107$
+                                    386 ;	user/RTC_pcf8563.c: 104: I2C_SendData(regadd);
+      0001A7 7B 04            [ 1]  387 	ld	a, (0x04, sp)
+      0001A9 88               [ 1]  388 	push	a
+      0001AA CDr00r00         [ 4]  389 	call	_I2C_SendData
+      0001AD 84               [ 1]  390 	pop	a
+                                    391 ;	user/RTC_pcf8563.c: 105: while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET);
+      0001AE                        392 00110$:
+      0001AE 4B 04            [ 1]  393 	push	#0x04
+      0001B0 4B 01            [ 1]  394 	push	#0x01
+      0001B2 CDr00r00         [ 4]  395 	call	_I2C_GetFlagStatus
+      0001B5 85               [ 2]  396 	popw	x
+      0001B6 4D               [ 1]  397 	tnz	a
+      0001B7 27 F5            [ 1]  398 	jreq	00110$
+                                    399 ;	user/RTC_pcf8563.c: 108: I2C_GenerateSTART( ENABLE);
+      0001B9 4B 01            [ 1]  400 	push	#0x01
+      0001BB CDr00r00         [ 4]  401 	call	_I2C_GenerateSTART
+      0001BE 84               [ 1]  402 	pop	a
+                                    403 ;	user/RTC_pcf8563.c: 109: while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
+      0001BF                        404 00113$:
+      0001BF 4B 01            [ 1]  405 	push	#0x01
+      0001C1 4B 03            [ 1]  406 	push	#0x03
+      0001C3 CDr00r00         [ 4]  407 	call	_I2C_CheckEvent
+      0001C6 85               [ 2]  408 	popw	x
+      0001C7 4D               [ 1]  409 	tnz	a
+      0001C8 27 F5            [ 1]  410 	jreq	00113$
+                                    411 ;	user/RTC_pcf8563.c: 112: I2C_Send7bitAddress(PCF8563_READ_ADDR,I2C_DIRECTION_RX);
+      0001CA 4B 01            [ 1]  412 	push	#0x01
+      0001CC 4B A3            [ 1]  413 	push	#0xa3
+      0001CE CDr00r00         [ 4]  414 	call	_I2C_Send7bitAddress
+      0001D1 85               [ 2]  415 	popw	x
+                                    416 ;	user/RTC_pcf8563.c: 115: while(I2C_GetFlagStatus(I2C_FLAG_ADDRESSSENTMATCHED) == RESET);
+      0001D2                        417 00116$:
+      0001D2 4B 02            [ 1]  418 	push	#0x02
+      0001D4 4B 01            [ 1]  419 	push	#0x01
+      0001D6 CDr00r00         [ 4]  420 	call	_I2C_GetFlagStatus
+      0001D9 85               [ 2]  421 	popw	x
+      0001DA 4D               [ 1]  422 	tnz	a
+      0001DB 27 F5            [ 1]  423 	jreq	00116$
+                                    424 ;	user/RTC_pcf8563.c: 118: I2C_AcknowledgeConfig(I2C_ACK_NONE);
+      0001DD 4B 00            [ 1]  425 	push	#0x00
+      0001DF CDr00r00         [ 4]  426 	call	_I2C_AcknowledgeConfig
+      0001E2 84               [ 1]  427 	pop	a
+                                    428 ;	user/RTC_pcf8563.c: 121: I2C->SR1;        I2C->SR3;
+      0001E3 AE 52 17         [ 2]  429 	ldw	x, #0x5217
+      0001E6 F6               [ 1]  430 	ld	a, (x)
+      0001E7 AE 52 19         [ 2]  431 	ldw	x, #0x5219
+      0001EA F6               [ 1]  432 	ld	a, (x)
+                                    433 ;	user/RTC_pcf8563.c: 123: I2C_GenerateSTOP(ENABLE);
+      0001EB 4B 01            [ 1]  434 	push	#0x01
+      0001ED CDr00r00         [ 4]  435 	call	_I2C_GenerateSTOP
+      0001F0 84               [ 1]  436 	pop	a
+                                    437 ;	user/RTC_pcf8563.c: 126: while (I2C_GetFlagStatus( I2C_FLAG_RXNOTEMPTY) == RESET);
+      0001F1                        438 00119$:
+      0001F1 4B 40            [ 1]  439 	push	#0x40
+      0001F3 4B 01            [ 1]  440 	push	#0x01
+      0001F5 CDr00r00         [ 4]  441 	call	_I2C_GetFlagStatus
+      0001F8 85               [ 2]  442 	popw	x
+      0001F9 4D               [ 1]  443 	tnz	a
+      0001FA 27 F5            [ 1]  444 	jreq	00119$
+                                    445 ;	user/RTC_pcf8563.c: 129: data=I2C_ReceiveData();
+      0001FC CDr00r00         [ 4]  446 	call	_I2C_ReceiveData
+      0001FF 6B 01            [ 1]  447 	ld	(0x01, sp), a
+                                    448 ;	user/RTC_pcf8563.c: 132: while(I2C->CR2 & I2C_CR2_STOP);
+      000201                        449 00122$:
+      000201 AE 52 11         [ 2]  450 	ldw	x, #0x5211
+      000204 F6               [ 1]  451 	ld	a, (x)
+      000205 A5 02            [ 1]  452 	bcp	a, #0x02
+      000207 26 F8            [ 1]  453 	jrne	00122$
+                                    454 ;	user/RTC_pcf8563.c: 134: I2C_AcknowledgeConfig( I2C_ACK_CURR);
+      000209 4B 01            [ 1]  455 	push	#0x01
+      00020B CDr00r00         [ 4]  456 	call	_I2C_AcknowledgeConfig
+      00020E 84               [ 1]  457 	pop	a
+                                    458 ;	user/RTC_pcf8563.c: 135: return (data);
+      00020F 7B 01            [ 1]  459 	ld	a, (0x01, sp)
+      000211 5B 01            [ 2]  460 	addw	sp, #1
+      000213 81               [ 4]  461 	ret
+                                    462 ;	user/RTC_pcf8563.c: 138: uint8_t PCF_getDateTime(PCF_DateTime *dateTime)
+                                    463 ;	-----------------------------------------
+                                    464 ;	 function PCF_getDateTime
+                                    465 ;	-----------------------------------------
+      000214                        466 _PCF_getDateTime:
+      000214 52 1B            [ 2]  467 	sub	sp, #27
+                                    468 ;	user/RTC_pcf8563.c: 143: buffer[0] = read_pcf(0x02);
+      000216 96               [ 1]  469 	ldw	x, sp
+      000217 5C               [ 2]  470 	incw	x
+      000218 1F 10            [ 2]  471 	ldw	(0x10, sp), x
+      00021A 4B 02            [ 1]  472 	push	#0x02
+      00021C CDr01r76         [ 4]  473 	call	_read_pcf
+      00021F 5B 01            [ 2]  474 	addw	sp, #1
+      000221 6B 14            [ 1]  475 	ld	(0x14, sp), a
+      000223 1E 10            [ 2]  476 	ldw	x, (0x10, sp)
+      000225 7B 14            [ 1]  477 	ld	a, (0x14, sp)
+      000227 F7               [ 1]  478 	ld	(x), a
+                                    479 ;	user/RTC_pcf8563.c: 145: dateTime->second = (((buffer[0] >> 4) & 0x07) * 10) + (buffer[0] & 0x0F);
+      000228 16 1E            [ 2]  480 	ldw	y, (0x1e, sp)
+      00022A 17 15            [ 2]  481 	ldw	(0x15, sp), y
+      00022C 7B 14            [ 1]  482 	ld	a, (0x14, sp)
+      00022E 4E               [ 1]  483 	swap	a
+      00022F A4 0F            [ 1]  484 	and	a, #0x0f
+      000231 A4 07            [ 1]  485 	and	a, #0x07
+      000233 97               [ 1]  486 	ld	xl, a
+      000234 A6 0A            [ 1]  487 	ld	a, #0x0a
+      000236 42               [ 4]  488 	mul	x, a
+      000237 7B 14            [ 1]  489 	ld	a, (0x14, sp)
+      000239 A4 0F            [ 1]  490 	and	a, #0x0f
+      00023B 6B 0F            [ 1]  491 	ld	(0x0f, sp), a
+      00023D 9F               [ 1]  492 	ld	a, xl
+      00023E 1B 0F            [ 1]  493 	add	a, (0x0f, sp)
+      000240 1E 15            [ 2]  494 	ldw	x, (0x15, sp)
+      000242 F7               [ 1]  495 	ld	(x), a
+                                    496 ;	user/RTC_pcf8563.c: 146: buffer[1] = read_pcf(0x03);
+      000243 1E 10            [ 2]  497 	ldw	x, (0x10, sp)
+      000245 5C               [ 2]  498 	incw	x
+      000246 89               [ 2]  499 	pushw	x
+      000247 4B 03            [ 1]  500 	push	#0x03
+      000249 CDr01r76         [ 4]  501 	call	_read_pcf
+      00024C 5B 01            [ 2]  502 	addw	sp, #1
+      00024E 6B 1A            [ 1]  503 	ld	(0x1a, sp), a
+      000250 85               [ 2]  504 	popw	x
+      000251 7B 18            [ 1]  505 	ld	a, (0x18, sp)
+      000253 F7               [ 1]  506 	ld	(x), a
+                                    507 ;	user/RTC_pcf8563.c: 147: dateTime->minute = (((buffer[1] >> 4) & 0x07) * 10) + (buffer[1] & 0x0F);
+      000254 1E 15            [ 2]  508 	ldw	x, (0x15, sp)
+      000256 5C               [ 2]  509 	incw	x
+      000257 1F 0A            [ 2]  510 	ldw	(0x0a, sp), x
+      000259 7B 18            [ 1]  511 	ld	a, (0x18, sp)
+      00025B 4E               [ 1]  512 	swap	a
+      00025C A4 0F            [ 1]  513 	and	a, #0x0f
+      00025E A4 07            [ 1]  514 	and	a, #0x07
+      000260 97               [ 1]  515 	ld	xl, a
+      000261 A6 0A            [ 1]  516 	ld	a, #0x0a
+      000263 42               [ 4]  517 	mul	x, a
+      000264 7B 18            [ 1]  518 	ld	a, (0x18, sp)
+      000266 A4 0F            [ 1]  519 	and	a, #0x0f
+      000268 6B 12            [ 1]  520 	ld	(0x12, sp), a
+      00026A 9F               [ 1]  521 	ld	a, xl
+      00026B 1B 12            [ 1]  522 	add	a, (0x12, sp)
+      00026D 1E 0A            [ 2]  523 	ldw	x, (0x0a, sp)
+      00026F F7               [ 1]  524 	ld	(x), a
+                                    525 ;	user/RTC_pcf8563.c: 148: buffer[2] = read_pcf(0x04);
+      000270 1E 10            [ 2]  526 	ldw	x, (0x10, sp)
+      000272 5C               [ 2]  527 	incw	x
+      000273 5C               [ 2]  528 	incw	x
+      000274 89               [ 2]  529 	pushw	x
+      000275 4B 04            [ 1]  530 	push	#0x04
+      000277 CDr01r76         [ 4]  531 	call	_read_pcf
+      00027A 5B 01            [ 2]  532 	addw	sp, #1
+      00027C 6B 10            [ 1]  533 	ld	(0x10, sp), a
+      00027E 85               [ 2]  534 	popw	x
+      00027F 7B 0E            [ 1]  535 	ld	a, (0x0e, sp)
+      000281 F7               [ 1]  536 	ld	(x), a
+                                    537 ;	user/RTC_pcf8563.c: 149: dateTime->hour = (((buffer[2] >> 4) & 0x03) * 10) + (buffer[2] & 0x0F);
+      000282 16 15            [ 2]  538 	ldw	y, (0x15, sp)
+      000284 72 A9 00 02      [ 2]  539 	addw	y, #0x0002
+      000288 7B 0E            [ 1]  540 	ld	a, (0x0e, sp)
+      00028A 4E               [ 1]  541 	swap	a
+      00028B A4 0F            [ 1]  542 	and	a, #0x0f
+      00028D A4 03            [ 1]  543 	and	a, #0x03
+      00028F 97               [ 1]  544 	ld	xl, a
+      000290 A6 0A            [ 1]  545 	ld	a, #0x0a
+      000292 42               [ 4]  546 	mul	x, a
+      000293 7B 0E            [ 1]  547 	ld	a, (0x0e, sp)
+      000295 A4 0F            [ 1]  548 	and	a, #0x0f
+      000297 6B 19            [ 1]  549 	ld	(0x19, sp), a
+      000299 9F               [ 1]  550 	ld	a, xl
+      00029A 1B 19            [ 1]  551 	add	a, (0x19, sp)
+      00029C 90 F7            [ 1]  552 	ld	(y), a
+                                    553 ;	user/RTC_pcf8563.c: 150: buffer[3] = read_pcf(0x05);
+      00029E 1E 10            [ 2]  554 	ldw	x, (0x10, sp)
+      0002A0 1C 00 03         [ 2]  555 	addw	x, #0x0003
+      0002A3 89               [ 2]  556 	pushw	x
+      0002A4 4B 05            [ 1]  557 	push	#0x05
+      0002A6 CDr01r76         [ 4]  558 	call	_read_pcf
+      0002A9 5B 01            [ 2]  559 	addw	sp, #1
+      0002AB 6B 19            [ 1]  560 	ld	(0x19, sp), a
+      0002AD 85               [ 2]  561 	popw	x
+      0002AE 7B 17            [ 1]  562 	ld	a, (0x17, sp)
+      0002B0 F7               [ 1]  563 	ld	(x), a
+                                    564 ;	user/RTC_pcf8563.c: 151: dateTime->day = (((buffer[3] >> 4) & 0x03) * 10) + (buffer[3] & 0x0F);
+      0002B1 16 15            [ 2]  565 	ldw	y, (0x15, sp)
+      0002B3 72 A9 00 03      [ 2]  566 	addw	y, #0x0003
+      0002B7 7B 17            [ 1]  567 	ld	a, (0x17, sp)
+      0002B9 4E               [ 1]  568 	swap	a
+      0002BA A4 0F            [ 1]  569 	and	a, #0x0f
+      0002BC A4 03            [ 1]  570 	and	a, #0x03
+      0002BE 97               [ 1]  571 	ld	xl, a
+      0002BF A6 0A            [ 1]  572 	ld	a, #0x0a
+      0002C1 42               [ 4]  573 	mul	x, a
+      0002C2 7B 17            [ 1]  574 	ld	a, (0x17, sp)
+      0002C4 A4 0F            [ 1]  575 	and	a, #0x0f
+      0002C6 6B 09            [ 1]  576 	ld	(0x09, sp), a
+      0002C8 9F               [ 1]  577 	ld	a, xl
+      0002C9 1B 09            [ 1]  578 	add	a, (0x09, sp)
+      0002CB 90 F7            [ 1]  579 	ld	(y), a
+                                    580 ;	user/RTC_pcf8563.c: 152: buffer[4] = read_pcf(0x06);
+      0002CD 1E 10            [ 2]  581 	ldw	x, (0x10, sp)
+      0002CF 1C 00 04         [ 2]  582 	addw	x, #0x0004
+      0002D2 89               [ 2]  583 	pushw	x
+      0002D3 4B 06            [ 1]  584 	push	#0x06
+      0002D5 CDr01r76         [ 4]  585 	call	_read_pcf
+      0002D8 5B 01            [ 2]  586 	addw	sp, #1
+      0002DA 85               [ 2]  587 	popw	x
+      0002DB F7               [ 1]  588 	ld	(x), a
+                                    589 ;	user/RTC_pcf8563.c: 153: dateTime->weekday = (buffer[4] & 0x07);
+      0002DC 1E 15            [ 2]  590 	ldw	x, (0x15, sp)
+      0002DE 1C 00 04         [ 2]  591 	addw	x, #0x0004
+      0002E1 A4 07            [ 1]  592 	and	a, #0x07
+      0002E3 F7               [ 1]  593 	ld	(x), a
+                                    594 ;	user/RTC_pcf8563.c: 154: buffer[5] = read_pcf(0x07);
+      0002E4 1E 10            [ 2]  595 	ldw	x, (0x10, sp)
+      0002E6 1C 00 05         [ 2]  596 	addw	x, #0x0005
+      0002E9 1F 0C            [ 2]  597 	ldw	(0x0c, sp), x
+      0002EB 4B 07            [ 1]  598 	push	#0x07
+      0002ED CDr01r76         [ 4]  599 	call	_read_pcf
+      0002F0 5B 01            [ 2]  600 	addw	sp, #1
+      0002F2 1E 0C            [ 2]  601 	ldw	x, (0x0c, sp)
+      0002F4 F7               [ 1]  602 	ld	(x), a
+                                    603 ;	user/RTC_pcf8563.c: 155: dateTime->month = ((buffer[5] >> 4) & 0x01) * 10 + (buffer[5] & 0x0F);
+      0002F5 16 15            [ 2]  604 	ldw	y, (0x15, sp)
+      0002F7 72 A9 00 05      [ 2]  605 	addw	y, #0x0005
+      0002FB 88               [ 1]  606 	push	a
+      0002FC 44               [ 1]  607 	srl	a
+      0002FD 44               [ 1]  608 	srl	a
+      0002FE 44               [ 1]  609 	srl	a
+      0002FF 44               [ 1]  610 	srl	a
+      000300 A4 01            [ 1]  611 	and	a, #0x01
+      000302 97               [ 1]  612 	ld	xl, a
+      000303 A6 0A            [ 1]  613 	ld	a, #0x0a
+      000305 42               [ 4]  614 	mul	x, a
+      000306 84               [ 1]  615 	pop	a
+      000307 A4 0F            [ 1]  616 	and	a, #0x0f
+      000309 6B 08            [ 1]  617 	ld	(0x08, sp), a
+      00030B 9F               [ 1]  618 	ld	a, xl
+      00030C 1B 08            [ 1]  619 	add	a, (0x08, sp)
+      00030E 90 F7            [ 1]  620 	ld	(y), a
+                                    621 ;	user/RTC_pcf8563.c: 156: buffer[6] = read_pcf(0x08);
+      000310 1E 10            [ 2]  622 	ldw	x, (0x10, sp)
+      000312 1C 00 06         [ 2]  623 	addw	x, #0x0006
+      000315 89               [ 2]  624 	pushw	x
+      000316 4B 08            [ 1]  625 	push	#0x08
+      000318 CDr01r76         [ 4]  626 	call	_read_pcf
+      00031B 5B 01            [ 2]  627 	addw	sp, #1
+      00031D 6B 15            [ 1]  628 	ld	(0x15, sp), a
+      00031F 85               [ 2]  629 	popw	x
+      000320 7B 13            [ 1]  630 	ld	a, (0x13, sp)
+      000322 F7               [ 1]  631 	ld	(x), a
+                                    632 ;	user/RTC_pcf8563.c: 157: dateTime->year = 1900 + ((buffer[6] >> 4) & 0x0F) * 10 + (buffer[6] & 0x0F);
+      000323 1E 15            [ 2]  633 	ldw	x, (0x15, sp)
+      000325 1C 00 06         [ 2]  634 	addw	x, #0x0006
+      000328 7B 13            [ 1]  635 	ld	a, (0x13, sp)
+      00032A 4E               [ 1]  636 	swap	a
+      00032B A4 0F            [ 1]  637 	and	a, #0x0f
+      00032D A4 0F            [ 1]  638 	and	a, #0x0f
+      00032F 61               [ 1]  639 	exg	a, yl
+      000330 A6 0A            [ 1]  640 	ld	a, #0x0a
+      000332 61               [ 1]  641 	exg	a, yl
+      000333 90 42            [ 4]  642 	mul	y, a
+      000335 72 A9 07 6C      [ 2]  643 	addw	y, #0x076c
+      000339 7B 13            [ 1]  644 	ld	a, (0x13, sp)
+      00033B A4 0F            [ 1]  645 	and	a, #0x0f
+      00033D 6B 1B            [ 1]  646 	ld	(0x1b, sp), a
+      00033F 0F 1A            [ 1]  647 	clr	(0x1a, sp)
+      000341 72 F9 1A         [ 2]  648 	addw	y, (0x1a, sp)
+      000344 FF               [ 2]  649 	ldw	(x), y
+                                    650 ;	user/RTC_pcf8563.c: 159: if (buffer[5] &  0x80)
+      000345 16 0C            [ 2]  651 	ldw	y, (0x0c, sp)
+      000347 90 F6            [ 1]  652 	ld	a, (y)
+      000349 4D               [ 1]  653 	tnz	a
+      00034A 2A 09            [ 1]  654 	jrpl	00102$
+                                    655 ;	user/RTC_pcf8563.c: 161: dateTime->year += 100;
+      00034C 89               [ 2]  656 	pushw	x
+      00034D FE               [ 2]  657 	ldw	x, (x)
+      00034E 51               [ 1]  658 	exgw	x, y
+      00034F 85               [ 2]  659 	popw	x
+      000350 72 A9 00 64      [ 2]  660 	addw	y, #0x0064
+      000354 FF               [ 2]  661 	ldw	(x), y
+      000355                        662 00102$:
+                                    663 ;	user/RTC_pcf8563.c: 164: if (buffer[0] & 0x80) //Clock integrity not guaranted
+      000355 1E 10            [ 2]  664 	ldw	x, (0x10, sp)
+      000357 F6               [ 1]  665 	ld	a, (x)
+      000358 4D               [ 1]  666 	tnz	a
+      000359 2A 03            [ 1]  667 	jrpl	00104$
+                                    668 ;	user/RTC_pcf8563.c: 166: return 1;
+      00035B A6 01            [ 1]  669 	ld	a, #0x01
+                                    670 ;	user/RTC_pcf8563.c: 169: return 0;
+      00035D 21                     671 	.byte 0x21
+      00035E                        672 00104$:
+      00035E 4F               [ 1]  673 	clr	a
+      00035F                        674 00105$:
+      00035F 5B 1B            [ 2]  675 	addw	sp, #27
+      000361 81               [ 4]  676 	ret
+                                    677 ;	user/RTC_pcf8563.c: 173: void PCF_Init(uint8_t mode)
+                                    678 ;	-----------------------------------------
+                                    679 ;	 function PCF_Init
+                                    680 ;	-----------------------------------------
+      000362                        681 _PCF_Init:
+      000362 88               [ 1]  682 	push	a
+                                    683 ;	user/RTC_pcf8563.c: 175: uint8_t tmp = 0x00;
+      000363 0F 01            [ 1]  684 	clr	(0x01, sp)
+                                    685 ;	user/RTC_pcf8563.c: 176: I2C_setup();
+      000365 CDr00r00         [ 4]  686 	call	_I2C_setup
+                                    687 ;	user/RTC_pcf8563.c: 179: PCF_Write(0x00, &tmp, 1);
+      000368 96               [ 1]  688 	ldw	x, sp
+      000369 5C               [ 2]  689 	incw	x
+      00036A 4B 01            [ 1]  690 	push	#0x01
+      00036C 89               [ 2]  691 	pushw	x
+      00036D 4B 00            [ 1]  692 	push	#0x00
+      00036F CDr00r75         [ 4]  693 	call	_PCF_Write
+      000372 5B 04            [ 2]  694 	addw	sp, #4
+                                    695 ;	user/RTC_pcf8563.c: 180: mode &= 0x13;
+      000374 7B 04            [ 1]  696 	ld	a, (0x04, sp)
+      000376 A4 13            [ 1]  697 	and	a, #0x13
+      000378 6B 04            [ 1]  698 	ld	(0x04, sp), a
+                                    699 ;	user/RTC_pcf8563.c: 183: PCF_Write(0x00, &mode, 1);
+      00037A 96               [ 1]  700 	ldw	x, sp
+      00037B 1C 00 04         [ 2]  701 	addw	x, #4
+      00037E 4B 01            [ 1]  702 	push	#0x01
+      000380 89               [ 2]  703 	pushw	x
+      000381 4B 00            [ 1]  704 	push	#0x00
+      000383 CDr00r75         [ 4]  705 	call	_PCF_Write
+      000386 5B 05            [ 2]  706 	addw	sp, #5
+      000388 81               [ 4]  707 	ret
+                                    708 ;	user/RTC_pcf8563.c: 186: uint8_t PCF_setDateTime(PCF_DateTime *dateTime)
+                                    709 ;	-----------------------------------------
+                                    710 ;	 function PCF_setDateTime
+                                    711 ;	-----------------------------------------
+      000389                        712 _PCF_setDateTime:
+      000389 52 26            [ 2]  713 	sub	sp, #38
+                                    714 ;	user/RTC_pcf8563.c: 189: if (dateTime->second >= 60 || dateTime->minute >= 60 || dateTime->hour >= 24 || dateTime->day > 32 || dateTime->weekday > 6 || dateTime->month > 12 || dateTime->year < 1900 || dateTime->year >= 2100)
+      00038B 16 29            [ 2]  715 	ldw	y, (0x29, sp)
+      00038D 17 1E            [ 2]  716 	ldw	(0x1e, sp), y
+      00038F 1E 1E            [ 2]  717 	ldw	x, (0x1e, sp)
+      000391 F6               [ 1]  718 	ld	a, (x)
+      000392 6B 1D            [ 1]  719 	ld	(0x1d, sp), a
+      000394 7B 1D            [ 1]  720 	ld	a, (0x1d, sp)
+      000396 A1 3C            [ 1]  721 	cp	a, #0x3c
+      000398 24 55            [ 1]  722 	jrnc	00101$
+      00039A 16 1E            [ 2]  723 	ldw	y, (0x1e, sp)
+      00039C 90 5C            [ 2]  724 	incw	y
+      00039E 90 F6            [ 1]  725 	ld	a, (y)
+      0003A0 A1 3C            [ 1]  726 	cp	a, #0x3c
+      0003A2 24 4B            [ 1]  727 	jrnc	00101$
+      0003A4 1E 1E            [ 2]  728 	ldw	x, (0x1e, sp)
+      0003A6 5C               [ 2]  729 	incw	x
+      0003A7 5C               [ 2]  730 	incw	x
+      0003A8 1F 0E            [ 2]  731 	ldw	(0x0e, sp), x
+      0003AA 1E 0E            [ 2]  732 	ldw	x, (0x0e, sp)
+      0003AC F6               [ 1]  733 	ld	a, (x)
+      0003AD A1 18            [ 1]  734 	cp	a, #0x18
+      0003AF 24 3E            [ 1]  735 	jrnc	00101$
+      0003B1 1E 1E            [ 2]  736 	ldw	x, (0x1e, sp)
+      0003B3 1C 00 03         [ 2]  737 	addw	x, #0x0003
+      0003B6 1F 12            [ 2]  738 	ldw	(0x12, sp), x
+      0003B8 1E 12            [ 2]  739 	ldw	x, (0x12, sp)
+      0003BA F6               [ 1]  740 	ld	a, (x)
+      0003BB A1 20            [ 1]  741 	cp	a, #0x20
+      0003BD 22 30            [ 1]  742 	jrugt	00101$
+      0003BF 1E 1E            [ 2]  743 	ldw	x, (0x1e, sp)
+      0003C1 1C 00 04         [ 2]  744 	addw	x, #0x0004
+      0003C4 1F 1B            [ 2]  745 	ldw	(0x1b, sp), x
+      0003C6 1E 1B            [ 2]  746 	ldw	x, (0x1b, sp)
+      0003C8 F6               [ 1]  747 	ld	a, (x)
+      0003C9 A1 06            [ 1]  748 	cp	a, #0x06
+      0003CB 22 22            [ 1]  749 	jrugt	00101$
+      0003CD 1E 1E            [ 2]  750 	ldw	x, (0x1e, sp)
+      0003CF 1C 00 05         [ 2]  751 	addw	x, #0x0005
+      0003D2 1F 22            [ 2]  752 	ldw	(0x22, sp), x
+      0003D4 1E 22            [ 2]  753 	ldw	x, (0x22, sp)
+      0003D6 F6               [ 1]  754 	ld	a, (x)
+      0003D7 A1 0C            [ 1]  755 	cp	a, #0x0c
+      0003D9 22 14            [ 1]  756 	jrugt	00101$
+      0003DB 1E 1E            [ 2]  757 	ldw	x, (0x1e, sp)
+      0003DD 1C 00 06         [ 2]  758 	addw	x, #0x0006
+      0003E0 1F 20            [ 2]  759 	ldw	(0x20, sp), x
+      0003E2 1E 20            [ 2]  760 	ldw	x, (0x20, sp)
+      0003E4 FE               [ 2]  761 	ldw	x, (x)
+      0003E5 A3 07 6C         [ 2]  762 	cpw	x, #0x076c
+      0003E8 25 05            [ 1]  763 	jrc	00101$
+      0003EA A3 08 34         [ 2]  764 	cpw	x, #0x0834
+      0003ED 25 05            [ 1]  765 	jrc	00102$
+      0003EF                        766 00101$:
+                                    767 ;	user/RTC_pcf8563.c: 191: return 1;
+      0003EF A6 01            [ 1]  768 	ld	a, #0x01
+      0003F1 CCr05r25         [ 2]  769 	jp	00113$
+      0003F4                        770 00102$:
+                                    771 ;	user/RTC_pcf8563.c: 194: buffer[0] = BinToBCD(dateTime->second) & 0x7F;
+      0003F4 96               [ 1]  772 	ldw	x, sp
+      0003F5 5C               [ 2]  773 	incw	x
+      0003F6 1F 19            [ 2]  774 	ldw	(0x19, sp), x
+      0003F8 5F               [ 1]  775 	clrw	x
+      0003F9 7B 1D            [ 1]  776 	ld	a, (0x1d, sp)
+      0003FB 97               [ 1]  777 	ld	xl, a
+      0003FC A6 0A            [ 1]  778 	ld	a, #0x0a
+      0003FE 62               [ 2]  779 	div	x, a
+      0003FF 9F               [ 1]  780 	ld	a, xl
+      000400 4E               [ 1]  781 	swap	a
+      000401 A4 F0            [ 1]  782 	and	a, #0xf0
+      000403 6B 11            [ 1]  783 	ld	(0x11, sp), a
+      000405 5F               [ 1]  784 	clrw	x
+      000406 7B 1D            [ 1]  785 	ld	a, (0x1d, sp)
+      000408 97               [ 1]  786 	ld	xl, a
+      000409 A6 0A            [ 1]  787 	ld	a, #0x0a
+      00040B 62               [ 2]  788 	div	x, a
+      00040C 1B 11            [ 1]  789 	add	a, (0x11, sp)
+      00040E A4 7F            [ 1]  790 	and	a, #0x7f
+      000410 1E 19            [ 2]  791 	ldw	x, (0x19, sp)
+      000412 F7               [ 1]  792 	ld	(x), a
+                                    793 ;	user/RTC_pcf8563.c: 195: buffer[1] = BinToBCD(dateTime->minute) & 0x7F;
+      000413 1E 19            [ 2]  794 	ldw	x, (0x19, sp)
+      000415 5C               [ 2]  795 	incw	x
+      000416 1F 17            [ 2]  796 	ldw	(0x17, sp), x
+      000418 90 F6            [ 1]  797 	ld	a, (y)
+      00041A 97               [ 1]  798 	ld	xl, a
+      00041B 89               [ 2]  799 	pushw	x
+      00041C 4F               [ 1]  800 	clr	a
+      00041D 95               [ 1]  801 	ld	xh, a
+      00041E A6 0A            [ 1]  802 	ld	a, #0x0a
+      000420 62               [ 2]  803 	div	x, a
+      000421 9F               [ 1]  804 	ld	a, xl
+      000422 85               [ 2]  805 	popw	x
+      000423 4E               [ 1]  806 	swap	a
+      000424 A4 F0            [ 1]  807 	and	a, #0xf0
+      000426 6B 24            [ 1]  808 	ld	(0x24, sp), a
+      000428 4F               [ 1]  809 	clr	a
+      000429 95               [ 1]  810 	ld	xh, a
+      00042A A6 0A            [ 1]  811 	ld	a, #0x0a
+      00042C 62               [ 2]  812 	div	x, a
+      00042D 1B 24            [ 1]  813 	add	a, (0x24, sp)
+      00042F A4 7F            [ 1]  814 	and	a, #0x7f
+      000431 1E 17            [ 2]  815 	ldw	x, (0x17, sp)
+      000433 F7               [ 1]  816 	ld	(x), a
+                                    817 ;	user/RTC_pcf8563.c: 196: buffer[2] = BinToBCD(dateTime->hour) & 0x3F;
+      000434 16 19            [ 2]  818 	ldw	y, (0x19, sp)
+      000436 72 A9 00 02      [ 2]  819 	addw	y, #0x0002
+      00043A 1E 0E            [ 2]  820 	ldw	x, (0x0e, sp)
+      00043C F6               [ 1]  821 	ld	a, (x)
+      00043D 97               [ 1]  822 	ld	xl, a
+      00043E 89               [ 2]  823 	pushw	x
+      00043F 4F               [ 1]  824 	clr	a
+      000440 95               [ 1]  825 	ld	xh, a
+      000441 A6 0A            [ 1]  826 	ld	a, #0x0a
+      000443 62               [ 2]  827 	div	x, a
+      000444 9F               [ 1]  828 	ld	a, xl
+      000445 85               [ 2]  829 	popw	x
+      000446 4E               [ 1]  830 	swap	a
+      000447 A4 F0            [ 1]  831 	and	a, #0xf0
+      000449 6B 10            [ 1]  832 	ld	(0x10, sp), a
+      00044B 4F               [ 1]  833 	clr	a
+      00044C 95               [ 1]  834 	ld	xh, a
+      00044D A6 0A            [ 1]  835 	ld	a, #0x0a
+      00044F 62               [ 2]  836 	div	x, a
+      000450 1B 10            [ 1]  837 	add	a, (0x10, sp)
+      000452 A4 3F            [ 1]  838 	and	a, #0x3f
+      000454 90 F7            [ 1]  839 	ld	(y), a
+                                    840 ;	user/RTC_pcf8563.c: 197: buffer[3] = BinToBCD(dateTime->day) & 0x3F;
+      000456 16 19            [ 2]  841 	ldw	y, (0x19, sp)
+      000458 72 A9 00 03      [ 2]  842 	addw	y, #0x0003
+      00045C 1E 12            [ 2]  843 	ldw	x, (0x12, sp)
+      00045E F6               [ 1]  844 	ld	a, (x)
+      00045F 97               [ 1]  845 	ld	xl, a
+      000460 89               [ 2]  846 	pushw	x
+      000461 4F               [ 1]  847 	clr	a
+      000462 95               [ 1]  848 	ld	xh, a
+      000463 A6 0A            [ 1]  849 	ld	a, #0x0a
+      000465 62               [ 2]  850 	div	x, a
+      000466 9F               [ 1]  851 	ld	a, xl
+      000467 85               [ 2]  852 	popw	x
+      000468 4E               [ 1]  853 	swap	a
+      000469 A4 F0            [ 1]  854 	and	a, #0xf0
+      00046B 6B 0D            [ 1]  855 	ld	(0x0d, sp), a
+      00046D 4F               [ 1]  856 	clr	a
+      00046E 95               [ 1]  857 	ld	xh, a
+      00046F A6 0A            [ 1]  858 	ld	a, #0x0a
+      000471 62               [ 2]  859 	div	x, a
+      000472 1B 0D            [ 1]  860 	add	a, (0x0d, sp)
+      000474 A4 3F            [ 1]  861 	and	a, #0x3f
+      000476 90 F7            [ 1]  862 	ld	(y), a
+                                    863 ;	user/RTC_pcf8563.c: 198: buffer[4] = BinToBCD(dateTime->weekday) & 0x07;
+      000478 16 19            [ 2]  864 	ldw	y, (0x19, sp)
+      00047A 72 A9 00 04      [ 2]  865 	addw	y, #0x0004
+      00047E 1E 1B            [ 2]  866 	ldw	x, (0x1b, sp)
+      000480 F6               [ 1]  867 	ld	a, (x)
+      000481 97               [ 1]  868 	ld	xl, a
+      000482 89               [ 2]  869 	pushw	x
+      000483 4F               [ 1]  870 	clr	a
+      000484 95               [ 1]  871 	ld	xh, a
+      000485 A6 0A            [ 1]  872 	ld	a, #0x0a
+      000487 62               [ 2]  873 	div	x, a
+      000488 9F               [ 1]  874 	ld	a, xl
+      000489 85               [ 2]  875 	popw	x
+      00048A 4E               [ 1]  876 	swap	a
+      00048B A4 F0            [ 1]  877 	and	a, #0xf0
+      00048D 6B 16            [ 1]  878 	ld	(0x16, sp), a
+      00048F 4F               [ 1]  879 	clr	a
+      000490 95               [ 1]  880 	ld	xh, a
+      000491 A6 0A            [ 1]  881 	ld	a, #0x0a
+      000493 62               [ 2]  882 	div	x, a
+      000494 1B 16            [ 1]  883 	add	a, (0x16, sp)
+      000496 A4 07            [ 1]  884 	and	a, #0x07
+      000498 90 F7            [ 1]  885 	ld	(y), a
+                                    886 ;	user/RTC_pcf8563.c: 199: buffer[5] = BinToBCD(dateTime->month) & 0x1F;
+      00049A 1E 19            [ 2]  887 	ldw	x, (0x19, sp)
+      00049C 1C 00 05         [ 2]  888 	addw	x, #0x0005
+      00049F 1F 14            [ 2]  889 	ldw	(0x14, sp), x
+      0004A1 1E 22            [ 2]  890 	ldw	x, (0x22, sp)
+      0004A3 F6               [ 1]  891 	ld	a, (x)
+      0004A4 97               [ 1]  892 	ld	xl, a
+      0004A5 89               [ 2]  893 	pushw	x
+      0004A6 4F               [ 1]  894 	clr	a
+      0004A7 95               [ 1]  895 	ld	xh, a
+      0004A8 A6 0A            [ 1]  896 	ld	a, #0x0a
+      0004AA 62               [ 2]  897 	div	x, a
+      0004AB 9F               [ 1]  898 	ld	a, xl
+      0004AC 85               [ 2]  899 	popw	x
+      0004AD 4E               [ 1]  900 	swap	a
+      0004AE A4 F0            [ 1]  901 	and	a, #0xf0
+      0004B0 6B 26            [ 1]  902 	ld	(0x26, sp), a
+      0004B2 4F               [ 1]  903 	clr	a
+      0004B3 95               [ 1]  904 	ld	xh, a
+      0004B4 A6 0A            [ 1]  905 	ld	a, #0x0a
+      0004B6 62               [ 2]  906 	div	x, a
+      0004B7 1B 26            [ 1]  907 	add	a, (0x26, sp)
+      0004B9 A4 1F            [ 1]  908 	and	a, #0x1f
+      0004BB 1E 14            [ 2]  909 	ldw	x, (0x14, sp)
+      0004BD F7               [ 1]  910 	ld	(x), a
+                                    911 ;	user/RTC_pcf8563.c: 201: if (dateTime->year >= 2000)
+      0004BE 1E 20            [ 2]  912 	ldw	x, (0x20, sp)
+      0004C0 FE               [ 2]  913 	ldw	x, (x)
+      0004C1 1F 0B            [ 2]  914 	ldw	(0x0b, sp), x
+                                    915 ;	user/RTC_pcf8563.c: 204: buffer[6] = BinToBCD(dateTime->year - 2000);
+      0004C3 1E 19            [ 2]  916 	ldw	x, (0x19, sp)
+      0004C5 1C 00 06         [ 2]  917 	addw	x, #0x0006
+      0004C8 1F 09            [ 2]  918 	ldw	(0x09, sp), x
+                                    919 ;	user/RTC_pcf8563.c: 201: if (dateTime->year >= 2000)
+      0004CA 1E 0B            [ 2]  920 	ldw	x, (0x0b, sp)
+      0004CC A3 07 D0         [ 2]  921 	cpw	x, #0x07d0
+      0004CF 25 29            [ 1]  922 	jrc	00111$
+                                    923 ;	user/RTC_pcf8563.c: 203: buffer[5] |= 0x80;
+      0004D1 1E 14            [ 2]  924 	ldw	x, (0x14, sp)
+      0004D3 F6               [ 1]  925 	ld	a, (x)
+      0004D4 AA 80            [ 1]  926 	or	a, #0x80
+      0004D6 1E 14            [ 2]  927 	ldw	x, (0x14, sp)
+      0004D8 F7               [ 1]  928 	ld	(x), a
+                                    929 ;	user/RTC_pcf8563.c: 204: buffer[6] = BinToBCD(dateTime->year - 2000);
+      0004D9 1E 20            [ 2]  930 	ldw	x, (0x20, sp)
+      0004DB FE               [ 2]  931 	ldw	x, (x)
+      0004DC 1D 07 D0         [ 2]  932 	subw	x, #0x07d0
+      0004DF 89               [ 2]  933 	pushw	x
+      0004E0 90 AE 00 0A      [ 2]  934 	ldw	y, #0x000a
+      0004E4 65               [ 2]  935 	divw	x, y
+      0004E5 9F               [ 1]  936 	ld	a, xl
+      0004E6 85               [ 2]  937 	popw	x
+      0004E7 4E               [ 1]  938 	swap	a
+      0004E8 A4 F0            [ 1]  939 	and	a, #0xf0
+      0004EA 6B 25            [ 1]  940 	ld	(0x25, sp), a
+      0004EC 90 AE 00 0A      [ 2]  941 	ldw	y, #0x000a
+      0004F0 65               [ 2]  942 	divw	x, y
+      0004F1 90 9F            [ 1]  943 	ld	a, yl
+      0004F3 1B 25            [ 1]  944 	add	a, (0x25, sp)
+      0004F5 1E 09            [ 2]  945 	ldw	x, (0x09, sp)
+      0004F7 F7               [ 1]  946 	ld	(x), a
+      0004F8 20 1E            [ 2]  947 	jra	00112$
+      0004FA                        948 00111$:
+                                    949 ;	user/RTC_pcf8563.c: 208: buffer[6] = BinToBCD(dateTime->year - 1900);
+      0004FA 1E 0B            [ 2]  950 	ldw	x, (0x0b, sp)
+      0004FC 1D 07 6C         [ 2]  951 	subw	x, #0x076c
+      0004FF 89               [ 2]  952 	pushw	x
+      000500 90 AE 00 0A      [ 2]  953 	ldw	y, #0x000a
+      000504 65               [ 2]  954 	divw	x, y
+      000505 9F               [ 1]  955 	ld	a, xl
+      000506 85               [ 2]  956 	popw	x
+      000507 4E               [ 1]  957 	swap	a
+      000508 A4 F0            [ 1]  958 	and	a, #0xf0
+      00050A 90 AE 00 0A      [ 2]  959 	ldw	y, #0x000a
+      00050E 65               [ 2]  960 	divw	x, y
+      00050F 61               [ 1]  961 	exg	a, yl
+      000510 6B 08            [ 1]  962 	ld	(0x08, sp), a
+      000512 61               [ 1]  963 	exg	a, yl
+      000513 1B 08            [ 1]  964 	add	a, (0x08, sp)
+      000515 1E 09            [ 2]  965 	ldw	x, (0x09, sp)
+      000517 F7               [ 1]  966 	ld	(x), a
+      000518                        967 00112$:
+                                    968 ;	user/RTC_pcf8563.c: 211: PCF_Write(0x02, buffer, sizeof(buffer));
+      000518 1E 19            [ 2]  969 	ldw	x, (0x19, sp)
+      00051A 4B 07            [ 1]  970 	push	#0x07
+      00051C 89               [ 2]  971 	pushw	x
+      00051D 4B 02            [ 1]  972 	push	#0x02
+      00051F CDr00r75         [ 4]  973 	call	_PCF_Write
+      000522 5B 04            [ 2]  974 	addw	sp, #4
+                                    975 ;	user/RTC_pcf8563.c: 213: return 0;
+      000524 4F               [ 1]  976 	clr	a
+      000525                        977 00113$:
+      000525 5B 26            [ 2]  978 	addw	sp, #38
+      000527 81               [ 4]  979 	ret
+                                    980 ;	user/RTC_pcf8563.c: 243: uint8_t PCF_setAlarm(PCF_Alarm *alarm)
+                                    981 ;	-----------------------------------------
+                                    982 ;	 function PCF_setAlarm
+                                    983 ;	-----------------------------------------
+      000528                        984 _PCF_setAlarm:
+      000528 52 13            [ 2]  985 	sub	sp, #19
+                                    986 ;	user/RTC_pcf8563.c: 246: if ((alarm->minute >= 60 && alarm->minute != 80) || (alarm->hour >= 24 && alarm->hour != 80) || (alarm->day > 32 && alarm->day != 80) || (alarm->weekday > 6 && alarm->weekday != 80))
+      00052A 16 16            [ 2]  987 	ldw	y, (0x16, sp)
+      00052C 17 0E            [ 2]  988 	ldw	(0x0e, sp), y
+      00052E 1E 0E            [ 2]  989 	ldw	x, (0x0e, sp)
+      000530 F6               [ 1]  990 	ld	a, (x)
+      000531 6B 06            [ 1]  991 	ld	(0x06, sp), a
+      000533 7B 06            [ 1]  992 	ld	a, (0x06, sp)
+      000535 A1 3C            [ 1]  993 	cp	a, #0x3c
+      000537 25 06            [ 1]  994 	jrc	00105$
+      000539 7B 06            [ 1]  995 	ld	a, (0x06, sp)
+      00053B A1 50            [ 1]  996 	cp	a, #0x50
+      00053D 26 31            [ 1]  997 	jrne	00101$
+      00053F                        998 00105$:
+      00053F 16 0E            [ 2]  999 	ldw	y, (0x0e, sp)
+      000541 90 5C            [ 2] 1000 	incw	y
+      000543 90 F6            [ 1] 1001 	ld	a, (y)
+      000545 A1 18            [ 1] 1002 	cp	a, #0x18
+      000547 25 04            [ 1] 1003 	jrc	00107$
+      000549 A1 50            [ 1] 1004 	cp	a, #0x50
+      00054B 26 23            [ 1] 1005 	jrne	00101$
+      00054D                       1006 00107$:
+      00054D 1E 0E            [ 2] 1007 	ldw	x, (0x0e, sp)
+      00054F 5C               [ 2] 1008 	incw	x
+      000550 5C               [ 2] 1009 	incw	x
+      000551 1F 10            [ 2] 1010 	ldw	(0x10, sp), x
+      000553 1E 10            [ 2] 1011 	ldw	x, (0x10, sp)
+      000555 F6               [ 1] 1012 	ld	a, (x)
+      000556 A1 20            [ 1] 1013 	cp	a, #0x20
+      000558 23 04            [ 2] 1014 	jrule	00109$
+      00055A A1 50            [ 1] 1015 	cp	a, #0x50
+      00055C 26 12            [ 1] 1016 	jrne	00101$
+      00055E                       1017 00109$:
+      00055E 1E 0E            [ 2] 1018 	ldw	x, (0x0e, sp)
+      000560 1C 00 03         [ 2] 1019 	addw	x, #0x0003
+      000563 1F 0C            [ 2] 1020 	ldw	(0x0c, sp), x
+      000565 1E 0C            [ 2] 1021 	ldw	x, (0x0c, sp)
+      000567 F6               [ 1] 1022 	ld	a, (x)
+      000568 A1 06            [ 1] 1023 	cp	a, #0x06
+      00056A 23 09            [ 2] 1024 	jrule	00102$
+      00056C A1 50            [ 1] 1025 	cp	a, #0x50
+      00056E 27 05            [ 1] 1026 	jreq	00102$
+      000570                       1027 00101$:
+                                   1028 ;	user/RTC_pcf8563.c: 248: return 1;
+      000570 A6 01            [ 1] 1029 	ld	a, #0x01
+      000572 CCr06r04         [ 2] 1030 	jp	00110$
+      000575                       1031 00102$:
+                                   1032 ;	user/RTC_pcf8563.c: 251: buffer[0] = BinToBCD(alarm->minute) & 0xFF;
+      000575 96               [ 1] 1033 	ldw	x, sp
+      000576 5C               [ 2] 1034 	incw	x
+      000577 1F 07            [ 2] 1035 	ldw	(0x07, sp), x
+      000579 5F               [ 1] 1036 	clrw	x
+      00057A 7B 06            [ 1] 1037 	ld	a, (0x06, sp)
+      00057C 97               [ 1] 1038 	ld	xl, a
+      00057D A6 0A            [ 1] 1039 	ld	a, #0x0a
+      00057F 62               [ 2] 1040 	div	x, a
+      000580 9F               [ 1] 1041 	ld	a, xl
+      000581 4E               [ 1] 1042 	swap	a
+      000582 A4 F0            [ 1] 1043 	and	a, #0xf0
+      000584 6B 0B            [ 1] 1044 	ld	(0x0b, sp), a
+      000586 5F               [ 1] 1045 	clrw	x
+      000587 7B 06            [ 1] 1046 	ld	a, (0x06, sp)
+      000589 97               [ 1] 1047 	ld	xl, a
+      00058A A6 0A            [ 1] 1048 	ld	a, #0x0a
+      00058C 62               [ 2] 1049 	div	x, a
+      00058D 1B 0B            [ 1] 1050 	add	a, (0x0b, sp)
+      00058F 1E 07            [ 2] 1051 	ldw	x, (0x07, sp)
+      000591 F7               [ 1] 1052 	ld	(x), a
+                                   1053 ;	user/RTC_pcf8563.c: 252: buffer[1] = BinToBCD(alarm->hour) & 0xBF;
+      000592 1E 07            [ 2] 1054 	ldw	x, (0x07, sp)
+      000594 5C               [ 2] 1055 	incw	x
+      000595 1F 09            [ 2] 1056 	ldw	(0x09, sp), x
+      000597 90 F6            [ 1] 1057 	ld	a, (y)
+      000599 97               [ 1] 1058 	ld	xl, a
+      00059A 89               [ 2] 1059 	pushw	x
+      00059B 4F               [ 1] 1060 	clr	a
+      00059C 95               [ 1] 1061 	ld	xh, a
+      00059D A6 0A            [ 1] 1062 	ld	a, #0x0a
+      00059F 62               [ 2] 1063 	div	x, a
+      0005A0 9F               [ 1] 1064 	ld	a, xl
+      0005A1 85               [ 2] 1065 	popw	x
+      0005A2 4E               [ 1] 1066 	swap	a
+      0005A3 A4 F0            [ 1] 1067 	and	a, #0xf0
+      0005A5 6B 05            [ 1] 1068 	ld	(0x05, sp), a
+      0005A7 4F               [ 1] 1069 	clr	a
+      0005A8 95               [ 1] 1070 	ld	xh, a
+      0005A9 A6 0A            [ 1] 1071 	ld	a, #0x0a
+      0005AB 62               [ 2] 1072 	div	x, a
+      0005AC 1B 05            [ 1] 1073 	add	a, (0x05, sp)
+      0005AE A4 BF            [ 1] 1074 	and	a, #0xbf
+      0005B0 1E 09            [ 2] 1075 	ldw	x, (0x09, sp)
+      0005B2 F7               [ 1] 1076 	ld	(x), a
+                                   1077 ;	user/RTC_pcf8563.c: 253: buffer[2] = BinToBCD(alarm->day) & 0xBF;
+      0005B3 16 07            [ 2] 1078 	ldw	y, (0x07, sp)
+      0005B5 72 A9 00 02      [ 2] 1079 	addw	y, #0x0002
+      0005B9 1E 10            [ 2] 1080 	ldw	x, (0x10, sp)
+      0005BB F6               [ 1] 1081 	ld	a, (x)
+      0005BC 97               [ 1] 1082 	ld	xl, a
+      0005BD 89               [ 2] 1083 	pushw	x
+      0005BE 4F               [ 1] 1084 	clr	a
+      0005BF 95               [ 1] 1085 	ld	xh, a
+      0005C0 A6 0A            [ 1] 1086 	ld	a, #0x0a
+      0005C2 62               [ 2] 1087 	div	x, a
+      0005C3 9F               [ 1] 1088 	ld	a, xl
+      0005C4 85               [ 2] 1089 	popw	x
+      0005C5 4E               [ 1] 1090 	swap	a
+      0005C6 A4 F0            [ 1] 1091 	and	a, #0xf0
+      0005C8 6B 13            [ 1] 1092 	ld	(0x13, sp), a
+      0005CA 4F               [ 1] 1093 	clr	a
+      0005CB 95               [ 1] 1094 	ld	xh, a
+      0005CC A6 0A            [ 1] 1095 	ld	a, #0x0a
+      0005CE 62               [ 2] 1096 	div	x, a
+      0005CF 1B 13            [ 1] 1097 	add	a, (0x13, sp)
+      0005D1 A4 BF            [ 1] 1098 	and	a, #0xbf
+      0005D3 90 F7            [ 1] 1099 	ld	(y), a
+                                   1100 ;	user/RTC_pcf8563.c: 254: buffer[3] = BinToBCD(alarm->weekday) & 0x87;
+      0005D5 16 07            [ 2] 1101 	ldw	y, (0x07, sp)
+      0005D7 72 A9 00 03      [ 2] 1102 	addw	y, #0x0003
+      0005DB 1E 0C            [ 2] 1103 	ldw	x, (0x0c, sp)
+      0005DD F6               [ 1] 1104 	ld	a, (x)
+      0005DE 97               [ 1] 1105 	ld	xl, a
+      0005DF 89               [ 2] 1106 	pushw	x
+      0005E0 4F               [ 1] 1107 	clr	a
+      0005E1 95               [ 1] 1108 	ld	xh, a
+      0005E2 A6 0A            [ 1] 1109 	ld	a, #0x0a
+      0005E4 62               [ 2] 1110 	div	x, a
+      0005E5 9F               [ 1] 1111 	ld	a, xl
+      0005E6 85               [ 2] 1112 	popw	x
+      0005E7 4E               [ 1] 1113 	swap	a
+      0005E8 A4 F0            [ 1] 1114 	and	a, #0xf0
+      0005EA 6B 12            [ 1] 1115 	ld	(0x12, sp), a
+      0005EC 4F               [ 1] 1116 	clr	a
+      0005ED 95               [ 1] 1117 	ld	xh, a
+      0005EE A6 0A            [ 1] 1118 	ld	a, #0x0a
+      0005F0 62               [ 2] 1119 	div	x, a
+      0005F1 1B 12            [ 1] 1120 	add	a, (0x12, sp)
+      0005F3 A4 87            [ 1] 1121 	and	a, #0x87
+      0005F5 90 F7            [ 1] 1122 	ld	(y), a
+                                   1123 ;	user/RTC_pcf8563.c: 256: PCF_Write(0x09, buffer, sizeof(buffer));
+      0005F7 1E 07            [ 2] 1124 	ldw	x, (0x07, sp)
+      0005F9 4B 04            [ 1] 1125 	push	#0x04
+      0005FB 89               [ 2] 1126 	pushw	x
+      0005FC 4B 09            [ 1] 1127 	push	#0x09
+      0005FE CDr00r75         [ 4] 1128 	call	_PCF_Write
+      000601 5B 04            [ 2] 1129 	addw	sp, #4
+                                   1130 ;	user/RTC_pcf8563.c: 258: return 0;
+      000603 4F               [ 1] 1131 	clr	a
+      000604                       1132 00110$:
+      000604 5B 13            [ 2] 1133 	addw	sp, #19
+      000606 81               [ 4] 1134 	ret
+                                   1135 ;	user/RTC_pcf8563.c: 261: void PCF_setTimer(uint8_t mode, uint8_t count)
+                                   1136 ;	-----------------------------------------
+                                   1137 ;	 function PCF_setTimer
+                                   1138 ;	-----------------------------------------
+      000607                       1139 _PCF_setTimer:
+                                   1140 ;	user/RTC_pcf8563.c: 263: mode &= 0x13;
+      000607 7B 03            [ 1] 1141 	ld	a, (0x03, sp)
+      000609 A4 13            [ 1] 1142 	and	a, #0x13
+      00060B 6B 03            [ 1] 1143 	ld	(0x03, sp), a
+                                   1144 ;	user/RTC_pcf8563.c: 264: PCF_Write(0x0E, &mode, 1);				//Timer_control
+      00060D 96               [ 1] 1145 	ldw	x, sp
+      00060E 1C 00 03         [ 2] 1146 	addw	x, #3
+      000611 4B 01            [ 1] 1147 	push	#0x01
+      000613 89               [ 2] 1148 	pushw	x
+      000614 4B 0E            [ 1] 1149 	push	#0x0e
+      000616 CDr00r75         [ 4] 1150 	call	_PCF_Write
+      000619 5B 04            [ 2] 1151 	addw	sp, #4
+                                   1152 ;	user/RTC_pcf8563.c: 266: PCF_Write(0x0F, &count, 1);				//Timer
+      00061B 96               [ 1] 1153 	ldw	x, sp
+      00061C 1C 00 04         [ 2] 1154 	addw	x, #4
+      00061F 4B 01            [ 1] 1155 	push	#0x01
+      000621 89               [ 2] 1156 	pushw	x
+      000622 4B 0F            [ 1] 1157 	push	#0x0f
+      000624 CDr00r75         [ 4] 1158 	call	_PCF_Write
+      000627 5B 04            [ 2] 1159 	addw	sp, #4
+      000629 81               [ 4] 1160 	ret
+                                   1161 ;	user/RTC_pcf8563.c: 269: uint8_t PCF_getTimer()
+                                   1162 ;	-----------------------------------------
+                                   1163 ;	 function PCF_getTimer
+                                   1164 ;	-----------------------------------------
+      00062A                       1165 _PCF_getTimer:
+      00062A 88               [ 1] 1166 	push	a
+                                   1167 ;	user/RTC_pcf8563.c: 272: PCF_Read(0x0F, &count, 1);				//Timer
+      00062B 96               [ 1] 1168 	ldw	x, sp
+      00062C 5C               [ 2] 1169 	incw	x
+      00062D 4B 01            [ 1] 1170 	push	#0x01
+      00062F 89               [ 2] 1171 	pushw	x
+      000630 4B 0F            [ 1] 1172 	push	#0x0f
+      000632 CDr00rD8         [ 4] 1173 	call	_PCF_Read
+      000635 5B 04            [ 2] 1174 	addw	sp, #4
+                                   1175 ;	user/RTC_pcf8563.c: 274: return count;
+      000637 7B 01            [ 1] 1176 	ld	a, (0x01, sp)
+      000639 5B 01            [ 2] 1177 	addw	sp, #1
+      00063B 81               [ 4] 1178 	ret
+                                   1179 ;	user/RTC_pcf8563.c: 277: uint8_t PCF_getAlarm(PCF_Alarm *alarm)
+                                   1180 ;	-----------------------------------------
+                                   1181 ;	 function PCF_getAlarm
+                                   1182 ;	-----------------------------------------
+      00063C                       1183 _PCF_getAlarm:
+      00063C 52 0F            [ 2] 1184 	sub	sp, #15
+                                   1185 ;	user/RTC_pcf8563.c: 281: PCF_Read(0x09, buffer, sizeof(buffer));
+      00063E 96               [ 1] 1186 	ldw	x, sp
+      00063F 5C               [ 2] 1187 	incw	x
+      000640 1F 0E            [ 2] 1188 	ldw	(0x0e, sp), x
+      000642 1E 0E            [ 2] 1189 	ldw	x, (0x0e, sp)
+      000644 4B 04            [ 1] 1190 	push	#0x04
+      000646 89               [ 2] 1191 	pushw	x
+      000647 4B 09            [ 1] 1192 	push	#0x09
+      000649 CDr00rD8         [ 4] 1193 	call	_PCF_Read
+      00064C 5B 04            [ 2] 1194 	addw	sp, #4
+                                   1195 ;	user/RTC_pcf8563.c: 283: alarm->minute = (((buffer[0] >> 4) & 0x0F) * 10) + (buffer[0] & 0x0F);
+      00064E 16 12            [ 2] 1196 	ldw	y, (0x12, sp)
+      000650 17 09            [ 2] 1197 	ldw	(0x09, sp), y
+      000652 1E 0E            [ 2] 1198 	ldw	x, (0x0e, sp)
+      000654 F6               [ 1] 1199 	ld	a, (x)
+      000655 90 97            [ 1] 1200 	ld	yl, a
+      000657 4E               [ 1] 1201 	swap	a
+      000658 A4 0F            [ 1] 1202 	and	a, #0x0f
+      00065A A4 0F            [ 1] 1203 	and	a, #0x0f
+      00065C 97               [ 1] 1204 	ld	xl, a
+      00065D A6 0A            [ 1] 1205 	ld	a, #0x0a
+      00065F 42               [ 4] 1206 	mul	x, a
+      000660 90 9F            [ 1] 1207 	ld	a, yl
+      000662 A4 0F            [ 1] 1208 	and	a, #0x0f
+      000664 6B 0C            [ 1] 1209 	ld	(0x0c, sp), a
+      000666 9F               [ 1] 1210 	ld	a, xl
+      000667 1B 0C            [ 1] 1211 	add	a, (0x0c, sp)
+      000669 1E 09            [ 2] 1212 	ldw	x, (0x09, sp)
+      00066B F7               [ 1] 1213 	ld	(x), a
+                                   1214 ;	user/RTC_pcf8563.c: 284: alarm->hour = (((buffer[1] >> 4) & 0x0B) * 10) + (buffer[1] & 0x0F);
+      00066C 16 09            [ 2] 1215 	ldw	y, (0x09, sp)
+      00066E 90 5C            [ 2] 1216 	incw	y
+      000670 1E 0E            [ 2] 1217 	ldw	x, (0x0e, sp)
+      000672 E6 01            [ 1] 1218 	ld	a, (0x1, x)
+      000674 6B 06            [ 1] 1219 	ld	(0x06, sp), a
+      000676 7B 06            [ 1] 1220 	ld	a, (0x06, sp)
+      000678 4E               [ 1] 1221 	swap	a
+      000679 A4 0F            [ 1] 1222 	and	a, #0x0f
+      00067B A4 0B            [ 1] 1223 	and	a, #0x0b
+      00067D 97               [ 1] 1224 	ld	xl, a
+      00067E A6 0A            [ 1] 1225 	ld	a, #0x0a
+      000680 42               [ 4] 1226 	mul	x, a
+      000681 7B 06            [ 1] 1227 	ld	a, (0x06, sp)
+      000683 A4 0F            [ 1] 1228 	and	a, #0x0f
+      000685 6B 08            [ 1] 1229 	ld	(0x08, sp), a
+      000687 9F               [ 1] 1230 	ld	a, xl
+      000688 1B 08            [ 1] 1231 	add	a, (0x08, sp)
+      00068A 90 F7            [ 1] 1232 	ld	(y), a
+                                   1233 ;	user/RTC_pcf8563.c: 285: alarm->day = (((buffer[2] >> 4) & 0x0B) * 10) + (buffer[2] & 0x0F);
+      00068C 16 09            [ 2] 1234 	ldw	y, (0x09, sp)
+      00068E 72 A9 00 02      [ 2] 1235 	addw	y, #0x0002
+      000692 1E 0E            [ 2] 1236 	ldw	x, (0x0e, sp)
+      000694 E6 02            [ 1] 1237 	ld	a, (0x2, x)
+      000696 6B 0B            [ 1] 1238 	ld	(0x0b, sp), a
+      000698 7B 0B            [ 1] 1239 	ld	a, (0x0b, sp)
+      00069A 4E               [ 1] 1240 	swap	a
+      00069B A4 0F            [ 1] 1241 	and	a, #0x0f
+      00069D A4 0B            [ 1] 1242 	and	a, #0x0b
+      00069F 97               [ 1] 1243 	ld	xl, a
+      0006A0 A6 0A            [ 1] 1244 	ld	a, #0x0a
+      0006A2 42               [ 4] 1245 	mul	x, a
+      0006A3 7B 0B            [ 1] 1246 	ld	a, (0x0b, sp)
+      0006A5 A4 0F            [ 1] 1247 	and	a, #0x0f
+      0006A7 6B 0D            [ 1] 1248 	ld	(0x0d, sp), a
+      0006A9 9F               [ 1] 1249 	ld	a, xl
+      0006AA 1B 0D            [ 1] 1250 	add	a, (0x0d, sp)
+      0006AC 90 F7            [ 1] 1251 	ld	(y), a
+                                   1252 ;	user/RTC_pcf8563.c: 286: alarm->weekday = (((buffer[3] >> 4) & 0x08) * 10) + (buffer[3] & 0x07);
+      0006AE 16 09            [ 2] 1253 	ldw	y, (0x09, sp)
+      0006B0 72 A9 00 03      [ 2] 1254 	addw	y, #0x0003
+      0006B4 1E 0E            [ 2] 1255 	ldw	x, (0x0e, sp)
+      0006B6 E6 03            [ 1] 1256 	ld	a, (0x3, x)
+      0006B8 6B 07            [ 1] 1257 	ld	(0x07, sp), a
+      0006BA 7B 07            [ 1] 1258 	ld	a, (0x07, sp)
+      0006BC 4E               [ 1] 1259 	swap	a
+      0006BD A4 0F            [ 1] 1260 	and	a, #0x0f
+      0006BF A4 08            [ 1] 1261 	and	a, #0x08
+      0006C1 97               [ 1] 1262 	ld	xl, a
+      0006C2 A6 0A            [ 1] 1263 	ld	a, #0x0a
+      0006C4 42               [ 4] 1264 	mul	x, a
+      0006C5 7B 07            [ 1] 1265 	ld	a, (0x07, sp)
+      0006C7 A4 07            [ 1] 1266 	and	a, #0x07
+      0006C9 6B 05            [ 1] 1267 	ld	(0x05, sp), a
+      0006CB 9F               [ 1] 1268 	ld	a, xl
+      0006CC 1B 05            [ 1] 1269 	add	a, (0x05, sp)
+      0006CE 90 F7            [ 1] 1270 	ld	(y), a
+                                   1271 ;	user/RTC_pcf8563.c: 288: return 0;
+      0006D0 4F               [ 1] 1272 	clr	a
+      0006D1 5B 0F            [ 2] 1273 	addw	sp, #15
+      0006D3 81               [ 4] 1274 	ret
+                                   1275 ;	user/RTC_pcf8563.c: 291: uint8_t PCF_getAndClearFlags()
+                                   1276 ;	-----------------------------------------
+                                   1277 ;	 function PCF_getAndClearFlags
+                                   1278 ;	-----------------------------------------
+      0006D4                       1279 _PCF_getAndClearFlags:
+      0006D4 89               [ 2] 1280 	pushw	x
+                                   1281 ;	user/RTC_pcf8563.c: 295: PCF_Read(0x01, &flags, 1);				//Control_status_2
+      0006D5 96               [ 1] 1282 	ldw	x, sp
+      0006D6 5C               [ 2] 1283 	incw	x
+      0006D7 4B 01            [ 1] 1284 	push	#0x01
+      0006D9 89               [ 2] 1285 	pushw	x
+      0006DA 4B 01            [ 1] 1286 	push	#0x01
+      0006DC CDr00rD8         [ 4] 1287 	call	_PCF_Read
+      0006DF 5B 04            [ 2] 1288 	addw	sp, #4
+                                   1289 ;	user/RTC_pcf8563.c: 296: cleared = flags & 0x13;
+      0006E1 7B 01            [ 1] 1290 	ld	a, (0x01, sp)
+      0006E3 A4 13            [ 1] 1291 	and	a, #0x13
+      0006E5 6B 02            [ 1] 1292 	ld	(0x02, sp), a
+                                   1293 ;	user/RTC_pcf8563.c: 297: PCF_Write(0x01, &cleared, 1);			//Control_status_2
+      0006E7 96               [ 1] 1294 	ldw	x, sp
+      0006E8 5C               [ 2] 1295 	incw	x
+      0006E9 5C               [ 2] 1296 	incw	x
+      0006EA 4B 01            [ 1] 1297 	push	#0x01
+      0006EC 89               [ 2] 1298 	pushw	x
+      0006ED 4B 01            [ 1] 1299 	push	#0x01
+      0006EF CDr00r75         [ 4] 1300 	call	_PCF_Write
+      0006F2 5B 04            [ 2] 1301 	addw	sp, #4
+                                   1302 ;	user/RTC_pcf8563.c: 299: return flags & 0x0C;					//Mask unnecessary bits
+      0006F4 7B 01            [ 1] 1303 	ld	a, (0x01, sp)
+      0006F6 A4 0C            [ 1] 1304 	and	a, #0x0c
+      0006F8 85               [ 2] 1305 	popw	x
+      0006F9 81               [ 4] 1306 	ret
+                                   1307 ;	user/RTC_pcf8563.c: 302: void PCF_setClockOut(uint8_t mode)
+                                   1308 ;	-----------------------------------------
+                                   1309 ;	 function PCF_setClockOut
+                                   1310 ;	-----------------------------------------
+      0006FA                       1311 _PCF_setClockOut:
+                                   1312 ;	user/RTC_pcf8563.c: 304: mode &= 0x13;
+      0006FA 7B 03            [ 1] 1313 	ld	a, (0x03, sp)
+      0006FC A4 13            [ 1] 1314 	and	a, #0x13
+      0006FE 6B 03            [ 1] 1315 	ld	(0x03, sp), a
+                                   1316 ;	user/RTC_pcf8563.c: 305: PCF_Write(0x0D, &mode, 1);				//CLKOUT_control
+      000700 96               [ 1] 1317 	ldw	x, sp
+      000701 1C 00 03         [ 2] 1318 	addw	x, #3
+      000704 4B 01            [ 1] 1319 	push	#0x01
+      000706 89               [ 2] 1320 	pushw	x
+      000707 4B 0D            [ 1] 1321 	push	#0x0d
+      000709 CDr00r75         [ 4] 1322 	call	_PCF_Write
+      00070C 5B 04            [ 2] 1323 	addw	sp, #4
+      00070E 81               [ 4] 1324 	ret
+                                   1325 	.area CODE
+                                   1326 	.area INITIALIZER
+                                   1327 	.area CABS (ABS)

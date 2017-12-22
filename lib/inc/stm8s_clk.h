@@ -5,15 +5,33 @@
   * @version V2.2.0
   * @date    30-September-2014
   * @brief   This file contains all functions prototype and macros for the CLK peripheral.
-  * @Date:   2016-03-29 14:06:05
-  * @Last Modified by:   nhantt
-  * @Last Modified time: 2017-03-21 23:07:13
    ******************************************************************************
-*/
+  * @attention
+  *
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+  *
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
+  *
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
+  ******************************************************************************
+  */
 
+
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM8S_CLK_H
 #define __STM8S_CLK_H
 
+/* Includes ------------------------------------------------------------------*/
+/* Contains the description of all STM8 hardware registers */
 #include "stm8s.h"
 
 /* Exported types ------------------------------------------------------------*/
@@ -331,10 +349,29 @@ typedef enum {
 /** @addtogroup CLK_Exported_functions
   * @{
   */
-void CLK_Config(void);
+void CLK_DeInit(void);
+void CLK_HSECmd(FunctionalState NewState);
+void CLK_HSICmd(FunctionalState NewState);
+void CLK_LSICmd(FunctionalState NewState);
+void CLK_CCOCmd(FunctionalState NewState);
+void CLK_ClockSwitchCmd(FunctionalState NewState);
+void CLK_FastHaltWakeUpCmd(FunctionalState NewState);
+void CLK_SlowActiveHaltWakeUpCmd(FunctionalState NewState);
 void CLK_PeripheralClockConfig(CLK_Peripheral_TypeDef CLK_Peripheral, FunctionalState NewState);
+ErrorStatus CLK_ClockSwitchConfig(CLK_SwitchMode_TypeDef CLK_SwitchMode, CLK_Source_TypeDef CLK_NewClock, FunctionalState ITState, CLK_CurrentClockState_TypeDef CLK_CurrentClockState);
+void CLK_HSIPrescalerConfig(CLK_Prescaler_TypeDef HSIPrescaler);
+void CLK_CCOConfig(CLK_Output_TypeDef CLK_CCO);
+void CLK_ITConfig(CLK_IT_TypeDef CLK_IT, FunctionalState NewState);
 void CLK_SYSCLKConfig(CLK_Prescaler_TypeDef CLK_Prescaler);
+void CLK_SWIMConfig(CLK_SWIMDivider_TypeDef CLK_SWIMDivider);
+void CLK_ClockSecuritySystemEnable(void);
+void CLK_SYSCLKEmergencyClear(void);
+void CLK_AdjustHSICalibrationValue(CLK_HSITrimValue_TypeDef CLK_HSICalibrationValue);
 uint32_t CLK_GetClockFreq(void);
+CLK_Source_TypeDef CLK_GetSYSCLKSource(void);
+FlagStatus CLK_GetFlagStatus(CLK_Flag_TypeDef CLK_FLAG);
+ITStatus CLK_GetITStatus(CLK_IT_TypeDef CLK_IT);
+void CLK_ClearITPendingBit(CLK_IT_TypeDef CLK_IT);
 
 /**
   * @}
