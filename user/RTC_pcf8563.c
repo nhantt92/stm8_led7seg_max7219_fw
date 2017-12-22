@@ -5,6 +5,8 @@
 
 #define BinToBCD(bin) ((((bin) / 10) << 4) + ((bin) % 10))
 
+uint32_t I2C_TimeOut = I2C_LONG_TIMEOUT;
+
 void I2C_setup(void)
 {
  uint8_t Input_Clock = 0x00;
@@ -303,4 +305,64 @@ void PCF_setClockOut(uint8_t mode)
 {
 	mode &= 0x13;
 	PCF_Write(0x0D, &mode, 1);				//CLKOUT_control
+}
+
+uint32_t pcf_read(uint8_t *buffer, uint8_t readAddr, uint16_t* NumByteToRead)
+{
+	I2C_TimeOut = I2C_LONG_TIMEOUT;
+	/* While the bus is busy */
+	while(I2C_GetFlagStatus(I2C_FLAG_BUSBUSY))
+	{
+		if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+	}
+
+	/* Send START */
+	I2C_GenerateSTART(ENABLE);
+
+	/* Check EV5 */
+	I2C_Timeout = I2C_FLAG_TIMEOUT;
+	while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT))
+	{
+		if((I2C_Timeout--) == 0) return TIMEOUT_UserCallback();
+	}
+
+	/* Send Slave Address for write */
+	I2C_Send7bitAddress((uint8_t)PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
+	/* Check EV6 */
+	I2C_Timeout = I2C_FLAG_TIMEOUT;
+	while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+	{
+		if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+	}
+
+	I2C_SendData((uint8_t)readAddr);
+	/* Check EV8 */
+	I2C_Timeout = I2C_FLAG_TIMEOUT;
+	while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET);
+	{
+		if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+	}
+
+	/* Send START second */
+	I2C_GenerateSTART(ENABLE);
+	/* Check EV5 */
+	I2C_Timeout = I2C_FLAG_TIMEOUT;
+	while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT))
+	{
+		if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+	}
+
+	I2C_Send7bitAddress((uint8_t)PCF8563_READ_ADDR, I2C_DIRECTION_TX);
+
+	if((uint16_t)(*NumByteToRead) > 3)
+	{
+		I2C_Timeout = I2C_FLAG_TIMEOUT;
+		while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET)
+		{
+			if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+		}
+		/* Read a byte from the EEPROM */
+		
+	}
+
 }

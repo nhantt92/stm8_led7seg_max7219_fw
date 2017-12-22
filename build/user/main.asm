@@ -233,15 +233,15 @@ _clock_setup:
 ;	 function GPIO_Config
 ;	-----------------------------------------
 _GPIO_Config:
-;	user/main.c: 50: GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_FAST);
-	push	#0xb0
+;	user/main.c: 50: GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_IN_PU_NO_IT);
+	push	#0x40
 	push	#0x10
 	push	#0x05
 	push	#0x50
 	call	_GPIO_Init
 	addw	sp, #4
-;	user/main.c: 51: GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_OD_HIZ_FAST);
-	push	#0xb0
+;	user/main.c: 51: GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_IN_PU_NO_IT);
+	push	#0x40
 	push	#0x20
 	push	#0x05
 	push	#0x50
@@ -307,42 +307,43 @@ _main:
 	sub	sp, #22
 ;	user/main.c: 159: dateTime.second = 40;
 	ldw	x, sp
-	incw	x
 	ld	a, #0x28
-	ld	(x), a
+	ld	(9, x), a
 ;	user/main.c: 160: dateTime.minute = 32;
 	ldw	x, sp
-	incw	x
-	ldw	(0x13, sp), x
-	ldw	x, (0x13, sp)
+	addw	x, #9
+	ldw	(0x15, sp), x
+	ldw	x, (0x15, sp)
 	incw	x
 	ld	a, #0x20
 	ld	(x), a
-;	user/main.c: 161: dateTime.hour = 14;
-	ldw	x, (0x13, sp)
+;	user/main.c: 161: dateTime.hour = 15;
+	ldw	x, (0x15, sp)
 	incw	x
 	incw	x
-	ld	a, #0x0e
+	ld	a, #0x0f
 	ld	(x), a
 ;	user/main.c: 162: dateTime.day = 22;
-	ldw	x, (0x13, sp)
+	ldw	x, (0x15, sp)
 	ld	a, #0x16
 	ld	(0x0003, x), a
 ;	user/main.c: 163: dateTime.weekday = 6;
-	ldw	x, (0x13, sp)
+	ldw	x, (0x15, sp)
 	ld	a, #0x06
 	ld	(0x0004, x), a
 ;	user/main.c: 164: dateTime.month = 12;
-	ldw	x, (0x13, sp)
+	ldw	x, (0x15, sp)
 	ld	a, #0x0c
 	ld	(0x0005, x), a
 ;	user/main.c: 165: dateTime.year = 2017;
-	ldw	x, (0x13, sp)
+	ldw	x, (0x15, sp)
 	addw	x, #0x0006
 	ldw	y, #0x07e1
 	ldw	(x), y
 ;	user/main.c: 166: clock_setup();
 	call	_clock_setup
+;	user/main.c: 167: GPIO_Config();
+	call	_GPIO_Config
 ;	user/main.c: 170: PCF_Init(PCF_ALARM_INTERRUPT_ENABLE | PCF_TIMER_INTERRUPT_ENABLE);
 	push	#0x03
 	call	_PCF_Init
@@ -370,7 +371,7 @@ _main:
 	call	_delay
 	popw	x
 ;	user/main.c: 178: PCF_setDateTime(&dateTime);
-	ldw	x, (0x13, sp)
+	ldw	x, (0x15, sp)
 	pushw	x
 	call	_PCF_setDateTime
 	popw	x
@@ -449,14 +450,14 @@ _main:
 	jrne	00104$
 ;	user/main.c: 216: PCF_getDateTime(&pcfDateTime);  
 	ldw	x, sp
-	addw	x, #9
-	ldw	(0x15, sp), x
-	ldw	x, (0x15, sp)
+	incw	x
+	ldw	(0x13, sp), x
+	ldw	x, (0x13, sp)
 	pushw	x
 	call	_PCF_getDateTime
 	popw	x
 ;	user/main.c: 217: send7Seg(DIG0, pcfDateTime.second%10);
-	ldw	x, (0x15, sp)
+	ldw	x, (0x13, sp)
 	ld	a, (x)
 	clrw	x
 	ld	xl, a
@@ -467,7 +468,7 @@ _main:
 	call	_send7Seg
 	popw	x
 ;	user/main.c: 218: send7Seg(DIG1, pcfDateTime.second/10);
-	ldw	x, (0x15, sp)
+	ldw	x, (0x13, sp)
 	ld	a, (x)
 	clrw	x
 	ld	xl, a
@@ -479,7 +480,7 @@ _main:
 	call	_send7Seg
 	popw	x
 ;	user/main.c: 219: send7Seg(DIG3, pcfDateTime.minute%10);
-	ldw	x, (0x15, sp)
+	ldw	x, (0x13, sp)
 	incw	x
 	ld	a, (x)
 	pushw	x
@@ -504,7 +505,7 @@ _main:
 	call	_send7Seg
 	popw	x
 ;	user/main.c: 221: send7Seg(DIG6, pcfDateTime.hour%10);
-	ldw	x, (0x15, sp)
+	ldw	x, (0x13, sp)
 	incw	x
 	incw	x
 	ld	a, (x)

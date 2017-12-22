@@ -68,22 +68,22 @@
                                      68 ;	-----------------------------------------
       0080A0                         69 _I2C_setup:
                                      70 ;	user/RTC_pcf8563.c: 11: I2C_DeInit();
-      0080A0 CD 95 DA         [ 4]   71 	call	_I2C_DeInit
+      0080A0 CD 95 DD         [ 4]   71 	call	_I2C_DeInit
                                      72 ;	user/RTC_pcf8563.c: 12: Input_Clock = CLK_GetClockFreq()/1000000;
-      0080A3 CD 94 06         [ 4]   73 	call	_CLK_GetClockFreq
+      0080A3 CD 94 09         [ 4]   73 	call	_CLK_GetClockFreq
       0080A6 4B 40            [ 1]   74 	push	#0x40
       0080A8 4B 42            [ 1]   75 	push	#0x42
       0080AA 4B 0F            [ 1]   76 	push	#0x0f
       0080AC 4B 00            [ 1]   77 	push	#0x00
       0080AE 89               [ 2]   78 	pushw	x
       0080AF 90 89            [ 2]   79 	pushw	y
-      0080B1 CD 9B 16         [ 4]   80 	call	__divulong
+      0080B1 CD 9B 19         [ 4]   80 	call	__divulong
       0080B4 5B 08            [ 2]   81 	addw	sp, #8
       0080B6 9F               [ 1]   82 	ld	a, xl
                                      83 ;	user/RTC_pcf8563.c: 13: I2C_Cmd(ENABLE);
       0080B7 88               [ 1]   84 	push	a
       0080B8 4B 01            [ 1]   85 	push	#0x01
-      0080BA CD 97 2D         [ 4]   86 	call	_I2C_Cmd
+      0080BA CD 97 30         [ 4]   86 	call	_I2C_Cmd
       0080BD 84               [ 1]   87 	pop	a
       0080BE 84               [ 1]   88 	pop	a
                                      89 ;	user/RTC_pcf8563.c: 14: I2C_Init(100000, PCF8563_WRITE_ADDR, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, Input_Clock);
@@ -97,7 +97,7 @@
       0080CC 4B 86            [ 1]   97 	push	#0x86
       0080CE 4B 01            [ 1]   98 	push	#0x01
       0080D0 4B 00            [ 1]   99 	push	#0x00
-      0080D2 CD 95 FF         [ 4]  100 	call	_I2C_Init
+      0080D2 CD 96 02         [ 4]  100 	call	_I2C_Init
       0080D5 5B 0A            [ 2]  101 	addw	sp, #10
       0080D7 81               [ 4]  102 	ret
                                     103 ;	user/RTC_pcf8563.c: 17: void I2C_Write_Byte(uint8_t data)
@@ -107,45 +107,45 @@
       0080D8                        107 _I2C_Write_Byte:
                                     108 ;	user/RTC_pcf8563.c: 19: I2C_GenerateSTART(ENABLE);
       0080D8 4B 01            [ 1]  109 	push	#0x01
-      0080DA CD 97 4F         [ 4]  110 	call	_I2C_GenerateSTART
+      0080DA CD 97 52         [ 4]  110 	call	_I2C_GenerateSTART
       0080DD 84               [ 1]  111 	pop	a
                                     112 ;	user/RTC_pcf8563.c: 20: while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
       0080DE                        113 00101$:
       0080DE 4B 01            [ 1]  114 	push	#0x01
       0080E0 4B 03            [ 1]  115 	push	#0x03
-      0080E2 CD 98 09         [ 4]  116 	call	_I2C_CheckEvent
+      0080E2 CD 98 0C         [ 4]  116 	call	_I2C_CheckEvent
       0080E5 85               [ 2]  117 	popw	x
       0080E6 4D               [ 1]  118 	tnz	a
       0080E7 27 F5            [ 1]  119 	jreq	00101$
                                     120 ;	user/RTC_pcf8563.c: 21: I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
       0080E9 4B 00            [ 1]  121 	push	#0x00
       0080EB 4B A2            [ 1]  122 	push	#0xa2
-      0080ED CD 97 F3         [ 4]  123 	call	_I2C_Send7bitAddress
+      0080ED CD 97 F6         [ 4]  123 	call	_I2C_Send7bitAddress
       0080F0 85               [ 2]  124 	popw	x
                                     125 ;	user/RTC_pcf8563.c: 22: while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
       0080F1                        126 00104$:
       0080F1 4B 82            [ 1]  127 	push	#0x82
       0080F3 4B 07            [ 1]  128 	push	#0x07
-      0080F5 CD 98 09         [ 4]  129 	call	_I2C_CheckEvent
+      0080F5 CD 98 0C         [ 4]  129 	call	_I2C_CheckEvent
       0080F8 85               [ 2]  130 	popw	x
       0080F9 4D               [ 1]  131 	tnz	a
       0080FA 27 F5            [ 1]  132 	jreq	00104$
                                     133 ;	user/RTC_pcf8563.c: 23: I2C_SendData(data);
       0080FC 7B 03            [ 1]  134 	ld	a, (0x03, sp)
       0080FE 88               [ 1]  135 	push	a
-      0080FF CD 98 02         [ 4]  136 	call	_I2C_SendData
+      0080FF CD 98 05         [ 4]  136 	call	_I2C_SendData
       008102 84               [ 1]  137 	pop	a
                                     138 ;	user/RTC_pcf8563.c: 24: while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
       008103                        139 00107$:
       008103 4B 84            [ 1]  140 	push	#0x84
       008105 4B 07            [ 1]  141 	push	#0x07
-      008107 CD 98 09         [ 4]  142 	call	_I2C_CheckEvent
+      008107 CD 98 0C         [ 4]  142 	call	_I2C_CheckEvent
       00810A 85               [ 2]  143 	popw	x
       00810B 4D               [ 1]  144 	tnz	a
       00810C 27 F5            [ 1]  145 	jreq	00107$
                                     146 ;	user/RTC_pcf8563.c: 25: I2C_GenerateSTOP(ENABLE);
       00810E 4B 01            [ 1]  147 	push	#0x01
-      008110 CD 97 5D         [ 4]  148 	call	_I2C_GenerateSTOP
+      008110 CD 97 60         [ 4]  148 	call	_I2C_GenerateSTOP
       008113 84               [ 1]  149 	pop	a
       008114 81               [ 4]  150 	ret
                                     151 ;	user/RTC_pcf8563.c: 28: void PCF_Write(uint8_t addr, uint8_t *data, uint8_t count)
@@ -156,39 +156,39 @@
       008115 88               [ 1]  156 	push	a
                                     157 ;	user/RTC_pcf8563.c: 31: I2C_GenerateSTART(ENABLE);
       008116 4B 01            [ 1]  158 	push	#0x01
-      008118 CD 97 4F         [ 4]  159 	call	_I2C_GenerateSTART
+      008118 CD 97 52         [ 4]  159 	call	_I2C_GenerateSTART
       00811B 84               [ 1]  160 	pop	a
                                     161 ;	user/RTC_pcf8563.c: 33: while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
       00811C                        162 00101$:
       00811C 4B 01            [ 1]  163 	push	#0x01
       00811E 4B 03            [ 1]  164 	push	#0x03
-      008120 CD 98 09         [ 4]  165 	call	_I2C_CheckEvent
+      008120 CD 98 0C         [ 4]  165 	call	_I2C_CheckEvent
       008123 85               [ 2]  166 	popw	x
       008124 4D               [ 1]  167 	tnz	a
       008125 27 F5            [ 1]  168 	jreq	00101$
                                     169 ;	user/RTC_pcf8563.c: 35: I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
       008127 4B 00            [ 1]  170 	push	#0x00
       008129 4B A2            [ 1]  171 	push	#0xa2
-      00812B CD 97 F3         [ 4]  172 	call	_I2C_Send7bitAddress
+      00812B CD 97 F6         [ 4]  172 	call	_I2C_Send7bitAddress
       00812E 85               [ 2]  173 	popw	x
                                     174 ;	user/RTC_pcf8563.c: 36: while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
       00812F                        175 00104$:
       00812F 4B 82            [ 1]  176 	push	#0x82
       008131 4B 07            [ 1]  177 	push	#0x07
-      008133 CD 98 09         [ 4]  178 	call	_I2C_CheckEvent
+      008133 CD 98 0C         [ 4]  178 	call	_I2C_CheckEvent
       008136 85               [ 2]  179 	popw	x
       008137 4D               [ 1]  180 	tnz	a
       008138 27 F5            [ 1]  181 	jreq	00104$
                                     182 ;	user/RTC_pcf8563.c: 38: I2C_SendData(addr);
       00813A 7B 04            [ 1]  183 	ld	a, (0x04, sp)
       00813C 88               [ 1]  184 	push	a
-      00813D CD 98 02         [ 4]  185 	call	_I2C_SendData
+      00813D CD 98 05         [ 4]  185 	call	_I2C_SendData
       008140 84               [ 1]  186 	pop	a
                                     187 ;	user/RTC_pcf8563.c: 39: while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
       008141                        188 00107$:
       008141 4B 84            [ 1]  189 	push	#0x84
       008143 4B 07            [ 1]  190 	push	#0x07
-      008145 CD 98 09         [ 4]  191 	call	_I2C_CheckEvent
+      008145 CD 98 0C         [ 4]  191 	call	_I2C_CheckEvent
       008148 85               [ 2]  192 	popw	x
       008149 4D               [ 1]  193 	tnz	a
       00814A 27 F5            [ 1]  194 	jreq	00107$
@@ -205,7 +205,7 @@
       008158 F6               [ 1]  205 	ld	a, (x)
       008159 89               [ 2]  206 	pushw	x
       00815A 88               [ 1]  207 	push	a
-      00815B CD 98 02         [ 4]  208 	call	_I2C_SendData
+      00815B CD 98 05         [ 4]  208 	call	_I2C_SendData
       00815E 84               [ 1]  209 	pop	a
       00815F 85               [ 2]  210 	popw	x
                                     211 ;	user/RTC_pcf8563.c: 44: while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
@@ -213,7 +213,7 @@
       008160 89               [ 2]  213 	pushw	x
       008161 4B 84            [ 1]  214 	push	#0x84
       008163 4B 07            [ 1]  215 	push	#0x07
-      008165 CD 98 09         [ 4]  216 	call	_I2C_CheckEvent
+      008165 CD 98 0C         [ 4]  216 	call	_I2C_CheckEvent
       008168 85               [ 2]  217 	popw	x
       008169 85               [ 2]  218 	popw	x
       00816A 4D               [ 1]  219 	tnz	a
@@ -224,7 +224,7 @@
       008170                        224 00115$:
                                     225 ;	user/RTC_pcf8563.c: 47: I2C_GenerateSTOP(ENABLE);
       008170 4B 01            [ 1]  226 	push	#0x01
-      008172 CD 97 5D         [ 4]  227 	call	_I2C_GenerateSTOP
+      008172 CD 97 60         [ 4]  227 	call	_I2C_GenerateSTOP
       008175 84               [ 1]  228 	pop	a
       008176 84               [ 1]  229 	pop	a
       008177 81               [ 4]  230 	ret
@@ -236,64 +236,64 @@
       008178 52 03            [ 2]  236 	sub	sp, #3
                                     237 ;	user/RTC_pcf8563.c: 53: I2C_GenerateSTART(ENABLE);
       00817A 4B 01            [ 1]  238 	push	#0x01
-      00817C CD 97 4F         [ 4]  239 	call	_I2C_GenerateSTART
+      00817C CD 97 52         [ 4]  239 	call	_I2C_GenerateSTART
       00817F 84               [ 1]  240 	pop	a
                                     241 ;	user/RTC_pcf8563.c: 55: while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
       008180                        242 00101$:
       008180 4B 01            [ 1]  243 	push	#0x01
       008182 4B 03            [ 1]  244 	push	#0x03
-      008184 CD 98 09         [ 4]  245 	call	_I2C_CheckEvent
+      008184 CD 98 0C         [ 4]  245 	call	_I2C_CheckEvent
       008187 85               [ 2]  246 	popw	x
       008188 4D               [ 1]  247 	tnz	a
       008189 27 F5            [ 1]  248 	jreq	00101$
                                     249 ;	user/RTC_pcf8563.c: 57: I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
       00818B 4B 00            [ 1]  250 	push	#0x00
       00818D 4B A2            [ 1]  251 	push	#0xa2
-      00818F CD 97 F3         [ 4]  252 	call	_I2C_Send7bitAddress
+      00818F CD 97 F6         [ 4]  252 	call	_I2C_Send7bitAddress
       008192 85               [ 2]  253 	popw	x
                                     254 ;	user/RTC_pcf8563.c: 58: while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
       008193                        255 00104$:
       008193 4B 82            [ 1]  256 	push	#0x82
       008195 4B 07            [ 1]  257 	push	#0x07
-      008197 CD 98 09         [ 4]  258 	call	_I2C_CheckEvent
+      008197 CD 98 0C         [ 4]  258 	call	_I2C_CheckEvent
       00819A 85               [ 2]  259 	popw	x
       00819B 4D               [ 1]  260 	tnz	a
       00819C 27 F5            [ 1]  261 	jreq	00104$
                                     262 ;	user/RTC_pcf8563.c: 60: I2C_SendData(addr);
       00819E 7B 06            [ 1]  263 	ld	a, (0x06, sp)
       0081A0 88               [ 1]  264 	push	a
-      0081A1 CD 98 02         [ 4]  265 	call	_I2C_SendData
+      0081A1 CD 98 05         [ 4]  265 	call	_I2C_SendData
       0081A4 84               [ 1]  266 	pop	a
                                     267 ;	user/RTC_pcf8563.c: 61: while(!I2C_CheckEvent(I2C_FLAG_TRANSFERFINISHED));
       0081A5                        268 00107$:
       0081A5 4B 04            [ 1]  269 	push	#0x04
       0081A7 4B 01            [ 1]  270 	push	#0x01
-      0081A9 CD 98 09         [ 4]  271 	call	_I2C_CheckEvent
+      0081A9 CD 98 0C         [ 4]  271 	call	_I2C_CheckEvent
       0081AC 85               [ 2]  272 	popw	x
       0081AD 4D               [ 1]  273 	tnz	a
       0081AE 27 F5            [ 1]  274 	jreq	00107$
                                     275 ;	user/RTC_pcf8563.c: 64: I2C_GenerateSTART(ENABLE);
       0081B0 4B 01            [ 1]  276 	push	#0x01
-      0081B2 CD 97 4F         [ 4]  277 	call	_I2C_GenerateSTART
+      0081B2 CD 97 52         [ 4]  277 	call	_I2C_GenerateSTART
       0081B5 84               [ 1]  278 	pop	a
                                     279 ;	user/RTC_pcf8563.c: 65: while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
       0081B6                        280 00110$:
       0081B6 4B 01            [ 1]  281 	push	#0x01
       0081B8 4B 03            [ 1]  282 	push	#0x03
-      0081BA CD 98 09         [ 4]  283 	call	_I2C_CheckEvent
+      0081BA CD 98 0C         [ 4]  283 	call	_I2C_CheckEvent
       0081BD 85               [ 2]  284 	popw	x
       0081BE 4D               [ 1]  285 	tnz	a
       0081BF 27 F5            [ 1]  286 	jreq	00110$
                                     287 ;	user/RTC_pcf8563.c: 67: I2C_Send7bitAddress(PCF8563_READ_ADDR, I2C_DIRECTION_RX);
       0081C1 4B 01            [ 1]  288 	push	#0x01
       0081C3 4B A3            [ 1]  289 	push	#0xa3
-      0081C5 CD 97 F3         [ 4]  290 	call	_I2C_Send7bitAddress
+      0081C5 CD 97 F6         [ 4]  290 	call	_I2C_Send7bitAddress
       0081C8 85               [ 2]  291 	popw	x
                                     292 ;	user/RTC_pcf8563.c: 69: while(!I2C_CheckEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
       0081C9                        293 00113$:
       0081C9 4B 02            [ 1]  294 	push	#0x02
       0081CB 4B 03            [ 1]  295 	push	#0x03
-      0081CD CD 98 09         [ 4]  296 	call	_I2C_CheckEvent
+      0081CD CD 98 0C         [ 4]  296 	call	_I2C_CheckEvent
       0081D0 85               [ 2]  297 	popw	x
       0081D1 4D               [ 1]  298 	tnz	a
       0081D2 27 F5            [ 1]  299 	jreq	00113$
@@ -309,7 +309,7 @@
       0081E0 0A 01            [ 1]  309 	dec	(0x01, sp)
                                     310 ;	user/RTC_pcf8563.c: 74: I2C_AcknowledgeConfig(I2C_ACK_NONE);
       0081E2 4B 00            [ 1]  311 	push	#0x00
-      0081E4 CD 97 8D         [ 4]  312 	call	_I2C_AcknowledgeConfig
+      0081E4 CD 97 90         [ 4]  312 	call	_I2C_AcknowledgeConfig
       0081E7 84               [ 1]  313 	pop	a
                                     314 ;	user/RTC_pcf8563.c: 77: I2C->SR1;        
       0081E8 AE 52 17         [ 2]  315 	ldw	x, #0x5217
@@ -321,17 +321,17 @@
       0081F0                        321 00116$:
       0081F0 4B 40            [ 1]  322 	push	#0x40
       0081F2 4B 01            [ 1]  323 	push	#0x01
-      0081F4 CD 98 84         [ 4]  324 	call	_I2C_GetFlagStatus
+      0081F4 CD 98 87         [ 4]  324 	call	_I2C_GetFlagStatus
       0081F7 85               [ 2]  325 	popw	x
       0081F8 4D               [ 1]  326 	tnz	a
       0081F9 27 F5            [ 1]  327 	jreq	00116$
                                     328 ;	user/RTC_pcf8563.c: 80: *data = I2C_ReceiveData();
-      0081FB CD 97 EE         [ 4]  329 	call	_I2C_ReceiveData
+      0081FB CD 97 F1         [ 4]  329 	call	_I2C_ReceiveData
       0081FE 1E 02            [ 2]  330 	ldw	x, (0x02, sp)
       008200 F7               [ 1]  331 	ld	(x), a
                                     332 ;	user/RTC_pcf8563.c: 81: I2C_AcknowledgeConfig(I2C_ACK_CURR);
       008201 4B 01            [ 1]  333 	push	#0x01
-      008203 CD 97 8D         [ 4]  334 	call	_I2C_AcknowledgeConfig
+      008203 CD 97 90         [ 4]  334 	call	_I2C_AcknowledgeConfig
       008206 84               [ 1]  335 	pop	a
                                     336 ;	user/RTC_pcf8563.c: 82: data++;
       008207 1E 02            [ 2]  337 	ldw	x, (0x02, sp)
@@ -341,7 +341,7 @@
       00820E                        341 00121$:
                                     342 ;	user/RTC_pcf8563.c: 84: I2C_GenerateSTOP(ENABLE);
       00820E 4B 01            [ 1]  343 	push	#0x01
-      008210 CD 97 5D         [ 4]  344 	call	_I2C_GenerateSTOP
+      008210 CD 97 60         [ 4]  344 	call	_I2C_GenerateSTOP
       008213 5B 04            [ 2]  345 	addw	sp, #4
       008215 81               [ 4]  346 	ret
                                     347 ;	user/RTC_pcf8563.c: 88: uint8_t read_pcf(uint8_t regadd)
@@ -354,76 +354,76 @@
       008217                        354 00101$:
       008217 4B 02            [ 1]  355 	push	#0x02
       008219 4B 03            [ 1]  356 	push	#0x03
-      00821B CD 98 84         [ 4]  357 	call	_I2C_GetFlagStatus
+      00821B CD 98 87         [ 4]  357 	call	_I2C_GetFlagStatus
       00821E 85               [ 2]  358 	popw	x
       00821F A1 01            [ 1]  359 	cp	a, #0x01
       008221 27 F4            [ 1]  360 	jreq	00101$
                                     361 ;	user/RTC_pcf8563.c: 94: I2C_GenerateSTART(ENABLE);
       008223 4B 01            [ 1]  362 	push	#0x01
-      008225 CD 97 4F         [ 4]  363 	call	_I2C_GenerateSTART
+      008225 CD 97 52         [ 4]  363 	call	_I2C_GenerateSTART
       008228 84               [ 1]  364 	pop	a
                                     365 ;	user/RTC_pcf8563.c: 97: while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
       008229                        366 00104$:
       008229 4B 01            [ 1]  367 	push	#0x01
       00822B 4B 03            [ 1]  368 	push	#0x03
-      00822D CD 98 09         [ 4]  369 	call	_I2C_CheckEvent
+      00822D CD 98 0C         [ 4]  369 	call	_I2C_CheckEvent
       008230 85               [ 2]  370 	popw	x
       008231 4D               [ 1]  371 	tnz	a
       008232 27 F5            [ 1]  372 	jreq	00104$
                                     373 ;	user/RTC_pcf8563.c: 100: I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
       008234 4B 00            [ 1]  374 	push	#0x00
       008236 4B A2            [ 1]  375 	push	#0xa2
-      008238 CD 97 F3         [ 4]  376 	call	_I2C_Send7bitAddress
+      008238 CD 97 F6         [ 4]  376 	call	_I2C_Send7bitAddress
       00823B 85               [ 2]  377 	popw	x
                                     378 ;	user/RTC_pcf8563.c: 101: while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
       00823C                        379 00107$:
       00823C 4B 82            [ 1]  380 	push	#0x82
       00823E 4B 07            [ 1]  381 	push	#0x07
-      008240 CD 98 09         [ 4]  382 	call	_I2C_CheckEvent
+      008240 CD 98 0C         [ 4]  382 	call	_I2C_CheckEvent
       008243 85               [ 2]  383 	popw	x
       008244 4D               [ 1]  384 	tnz	a
       008245 27 F5            [ 1]  385 	jreq	00107$
                                     386 ;	user/RTC_pcf8563.c: 104: I2C_SendData(regadd);
       008247 7B 04            [ 1]  387 	ld	a, (0x04, sp)
       008249 88               [ 1]  388 	push	a
-      00824A CD 98 02         [ 4]  389 	call	_I2C_SendData
+      00824A CD 98 05         [ 4]  389 	call	_I2C_SendData
       00824D 84               [ 1]  390 	pop	a
                                     391 ;	user/RTC_pcf8563.c: 105: while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET);
       00824E                        392 00110$:
       00824E 4B 04            [ 1]  393 	push	#0x04
       008250 4B 01            [ 1]  394 	push	#0x01
-      008252 CD 98 84         [ 4]  395 	call	_I2C_GetFlagStatus
+      008252 CD 98 87         [ 4]  395 	call	_I2C_GetFlagStatus
       008255 85               [ 2]  396 	popw	x
       008256 4D               [ 1]  397 	tnz	a
       008257 27 F5            [ 1]  398 	jreq	00110$
                                     399 ;	user/RTC_pcf8563.c: 108: I2C_GenerateSTART( ENABLE);
       008259 4B 01            [ 1]  400 	push	#0x01
-      00825B CD 97 4F         [ 4]  401 	call	_I2C_GenerateSTART
+      00825B CD 97 52         [ 4]  401 	call	_I2C_GenerateSTART
       00825E 84               [ 1]  402 	pop	a
                                     403 ;	user/RTC_pcf8563.c: 109: while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
       00825F                        404 00113$:
       00825F 4B 01            [ 1]  405 	push	#0x01
       008261 4B 03            [ 1]  406 	push	#0x03
-      008263 CD 98 09         [ 4]  407 	call	_I2C_CheckEvent
+      008263 CD 98 0C         [ 4]  407 	call	_I2C_CheckEvent
       008266 85               [ 2]  408 	popw	x
       008267 4D               [ 1]  409 	tnz	a
       008268 27 F5            [ 1]  410 	jreq	00113$
                                     411 ;	user/RTC_pcf8563.c: 112: I2C_Send7bitAddress(PCF8563_READ_ADDR,I2C_DIRECTION_RX);
       00826A 4B 01            [ 1]  412 	push	#0x01
       00826C 4B A3            [ 1]  413 	push	#0xa3
-      00826E CD 97 F3         [ 4]  414 	call	_I2C_Send7bitAddress
+      00826E CD 97 F6         [ 4]  414 	call	_I2C_Send7bitAddress
       008271 85               [ 2]  415 	popw	x
                                     416 ;	user/RTC_pcf8563.c: 115: while(I2C_GetFlagStatus(I2C_FLAG_ADDRESSSENTMATCHED) == RESET);
       008272                        417 00116$:
       008272 4B 02            [ 1]  418 	push	#0x02
       008274 4B 01            [ 1]  419 	push	#0x01
-      008276 CD 98 84         [ 4]  420 	call	_I2C_GetFlagStatus
+      008276 CD 98 87         [ 4]  420 	call	_I2C_GetFlagStatus
       008279 85               [ 2]  421 	popw	x
       00827A 4D               [ 1]  422 	tnz	a
       00827B 27 F5            [ 1]  423 	jreq	00116$
                                     424 ;	user/RTC_pcf8563.c: 118: I2C_AcknowledgeConfig(I2C_ACK_NONE);
       00827D 4B 00            [ 1]  425 	push	#0x00
-      00827F CD 97 8D         [ 4]  426 	call	_I2C_AcknowledgeConfig
+      00827F CD 97 90         [ 4]  426 	call	_I2C_AcknowledgeConfig
       008282 84               [ 1]  427 	pop	a
                                     428 ;	user/RTC_pcf8563.c: 121: I2C->SR1;        I2C->SR3;
       008283 AE 52 17         [ 2]  429 	ldw	x, #0x5217
@@ -432,18 +432,18 @@
       00828A F6               [ 1]  432 	ld	a, (x)
                                     433 ;	user/RTC_pcf8563.c: 123: I2C_GenerateSTOP(ENABLE);
       00828B 4B 01            [ 1]  434 	push	#0x01
-      00828D CD 97 5D         [ 4]  435 	call	_I2C_GenerateSTOP
+      00828D CD 97 60         [ 4]  435 	call	_I2C_GenerateSTOP
       008290 84               [ 1]  436 	pop	a
                                     437 ;	user/RTC_pcf8563.c: 126: while (I2C_GetFlagStatus( I2C_FLAG_RXNOTEMPTY) == RESET);
       008291                        438 00119$:
       008291 4B 40            [ 1]  439 	push	#0x40
       008293 4B 01            [ 1]  440 	push	#0x01
-      008295 CD 98 84         [ 4]  441 	call	_I2C_GetFlagStatus
+      008295 CD 98 87         [ 4]  441 	call	_I2C_GetFlagStatus
       008298 85               [ 2]  442 	popw	x
       008299 4D               [ 1]  443 	tnz	a
       00829A 27 F5            [ 1]  444 	jreq	00119$
                                     445 ;	user/RTC_pcf8563.c: 129: data=I2C_ReceiveData();
-      00829C CD 97 EE         [ 4]  446 	call	_I2C_ReceiveData
+      00829C CD 97 F1         [ 4]  446 	call	_I2C_ReceiveData
       00829F 6B 01            [ 1]  447 	ld	(0x01, sp), a
                                     448 ;	user/RTC_pcf8563.c: 132: while(I2C->CR2 & I2C_CR2_STOP);
       0082A1                        449 00122$:
@@ -453,7 +453,7 @@
       0082A7 26 F8            [ 1]  453 	jrne	00122$
                                     454 ;	user/RTC_pcf8563.c: 134: I2C_AcknowledgeConfig( I2C_ACK_CURR);
       0082A9 4B 01            [ 1]  455 	push	#0x01
-      0082AB CD 97 8D         [ 4]  456 	call	_I2C_AcknowledgeConfig
+      0082AB CD 97 90         [ 4]  456 	call	_I2C_AcknowledgeConfig
       0082AE 84               [ 1]  457 	pop	a
                                     458 ;	user/RTC_pcf8563.c: 135: return (data);
       0082AF 7B 01            [ 1]  459 	ld	a, (0x01, sp)

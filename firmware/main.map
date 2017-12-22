@@ -23,13 +23,13 @@ Area                                    Addr        Size        Decimal Bytes (A
      0000001D  l_DATA                          
      0000001E  s_INITIALIZED                   
      00000083  l_HOME                          
-     00001B81  l_CODE                          
+     00001B84  l_CODE                          
      00008000  s_HOME                          
      00008083  s_GSINIT                        
      0000809D  s_GSFINAL                       
      000080A0  s_CODE                          
-     00009C21  s_INITIALIZER                   
-     00009C21  s_SSEG                          
+     00009C24  s_INITIALIZER                   
+     00009C24  s_SSEG                          
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
 Hexadecimal  [32-Bits]
@@ -78,7 +78,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CODE                                000080A0    00001B81 =        7041. bytes (REL,CON)
+CODE                                000080A0    00001B84 =        7044. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -115,129 +115,129 @@ CODE                                000080A0    00001B81 =        7041. bytes (R
      00008D56  _TIM4_UPD_OVF_IRQHandler           main
      00008D64  _IWDG_Config                       main
      00008D7C  _main                              main
-     00008ED4  _max7Seg                           max7219
-     00008F0D  _Max7219_Write_Byte                max7219
-     00008F64  _setCommand                        max7219
-     00008FA8  _Init                              max7219
-     00008FF9  _setIntensity                      max7219
-     00009003  _send7Seg                          max7219
-     00009047  _TIMER_Init                        timerTick
-     0000907A  _TIMER_Inc                         timerTick
-     000090A6  _TIMER_InitTime                    timerTick
-     000090B6  _TIMER_CheckTimeUS                 timerTick
-     000090FD  _TIMER_CheckTimeMS                 timerTick
-     00009173  _CLK_DeInit                        stm8s_clk
-     000091AB  _CLK_FastHaltWakeUpCmd             stm8s_clk
-     000091BF  _CLK_HSECmd                        stm8s_clk
-     000091CD  _CLK_HSICmd                        stm8s_clk
-     000091DB  _CLK_LSICmd                        stm8s_clk
-     000091EF  _CLK_CCOCmd                        stm8s_clk
+     00008ED7  _max7Seg                           max7219
+     00008F10  _Max7219_Write_Byte                max7219
+     00008F67  _setCommand                        max7219
+     00008FAB  _Init                              max7219
+     00008FFC  _setIntensity                      max7219
+     00009006  _send7Seg                          max7219
+     0000904A  _TIMER_Init                        timerTick
+     0000907D  _TIMER_Inc                         timerTick
+     000090A9  _TIMER_InitTime                    timerTick
+     000090B9  _TIMER_CheckTimeUS                 timerTick
+     00009100  _TIMER_CheckTimeMS                 timerTick
+     00009176  _CLK_DeInit                        stm8s_clk
+     000091AE  _CLK_FastHaltWakeUpCmd             stm8s_clk
+     000091C2  _CLK_HSECmd                        stm8s_clk
+     000091D0  _CLK_HSICmd                        stm8s_clk
+     000091DE  _CLK_LSICmd                        stm8s_clk
+     000091F2  _CLK_CCOCmd                        stm8s_clk
 ASxxxx Linker V03.00 + NoICE + sdld,  page 7.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CODE                                000080A0    00001B81 =        7041. bytes (REL,CON)
+CODE                                000080A0    00001B84 =        7044. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     000091FD  _CLK_ClockSwitchCmd                stm8s_clk
-     00009211  _CLK_SlowActiveHaltWakeUpCmd       stm8s_clk
-     00009225  _CLK_PeripheralClockConfig         stm8s_clk
-     0000927B  _CLK_ClockSwitchConfig             stm8s_clk
-     00009340  _CLK_HSIPrescalerConfig            stm8s_clk
-     00009352  _CLK_CCOConfig                     stm8s_clk
-     00009368  _CLK_ITConfig                      stm8s_clk
-     000093B7  _CLK_SYSCLKConfig                  stm8s_clk
-     000093EE  _CLK_SWIMConfig                    stm8s_clk
-     000093FC  _CLK_ClockSecuritySystemEnable     stm8s_clk
-     00009401  _CLK_GetSYSCLKSource               stm8s_clk
-     00009406  _CLK_GetClockFreq                  stm8s_clk
-     0000945F  _CLK_AdjustHSICalibrationValue     stm8s_clk
-     0000946C  _CLK_SYSCLKEmergencyClear          stm8s_clk
-     00009471  _CLK_GetFlagStatus                 stm8s_clk
-     000094B9  _CLK_GetITStatus                   stm8s_clk
-     000094DD  _CLK_ClearITPendingBit             stm8s_clk
-     000094F3  _HSIDivFactor                      stm8s_clk
-     000094F7  _CLKPrescTable                     stm8s_clk
-     000094FF  _GPIO_Init                         stm8s_gpio
-     0000958D  _GPIO_Write                        stm8s_gpio
-     00009593  _GPIO_WriteHigh                    stm8s_gpio
-     0000959A  _GPIO_WriteLow                     stm8s_gpio
-     000095A8  _GPIO_WriteReverse                 stm8s_gpio
-     000095AF  _GPIO_ReadOutputData               stm8s_gpio
-     000095B3  _GPIO_ReadInputData                stm8s_gpio
-     000095B8  _GPIO_ReadInputPin                 stm8s_gpio
-     000095BF  _GPIO_ExternalPullUpConfig         stm8s_gpio
-     000095DA  _I2C_DeInit                        stm8s_i2c
-     000095FF  _I2C_Init                          stm8s_i2c
-     0000972D  _I2C_Cmd                           stm8s_i2c
-     0000973B  _I2C_GeneralCallCmd                stm8s_i2c
-     0000974F  _I2C_GenerateSTART                 stm8s_i2c
-     0000975D  _I2C_GenerateSTOP                  stm8s_i2c
-     00009771  _I2C_SoftwareResetCmd              stm8s_i2c
-     0000977F  _I2C_StretchClockCmd               stm8s_i2c
-     0000978D  _I2C_AcknowledgeConfig             stm8s_i2c
-     000097B6  _I2C_ITConfig                      stm8s_i2c
-     000097D8  _I2C_FastModeDutyCycleConfig       stm8s_i2c
-     000097EE  _I2C_ReceiveData                   stm8s_i2c
-     000097F3  _I2C_Send7bitAddress               stm8s_i2c
-     00009802  _I2C_SendData                      stm8s_i2c
-     00009809  _I2C_CheckEvent                    stm8s_i2c
-     00009854  _I2C_GetLastEvent                  stm8s_i2c
-     00009884  _I2C_GetFlagStatus                 stm8s_i2c
-     000098BB  _I2C_ClearFlag                     stm8s_i2c
-     000098C7  _I2C_GetITStatus                   stm8s_i2c
-     00009916  _I2C_ClearITPendingBit             stm8s_i2c
-     00009922  _IWDG_WriteAccessCmd               stm8s_iwdg
-     00009929  _IWDG_SetPrescaler                 stm8s_iwdg
-     00009930  _IWDG_SetReload                    stm8s_iwdg
+     00009200  _CLK_ClockSwitchCmd                stm8s_clk
+     00009214  _CLK_SlowActiveHaltWakeUpCmd       stm8s_clk
+     00009228  _CLK_PeripheralClockConfig         stm8s_clk
+     0000927E  _CLK_ClockSwitchConfig             stm8s_clk
+     00009343  _CLK_HSIPrescalerConfig            stm8s_clk
+     00009355  _CLK_CCOConfig                     stm8s_clk
+     0000936B  _CLK_ITConfig                      stm8s_clk
+     000093BA  _CLK_SYSCLKConfig                  stm8s_clk
+     000093F1  _CLK_SWIMConfig                    stm8s_clk
+     000093FF  _CLK_ClockSecuritySystemEnable     stm8s_clk
+     00009404  _CLK_GetSYSCLKSource               stm8s_clk
+     00009409  _CLK_GetClockFreq                  stm8s_clk
+     00009462  _CLK_AdjustHSICalibrationValue     stm8s_clk
+     0000946F  _CLK_SYSCLKEmergencyClear          stm8s_clk
+     00009474  _CLK_GetFlagStatus                 stm8s_clk
+     000094BC  _CLK_GetITStatus                   stm8s_clk
+     000094E0  _CLK_ClearITPendingBit             stm8s_clk
+     000094F6  _HSIDivFactor                      stm8s_clk
+     000094FA  _CLKPrescTable                     stm8s_clk
+     00009502  _GPIO_Init                         stm8s_gpio
+     00009590  _GPIO_Write                        stm8s_gpio
+     00009596  _GPIO_WriteHigh                    stm8s_gpio
+     0000959D  _GPIO_WriteLow                     stm8s_gpio
+     000095AB  _GPIO_WriteReverse                 stm8s_gpio
+     000095B2  _GPIO_ReadOutputData               stm8s_gpio
+     000095B6  _GPIO_ReadInputData                stm8s_gpio
+     000095BB  _GPIO_ReadInputPin                 stm8s_gpio
+     000095C2  _GPIO_ExternalPullUpConfig         stm8s_gpio
+     000095DD  _I2C_DeInit                        stm8s_i2c
+     00009602  _I2C_Init                          stm8s_i2c
+     00009730  _I2C_Cmd                           stm8s_i2c
+     0000973E  _I2C_GeneralCallCmd                stm8s_i2c
+     00009752  _I2C_GenerateSTART                 stm8s_i2c
+     00009760  _I2C_GenerateSTOP                  stm8s_i2c
+     00009774  _I2C_SoftwareResetCmd              stm8s_i2c
+     00009782  _I2C_StretchClockCmd               stm8s_i2c
+     00009790  _I2C_AcknowledgeConfig             stm8s_i2c
+     000097B9  _I2C_ITConfig                      stm8s_i2c
+     000097DB  _I2C_FastModeDutyCycleConfig       stm8s_i2c
+     000097F1  _I2C_ReceiveData                   stm8s_i2c
+     000097F6  _I2C_Send7bitAddress               stm8s_i2c
+     00009805  _I2C_SendData                      stm8s_i2c
+     0000980C  _I2C_CheckEvent                    stm8s_i2c
+     00009857  _I2C_GetLastEvent                  stm8s_i2c
+     00009887  _I2C_GetFlagStatus                 stm8s_i2c
+     000098BE  _I2C_ClearFlag                     stm8s_i2c
+     000098CA  _I2C_GetITStatus                   stm8s_i2c
+     00009919  _I2C_ClearITPendingBit             stm8s_i2c
+     00009925  _IWDG_WriteAccessCmd               stm8s_iwdg
+     0000992C  _IWDG_SetPrescaler                 stm8s_iwdg
+     00009933  _IWDG_SetReload                    stm8s_iwdg
 ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CODE                                000080A0    00001B81 =        7041. bytes (REL,CON)
+CODE                                000080A0    00001B84 =        7044. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00009937  _IWDG_ReloadCounter                stm8s_iwdg
-     0000993C  _IWDG_Enable                       stm8s_iwdg
-     00009941  _SPI_DeInit                        stm8s_spi
-     00009956  _SPI_Init                          stm8s_spi
-     00009991  _SPI_Cmd                           stm8s_spi
-     000099A5  _SPI_ITConfig                      stm8s_spi
-     000099DB  _SPI_SendData                      stm8s_spi
-     000099E2  _SPI_ReceiveData                   stm8s_spi
-     000099E7  _SPI_NSSInternalSoftwareCmd        stm8s_spi
-     000099F5  _SPI_TransmitCRC                   stm8s_spi
-     000099FD  _SPI_CalculateCRCCmd               stm8s_spi
-     00009A11  _SPI_GetCRC                        stm8s_spi
-     00009A1F  _SPI_ResetCRC                      stm8s_spi
-     00009A2C  _SPI_GetCRCPolynomial              stm8s_spi
-     00009A31  _SPI_BiDirectionalLineConfig       stm8s_spi
-     00009A45  _SPI_GetFlagStatus                 stm8s_spi
-     00009A53  _SPI_ClearFlag                     stm8s_spi
-     00009A5B  _SPI_GetITStatus                   stm8s_spi
-     00009AA2  _SPI_ClearITPendingBit             stm8s_spi
-     00009ABD  _TIM4_DeInit                       stm8s_tim4
-     00009AD6  _TIM4_TimeBaseInit                 stm8s_tim4
-     00009AE3  _TIM4_Cmd                          stm8s_tim4
-     00009AE8  _TIM4_ITConfig                     stm8s_tim4
-     00009AF3  _TIM4_GetCounter                   stm8s_tim4
-     00009AF8  _TIM4_GetFlagStatus                stm8s_tim4
-     00009B06  _TIM4_ClearFlag                    stm8s_tim4
-     00009B0E  _TIM4_ClearITPendingBit            stm8s_tim4
-     00009B16  __divulong                         
-     00009B70  _memset                            _memset
-     00009B91  __mullong                          
-     00009C0D  __divsint                          
+     0000993A  _IWDG_ReloadCounter                stm8s_iwdg
+     0000993F  _IWDG_Enable                       stm8s_iwdg
+     00009944  _SPI_DeInit                        stm8s_spi
+     00009959  _SPI_Init                          stm8s_spi
+     00009994  _SPI_Cmd                           stm8s_spi
+     000099A8  _SPI_ITConfig                      stm8s_spi
+     000099DE  _SPI_SendData                      stm8s_spi
+     000099E5  _SPI_ReceiveData                   stm8s_spi
+     000099EA  _SPI_NSSInternalSoftwareCmd        stm8s_spi
+     000099F8  _SPI_TransmitCRC                   stm8s_spi
+     00009A00  _SPI_CalculateCRCCmd               stm8s_spi
+     00009A14  _SPI_GetCRC                        stm8s_spi
+     00009A22  _SPI_ResetCRC                      stm8s_spi
+     00009A2F  _SPI_GetCRCPolynomial              stm8s_spi
+     00009A34  _SPI_BiDirectionalLineConfig       stm8s_spi
+     00009A48  _SPI_GetFlagStatus                 stm8s_spi
+     00009A56  _SPI_ClearFlag                     stm8s_spi
+     00009A5E  _SPI_GetITStatus                   stm8s_spi
+     00009AA5  _SPI_ClearITPendingBit             stm8s_spi
+     00009AC0  _TIM4_DeInit                       stm8s_tim4
+     00009AD9  _TIM4_TimeBaseInit                 stm8s_tim4
+     00009AE6  _TIM4_Cmd                          stm8s_tim4
+     00009AEB  _TIM4_ITConfig                     stm8s_tim4
+     00009AF6  _TIM4_GetCounter                   stm8s_tim4
+     00009AFB  _TIM4_GetFlagStatus                stm8s_tim4
+     00009B09  _TIM4_ClearFlag                    stm8s_tim4
+     00009B11  _TIM4_ClearITPendingBit            stm8s_tim4
+     00009B19  __divulong                         
+     00009B73  _memset                            _memset
+     00009B94  __mullong                          
+     00009C10  __divsint                          
 ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-SSEG                                00009C21    00000001 =           1. bytes (REL,CON)
+SSEG                                00009C24    00000001 =           1. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------

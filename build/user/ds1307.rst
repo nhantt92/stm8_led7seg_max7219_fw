@@ -70,27 +70,27 @@
       0087AF                         70 _DS1307_Init:
       0087AF 88               [ 1]   71 	push	a
                                      72 ;	user/ds1307.c: 9: Input_Clock = CLK_GetClockFreq()/1000000;
-      0087B0 CD 94 06         [ 4]   73 	call	_CLK_GetClockFreq
+      0087B0 CD 94 09         [ 4]   73 	call	_CLK_GetClockFreq
       0087B3 4B 40            [ 1]   74 	push	#0x40
       0087B5 4B 42            [ 1]   75 	push	#0x42
       0087B7 4B 0F            [ 1]   76 	push	#0x0f
       0087B9 4B 00            [ 1]   77 	push	#0x00
       0087BB 89               [ 2]   78 	pushw	x
       0087BC 90 89            [ 2]   79 	pushw	y
-      0087BE CD 9B 16         [ 4]   80 	call	__divulong
+      0087BE CD 9B 19         [ 4]   80 	call	__divulong
       0087C1 5B 08            [ 2]   81 	addw	sp, #8
       0087C3 9F               [ 1]   82 	ld	a, xl
       0087C4 6B 01            [ 1]   83 	ld	(0x01, sp), a
                                      84 ;	user/ds1307.c: 10: I2C_DeInit();
-      0087C6 CD 95 DA         [ 4]   85 	call	_I2C_DeInit
+      0087C6 CD 95 DD         [ 4]   85 	call	_I2C_DeInit
                                      86 ;	user/ds1307.c: 11: CLK_PeripheralClockConfig(CLK_PERIPHERAL_I2C, ENABLE);
       0087C9 4B 01            [ 1]   87 	push	#0x01
       0087CB 4B 00            [ 1]   88 	push	#0x00
-      0087CD CD 92 25         [ 4]   89 	call	_CLK_PeripheralClockConfig
+      0087CD CD 92 28         [ 4]   89 	call	_CLK_PeripheralClockConfig
       0087D0 85               [ 2]   90 	popw	x
                                      91 ;	user/ds1307.c: 12: I2C_Cmd( ENABLE);
       0087D1 4B 01            [ 1]   92 	push	#0x01
-      0087D3 CD 97 2D         [ 4]   93 	call	_I2C_Cmd
+      0087D3 CD 97 30         [ 4]   93 	call	_I2C_Cmd
       0087D6 84               [ 1]   94 	pop	a
                                      95 ;	user/ds1307.c: 14: I2C_Init(DS1307_I2C_CLOCK, DS1307_I2C_ADDR, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT,Input_Clock);
       0087D7 7B 01            [ 1]   96 	ld	a, (0x01, sp)
@@ -104,7 +104,7 @@
       0087E6 4B 27            [ 1]  104 	push	#0x27
       0087E8 5F               [ 1]  105 	clrw	x
       0087E9 89               [ 2]  106 	pushw	x
-      0087EA CD 95 FF         [ 4]  107 	call	_I2C_Init
+      0087EA CD 96 02         [ 4]  107 	call	_I2C_Init
       0087ED 5B 0B            [ 2]  108 	addw	sp, #11
       0087EF 81               [ 4]  109 	ret
                                     110 ;	user/ds1307.c: 17: void DS1307_write_time(unsigned char hour1,unsigned char min1,unsigned char day1,unsigned char date1,unsigned char month1,unsigned char year1)
@@ -187,44 +187,44 @@
       008869                        187 00101$:
       008869 4B 02            [ 1]  188 	push	#0x02
       00886B 4B 03            [ 1]  189 	push	#0x03
-      00886D CD 98 84         [ 4]  190 	call	_I2C_GetFlagStatus
+      00886D CD 98 87         [ 4]  190 	call	_I2C_GetFlagStatus
       008870 85               [ 2]  191 	popw	x
       008871 A1 01            [ 1]  192 	cp	a, #0x01
       008873 27 F4            [ 1]  193 	jreq	00101$
                                     194 ;	user/ds1307.c: 29: I2C_GenerateSTART(ENABLE);
       008875 4B 01            [ 1]  195 	push	#0x01
-      008877 CD 97 4F         [ 4]  196 	call	_I2C_GenerateSTART
+      008877 CD 97 52         [ 4]  196 	call	_I2C_GenerateSTART
       00887A 84               [ 1]  197 	pop	a
                                     198 ;	user/ds1307.c: 32: while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
       00887B                        199 00104$:
       00887B 4B 01            [ 1]  200 	push	#0x01
       00887D 4B 03            [ 1]  201 	push	#0x03
-      00887F CD 98 09         [ 4]  202 	call	_I2C_CheckEvent
+      00887F CD 98 0C         [ 4]  202 	call	_I2C_CheckEvent
       008882 85               [ 2]  203 	popw	x
       008883 4D               [ 1]  204 	tnz	a
       008884 27 F5            [ 1]  205 	jreq	00104$
                                     206 ;	user/ds1307.c: 35: I2C_Send7bitAddress(DS1307_ADDR_WRITE,I2C_DIRECTION_TX);
       008886 4B 00            [ 1]  207 	push	#0x00
       008888 4B D0            [ 1]  208 	push	#0xd0
-      00888A CD 97 F3         [ 4]  209 	call	_I2C_Send7bitAddress
+      00888A CD 97 F6         [ 4]  209 	call	_I2C_Send7bitAddress
       00888D 85               [ 2]  210 	popw	x
                                     211 ;	user/ds1307.c: 38: while(!I2C_CheckEvent( I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
       00888E                        212 00107$:
       00888E 4B 82            [ 1]  213 	push	#0x82
       008890 4B 07            [ 1]  214 	push	#0x07
-      008892 CD 98 09         [ 4]  215 	call	_I2C_CheckEvent
+      008892 CD 98 0C         [ 4]  215 	call	_I2C_CheckEvent
       008895 85               [ 2]  216 	popw	x
       008896 4D               [ 1]  217 	tnz	a
       008897 27 F5            [ 1]  218 	jreq	00107$
                                     219 ;	user/ds1307.c: 42: I2C_SendData( 0x01);
       008899 4B 01            [ 1]  220 	push	#0x01
-      00889B CD 98 02         [ 4]  221 	call	_I2C_SendData
+      00889B CD 98 05         [ 4]  221 	call	_I2C_SendData
       00889E 84               [ 1]  222 	pop	a
                                     223 ;	user/ds1307.c: 45: while(!I2C_CheckEvent( I2C_EVENT_MASTER_BYTE_TRANSMITTED));
       00889F                        224 00110$:
       00889F 4B 84            [ 1]  225 	push	#0x84
       0088A1 4B 07            [ 1]  226 	push	#0x07
-      0088A3 CD 98 09         [ 4]  227 	call	_I2C_CheckEvent
+      0088A3 CD 98 0C         [ 4]  227 	call	_I2C_CheckEvent
       0088A6 85               [ 2]  228 	popw	x
       0088A7 4D               [ 1]  229 	tnz	a
       0088A8 27 F5            [ 1]  230 	jreq	00110$
@@ -232,13 +232,13 @@
       0088AA 1E 10            [ 2]  232 	ldw	x, (0x10, sp)
       0088AC F6               [ 1]  233 	ld	a, (x)
       0088AD 88               [ 1]  234 	push	a
-      0088AE CD 98 02         [ 4]  235 	call	_I2C_SendData
+      0088AE CD 98 05         [ 4]  235 	call	_I2C_SendData
       0088B1 84               [ 1]  236 	pop	a
                                     237 ;	user/ds1307.c: 52: while(!I2C_GetFlagStatus( I2C_FLAG_TRANSFERFINISHED));
       0088B2                        238 00113$:
       0088B2 4B 04            [ 1]  239 	push	#0x04
       0088B4 4B 01            [ 1]  240 	push	#0x01
-      0088B6 CD 98 84         [ 4]  241 	call	_I2C_GetFlagStatus
+      0088B6 CD 98 87         [ 4]  241 	call	_I2C_GetFlagStatus
       0088B9 85               [ 2]  242 	popw	x
       0088BA 4D               [ 1]  243 	tnz	a
       0088BB 27 F5            [ 1]  244 	jreq	00113$
@@ -246,13 +246,13 @@
       0088BD 1E 0C            [ 2]  246 	ldw	x, (0x0c, sp)
       0088BF F6               [ 1]  247 	ld	a, (x)
       0088C0 88               [ 1]  248 	push	a
-      0088C1 CD 98 02         [ 4]  249 	call	_I2C_SendData
+      0088C1 CD 98 05         [ 4]  249 	call	_I2C_SendData
       0088C4 84               [ 1]  250 	pop	a
                                     251 ;	user/ds1307.c: 58: while(!I2C_GetFlagStatus( I2C_FLAG_TRANSFERFINISHED));
       0088C5                        252 00116$:
       0088C5 4B 04            [ 1]  253 	push	#0x04
       0088C7 4B 01            [ 1]  254 	push	#0x01
-      0088C9 CD 98 84         [ 4]  255 	call	_I2C_GetFlagStatus
+      0088C9 CD 98 87         [ 4]  255 	call	_I2C_GetFlagStatus
       0088CC 85               [ 2]  256 	popw	x
       0088CD 4D               [ 1]  257 	tnz	a
       0088CE 27 F5            [ 1]  258 	jreq	00116$
@@ -260,13 +260,13 @@
       0088D0 1E 08            [ 2]  260 	ldw	x, (0x08, sp)
       0088D2 F6               [ 1]  261 	ld	a, (x)
       0088D3 88               [ 1]  262 	push	a
-      0088D4 CD 98 02         [ 4]  263 	call	_I2C_SendData
+      0088D4 CD 98 05         [ 4]  263 	call	_I2C_SendData
       0088D7 84               [ 1]  264 	pop	a
                                     265 ;	user/ds1307.c: 64: while(!I2C_GetFlagStatus( I2C_FLAG_TRANSFERFINISHED));
       0088D8                        266 00119$:
       0088D8 4B 04            [ 1]  267 	push	#0x04
       0088DA 4B 01            [ 1]  268 	push	#0x01
-      0088DC CD 98 84         [ 4]  269 	call	_I2C_GetFlagStatus
+      0088DC CD 98 87         [ 4]  269 	call	_I2C_GetFlagStatus
       0088DF 85               [ 2]  270 	popw	x
       0088E0 4D               [ 1]  271 	tnz	a
       0088E1 27 F5            [ 1]  272 	jreq	00119$
@@ -274,13 +274,13 @@
       0088E3 1E 12            [ 2]  274 	ldw	x, (0x12, sp)
       0088E5 F6               [ 1]  275 	ld	a, (x)
       0088E6 88               [ 1]  276 	push	a
-      0088E7 CD 98 02         [ 4]  277 	call	_I2C_SendData
+      0088E7 CD 98 05         [ 4]  277 	call	_I2C_SendData
       0088EA 84               [ 1]  278 	pop	a
                                     279 ;	user/ds1307.c: 70: while(!I2C_GetFlagStatus( I2C_FLAG_TRANSFERFINISHED));
       0088EB                        280 00122$:
       0088EB 4B 04            [ 1]  281 	push	#0x04
       0088ED 4B 01            [ 1]  282 	push	#0x01
-      0088EF CD 98 84         [ 4]  283 	call	_I2C_GetFlagStatus
+      0088EF CD 98 87         [ 4]  283 	call	_I2C_GetFlagStatus
       0088F2 85               [ 2]  284 	popw	x
       0088F3 4D               [ 1]  285 	tnz	a
       0088F4 27 F5            [ 1]  286 	jreq	00122$
@@ -288,13 +288,13 @@
       0088F6 1E 0E            [ 2]  288 	ldw	x, (0x0e, sp)
       0088F8 F6               [ 1]  289 	ld	a, (x)
       0088F9 88               [ 1]  290 	push	a
-      0088FA CD 98 02         [ 4]  291 	call	_I2C_SendData
+      0088FA CD 98 05         [ 4]  291 	call	_I2C_SendData
       0088FD 84               [ 1]  292 	pop	a
                                     293 ;	user/ds1307.c: 76: while(!I2C_GetFlagStatus( I2C_FLAG_TRANSFERFINISHED));
       0088FE                        294 00125$:
       0088FE 4B 04            [ 1]  295 	push	#0x04
       008900 4B 01            [ 1]  296 	push	#0x01
-      008902 CD 98 84         [ 4]  297 	call	_I2C_GetFlagStatus
+      008902 CD 98 87         [ 4]  297 	call	_I2C_GetFlagStatus
       008905 85               [ 2]  298 	popw	x
       008906 4D               [ 1]  299 	tnz	a
       008907 27 F5            [ 1]  300 	jreq	00125$
@@ -302,19 +302,19 @@
       008909 1E 14            [ 2]  302 	ldw	x, (0x14, sp)
       00890B F6               [ 1]  303 	ld	a, (x)
       00890C 88               [ 1]  304 	push	a
-      00890D CD 98 02         [ 4]  305 	call	_I2C_SendData
+      00890D CD 98 05         [ 4]  305 	call	_I2C_SendData
       008910 84               [ 1]  306 	pop	a
                                     307 ;	user/ds1307.c: 82: while(!I2C_GetFlagStatus( I2C_FLAG_TRANSFERFINISHED));
       008911                        308 00128$:
       008911 4B 04            [ 1]  309 	push	#0x04
       008913 4B 01            [ 1]  310 	push	#0x01
-      008915 CD 98 84         [ 4]  311 	call	_I2C_GetFlagStatus
+      008915 CD 98 87         [ 4]  311 	call	_I2C_GetFlagStatus
       008918 85               [ 2]  312 	popw	x
       008919 4D               [ 1]  313 	tnz	a
       00891A 27 F5            [ 1]  314 	jreq	00128$
                                     315 ;	user/ds1307.c: 85: I2C_GenerateSTOP(ENABLE);
       00891C 4B 01            [ 1]  316 	push	#0x01
-      00891E CD 97 5D         [ 4]  317 	call	_I2C_GenerateSTOP
+      00891E CD 97 60         [ 4]  317 	call	_I2C_GenerateSTOP
       008921 84               [ 1]  318 	pop	a
                                     319 ;	user/ds1307.c: 88: I2C->SR1;		I2C->SR3;
       008922 AE 52 17         [ 2]  320 	ldw	x, #0x5217
@@ -413,44 +413,44 @@
       0089B8                        413 00101$:
       0089B8 4B 02            [ 1]  414 	push	#0x02
       0089BA 4B 03            [ 1]  415 	push	#0x03
-      0089BC CD 98 84         [ 4]  416 	call	_I2C_GetFlagStatus
+      0089BC CD 98 87         [ 4]  416 	call	_I2C_GetFlagStatus
       0089BF 85               [ 2]  417 	popw	x
       0089C0 A1 01            [ 1]  418 	cp	a, #0x01
       0089C2 27 F4            [ 1]  419 	jreq	00101$
                                     420 ;	user/ds1307.c: 104: I2C_GenerateSTART(ENABLE);
       0089C4 4B 01            [ 1]  421 	push	#0x01
-      0089C6 CD 97 4F         [ 4]  422 	call	_I2C_GenerateSTART
+      0089C6 CD 97 52         [ 4]  422 	call	_I2C_GenerateSTART
       0089C9 84               [ 1]  423 	pop	a
                                     424 ;	user/ds1307.c: 107: while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
       0089CA                        425 00104$:
       0089CA 4B 01            [ 1]  426 	push	#0x01
       0089CC 4B 03            [ 1]  427 	push	#0x03
-      0089CE CD 98 09         [ 4]  428 	call	_I2C_CheckEvent
+      0089CE CD 98 0C         [ 4]  428 	call	_I2C_CheckEvent
       0089D1 85               [ 2]  429 	popw	x
       0089D2 4D               [ 1]  430 	tnz	a
       0089D3 27 F5            [ 1]  431 	jreq	00104$
                                     432 ;	user/ds1307.c: 110: I2C_Send7bitAddress((uint8_t)DS1307_ADDR_WRITE,I2C_DIRECTION_TX);
       0089D5 4B 00            [ 1]  433 	push	#0x00
       0089D7 4B D0            [ 1]  434 	push	#0xd0
-      0089D9 CD 97 F3         [ 4]  435 	call	_I2C_Send7bitAddress
+      0089D9 CD 97 F6         [ 4]  435 	call	_I2C_Send7bitAddress
       0089DC 85               [ 2]  436 	popw	x
                                     437 ;	user/ds1307.c: 113: while(!I2C_CheckEvent( I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
       0089DD                        438 00107$:
       0089DD 4B 82            [ 1]  439 	push	#0x82
       0089DF 4B 07            [ 1]  440 	push	#0x07
-      0089E1 CD 98 09         [ 4]  441 	call	_I2C_CheckEvent
+      0089E1 CD 98 0C         [ 4]  441 	call	_I2C_CheckEvent
       0089E4 85               [ 2]  442 	popw	x
       0089E5 4D               [ 1]  443 	tnz	a
       0089E6 27 F5            [ 1]  444 	jreq	00107$
                                     445 ;	user/ds1307.c: 116: I2C_SendData( 0x01);
       0089E8 4B 01            [ 1]  446 	push	#0x01
-      0089EA CD 98 02         [ 4]  447 	call	_I2C_SendData
+      0089EA CD 98 05         [ 4]  447 	call	_I2C_SendData
       0089ED 84               [ 1]  448 	pop	a
                                     449 ;	user/ds1307.c: 119: while(!I2C_CheckEvent( I2C_EVENT_MASTER_BYTE_TRANSMITTED));
       0089EE                        450 00110$:
       0089EE 4B 84            [ 1]  451 	push	#0x84
       0089F0 4B 07            [ 1]  452 	push	#0x07
-      0089F2 CD 98 09         [ 4]  453 	call	_I2C_CheckEvent
+      0089F2 CD 98 0C         [ 4]  453 	call	_I2C_CheckEvent
       0089F5 85               [ 2]  454 	popw	x
       0089F6 4D               [ 1]  455 	tnz	a
       0089F7 27 F5            [ 1]  456 	jreq	00110$
@@ -458,13 +458,13 @@
       0089F9 1E 12            [ 2]  458 	ldw	x, (0x12, sp)
       0089FB F6               [ 1]  459 	ld	a, (x)
       0089FC 88               [ 1]  460 	push	a
-      0089FD CD 98 02         [ 4]  461 	call	_I2C_SendData
+      0089FD CD 98 05         [ 4]  461 	call	_I2C_SendData
       008A00 84               [ 1]  462 	pop	a
                                     463 ;	user/ds1307.c: 126: while(!I2C_GetFlagStatus( I2C_FLAG_TRANSFERFINISHED));
       008A01                        464 00113$:
       008A01 4B 04            [ 1]  465 	push	#0x04
       008A03 4B 01            [ 1]  466 	push	#0x01
-      008A05 CD 98 84         [ 4]  467 	call	_I2C_GetFlagStatus
+      008A05 CD 98 87         [ 4]  467 	call	_I2C_GetFlagStatus
       008A08 85               [ 2]  468 	popw	x
       008A09 4D               [ 1]  469 	tnz	a
       008A0A 27 F5            [ 1]  470 	jreq	00113$
@@ -472,13 +472,13 @@
       008A0C 1E 0E            [ 2]  472 	ldw	x, (0x0e, sp)
       008A0E F6               [ 1]  473 	ld	a, (x)
       008A0F 88               [ 1]  474 	push	a
-      008A10 CD 98 02         [ 4]  475 	call	_I2C_SendData
+      008A10 CD 98 05         [ 4]  475 	call	_I2C_SendData
       008A13 84               [ 1]  476 	pop	a
                                     477 ;	user/ds1307.c: 132: while(!I2C_GetFlagStatus( I2C_FLAG_TRANSFERFINISHED));
       008A14                        478 00116$:
       008A14 4B 04            [ 1]  479 	push	#0x04
       008A16 4B 01            [ 1]  480 	push	#0x01
-      008A18 CD 98 84         [ 4]  481 	call	_I2C_GetFlagStatus
+      008A18 CD 98 87         [ 4]  481 	call	_I2C_GetFlagStatus
       008A1B 85               [ 2]  482 	popw	x
       008A1C 4D               [ 1]  483 	tnz	a
       008A1D 27 F5            [ 1]  484 	jreq	00116$
@@ -486,13 +486,13 @@
       008A1F 1E 16            [ 2]  486 	ldw	x, (0x16, sp)
       008A21 F6               [ 1]  487 	ld	a, (x)
       008A22 88               [ 1]  488 	push	a
-      008A23 CD 98 02         [ 4]  489 	call	_I2C_SendData
+      008A23 CD 98 05         [ 4]  489 	call	_I2C_SendData
       008A26 84               [ 1]  490 	pop	a
                                     491 ;	user/ds1307.c: 138: while(!I2C_GetFlagStatus( I2C_FLAG_TRANSFERFINISHED));
       008A27                        492 00119$:
       008A27 4B 04            [ 1]  493 	push	#0x04
       008A29 4B 01            [ 1]  494 	push	#0x01
-      008A2B CD 98 84         [ 4]  495 	call	_I2C_GetFlagStatus
+      008A2B CD 98 87         [ 4]  495 	call	_I2C_GetFlagStatus
       008A2E 85               [ 2]  496 	popw	x
       008A2F 4D               [ 1]  497 	tnz	a
       008A30 27 F5            [ 1]  498 	jreq	00119$
@@ -500,13 +500,13 @@
       008A32 1E 0A            [ 2]  500 	ldw	x, (0x0a, sp)
       008A34 F6               [ 1]  501 	ld	a, (x)
       008A35 88               [ 1]  502 	push	a
-      008A36 CD 98 02         [ 4]  503 	call	_I2C_SendData
+      008A36 CD 98 05         [ 4]  503 	call	_I2C_SendData
       008A39 84               [ 1]  504 	pop	a
                                     505 ;	user/ds1307.c: 144: while(!I2C_GetFlagStatus( I2C_FLAG_TRANSFERFINISHED));
       008A3A                        506 00122$:
       008A3A 4B 04            [ 1]  507 	push	#0x04
       008A3C 4B 01            [ 1]  508 	push	#0x01
-      008A3E CD 98 84         [ 4]  509 	call	_I2C_GetFlagStatus
+      008A3E CD 98 87         [ 4]  509 	call	_I2C_GetFlagStatus
       008A41 85               [ 2]  510 	popw	x
       008A42 4D               [ 1]  511 	tnz	a
       008A43 27 F5            [ 1]  512 	jreq	00122$
@@ -514,13 +514,13 @@
       008A45 1E 10            [ 2]  514 	ldw	x, (0x10, sp)
       008A47 F6               [ 1]  515 	ld	a, (x)
       008A48 88               [ 1]  516 	push	a
-      008A49 CD 98 02         [ 4]  517 	call	_I2C_SendData
+      008A49 CD 98 05         [ 4]  517 	call	_I2C_SendData
       008A4C 84               [ 1]  518 	pop	a
                                     519 ;	user/ds1307.c: 150: while(!I2C_GetFlagStatus( I2C_FLAG_TRANSFERFINISHED));
       008A4D                        520 00125$:
       008A4D 4B 04            [ 1]  521 	push	#0x04
       008A4F 4B 01            [ 1]  522 	push	#0x01
-      008A51 CD 98 84         [ 4]  523 	call	_I2C_GetFlagStatus
+      008A51 CD 98 87         [ 4]  523 	call	_I2C_GetFlagStatus
       008A54 85               [ 2]  524 	popw	x
       008A55 4D               [ 1]  525 	tnz	a
       008A56 27 F5            [ 1]  526 	jreq	00125$
@@ -528,19 +528,19 @@
       008A58 1E 08            [ 2]  528 	ldw	x, (0x08, sp)
       008A5A F6               [ 1]  529 	ld	a, (x)
       008A5B 88               [ 1]  530 	push	a
-      008A5C CD 98 02         [ 4]  531 	call	_I2C_SendData
+      008A5C CD 98 05         [ 4]  531 	call	_I2C_SendData
       008A5F 84               [ 1]  532 	pop	a
                                     533 ;	user/ds1307.c: 156: while(!I2C_GetFlagStatus( I2C_FLAG_TRANSFERFINISHED));
       008A60                        534 00128$:
       008A60 4B 04            [ 1]  535 	push	#0x04
       008A62 4B 01            [ 1]  536 	push	#0x01
-      008A64 CD 98 84         [ 4]  537 	call	_I2C_GetFlagStatus
+      008A64 CD 98 87         [ 4]  537 	call	_I2C_GetFlagStatus
       008A67 85               [ 2]  538 	popw	x
       008A68 4D               [ 1]  539 	tnz	a
       008A69 27 F5            [ 1]  540 	jreq	00128$
                                     541 ;	user/ds1307.c: 159: I2C_GenerateSTOP(ENABLE);
       008A6B 4B 01            [ 1]  542 	push	#0x01
-      008A6D CD 97 5D         [ 4]  543 	call	_I2C_GenerateSTOP
+      008A6D CD 97 60         [ 4]  543 	call	_I2C_GenerateSTOP
       008A70 84               [ 1]  544 	pop	a
                                     545 ;	user/ds1307.c: 162: I2C->SR1;        I2C->SR3;
       008A71 AE 52 17         [ 2]  546 	ldw	x, #0x5217
@@ -828,76 +828,76 @@
       008BDC                        828 00101$:
       008BDC 4B 02            [ 1]  829 	push	#0x02
       008BDE 4B 03            [ 1]  830 	push	#0x03
-      008BE0 CD 98 84         [ 4]  831 	call	_I2C_GetFlagStatus
+      008BE0 CD 98 87         [ 4]  831 	call	_I2C_GetFlagStatus
       008BE3 85               [ 2]  832 	popw	x
       008BE4 A1 01            [ 1]  833 	cp	a, #0x01
       008BE6 27 F4            [ 1]  834 	jreq	00101$
                                     835 ;	user/ds1307.c: 244: I2C_GenerateSTART(ENABLE);
       008BE8 4B 01            [ 1]  836 	push	#0x01
-      008BEA CD 97 4F         [ 4]  837 	call	_I2C_GenerateSTART
+      008BEA CD 97 52         [ 4]  837 	call	_I2C_GenerateSTART
       008BED 84               [ 1]  838 	pop	a
                                     839 ;	user/ds1307.c: 247: while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
       008BEE                        840 00104$:
       008BEE 4B 01            [ 1]  841 	push	#0x01
       008BF0 4B 03            [ 1]  842 	push	#0x03
-      008BF2 CD 98 09         [ 4]  843 	call	_I2C_CheckEvent
+      008BF2 CD 98 0C         [ 4]  843 	call	_I2C_CheckEvent
       008BF5 85               [ 2]  844 	popw	x
       008BF6 4D               [ 1]  845 	tnz	a
       008BF7 27 F5            [ 1]  846 	jreq	00104$
                                     847 ;	user/ds1307.c: 250: I2C_Send7bitAddress(0xD0,I2C_DIRECTION_TX);
       008BF9 4B 00            [ 1]  848 	push	#0x00
       008BFB 4B D0            [ 1]  849 	push	#0xd0
-      008BFD CD 97 F3         [ 4]  850 	call	_I2C_Send7bitAddress
+      008BFD CD 97 F6         [ 4]  850 	call	_I2C_Send7bitAddress
       008C00 85               [ 2]  851 	popw	x
                                     852 ;	user/ds1307.c: 251: while(!I2C_CheckEvent( I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
       008C01                        853 00107$:
       008C01 4B 82            [ 1]  854 	push	#0x82
       008C03 4B 07            [ 1]  855 	push	#0x07
-      008C05 CD 98 09         [ 4]  856 	call	_I2C_CheckEvent
+      008C05 CD 98 0C         [ 4]  856 	call	_I2C_CheckEvent
       008C08 85               [ 2]  857 	popw	x
       008C09 4D               [ 1]  858 	tnz	a
       008C0A 27 F5            [ 1]  859 	jreq	00107$
                                     860 ;	user/ds1307.c: 254: I2C_SendData(regadd);
       008C0C 7B 04            [ 1]  861 	ld	a, (0x04, sp)
       008C0E 88               [ 1]  862 	push	a
-      008C0F CD 98 02         [ 4]  863 	call	_I2C_SendData
+      008C0F CD 98 05         [ 4]  863 	call	_I2C_SendData
       008C12 84               [ 1]  864 	pop	a
                                     865 ;	user/ds1307.c: 255: while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET);
       008C13                        866 00110$:
       008C13 4B 04            [ 1]  867 	push	#0x04
       008C15 4B 01            [ 1]  868 	push	#0x01
-      008C17 CD 98 84         [ 4]  869 	call	_I2C_GetFlagStatus
+      008C17 CD 98 87         [ 4]  869 	call	_I2C_GetFlagStatus
       008C1A 85               [ 2]  870 	popw	x
       008C1B 4D               [ 1]  871 	tnz	a
       008C1C 27 F5            [ 1]  872 	jreq	00110$
                                     873 ;	user/ds1307.c: 258: I2C_GenerateSTART( ENABLE);
       008C1E 4B 01            [ 1]  874 	push	#0x01
-      008C20 CD 97 4F         [ 4]  875 	call	_I2C_GenerateSTART
+      008C20 CD 97 52         [ 4]  875 	call	_I2C_GenerateSTART
       008C23 84               [ 1]  876 	pop	a
                                     877 ;	user/ds1307.c: 259: while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
       008C24                        878 00113$:
       008C24 4B 01            [ 1]  879 	push	#0x01
       008C26 4B 03            [ 1]  880 	push	#0x03
-      008C28 CD 98 09         [ 4]  881 	call	_I2C_CheckEvent
+      008C28 CD 98 0C         [ 4]  881 	call	_I2C_CheckEvent
       008C2B 85               [ 2]  882 	popw	x
       008C2C 4D               [ 1]  883 	tnz	a
       008C2D 27 F5            [ 1]  884 	jreq	00113$
                                     885 ;	user/ds1307.c: 262: I2C_Send7bitAddress(0xD0,I2C_DIRECTION_RX);
       008C2F 4B 01            [ 1]  886 	push	#0x01
       008C31 4B D0            [ 1]  887 	push	#0xd0
-      008C33 CD 97 F3         [ 4]  888 	call	_I2C_Send7bitAddress
+      008C33 CD 97 F6         [ 4]  888 	call	_I2C_Send7bitAddress
       008C36 85               [ 2]  889 	popw	x
                                     890 ;	user/ds1307.c: 265: while(I2C_GetFlagStatus( I2C_FLAG_ADDRESSSENTMATCHED) == RESET);
       008C37                        891 00116$:
       008C37 4B 02            [ 1]  892 	push	#0x02
       008C39 4B 01            [ 1]  893 	push	#0x01
-      008C3B CD 98 84         [ 4]  894 	call	_I2C_GetFlagStatus
+      008C3B CD 98 87         [ 4]  894 	call	_I2C_GetFlagStatus
       008C3E 85               [ 2]  895 	popw	x
       008C3F 4D               [ 1]  896 	tnz	a
       008C40 27 F5            [ 1]  897 	jreq	00116$
                                     898 ;	user/ds1307.c: 268: I2C_AcknowledgeConfig(I2C_ACK_NONE);
       008C42 4B 00            [ 1]  899 	push	#0x00
-      008C44 CD 97 8D         [ 4]  900 	call	_I2C_AcknowledgeConfig
+      008C44 CD 97 90         [ 4]  900 	call	_I2C_AcknowledgeConfig
       008C47 84               [ 1]  901 	pop	a
                                     902 ;	user/ds1307.c: 271: I2C->SR1;        I2C->SR3;
       008C48 AE 52 17         [ 2]  903 	ldw	x, #0x5217
@@ -906,18 +906,18 @@
       008C4F F6               [ 1]  906 	ld	a, (x)
                                     907 ;	user/ds1307.c: 273: I2C_GenerateSTOP(ENABLE);
       008C50 4B 01            [ 1]  908 	push	#0x01
-      008C52 CD 97 5D         [ 4]  909 	call	_I2C_GenerateSTOP
+      008C52 CD 97 60         [ 4]  909 	call	_I2C_GenerateSTOP
       008C55 84               [ 1]  910 	pop	a
                                     911 ;	user/ds1307.c: 276: while (I2C_GetFlagStatus( I2C_FLAG_RXNOTEMPTY) == RESET);
       008C56                        912 00119$:
       008C56 4B 40            [ 1]  913 	push	#0x40
       008C58 4B 01            [ 1]  914 	push	#0x01
-      008C5A CD 98 84         [ 4]  915 	call	_I2C_GetFlagStatus
+      008C5A CD 98 87         [ 4]  915 	call	_I2C_GetFlagStatus
       008C5D 85               [ 2]  916 	popw	x
       008C5E 4D               [ 1]  917 	tnz	a
       008C5F 27 F5            [ 1]  918 	jreq	00119$
                                     919 ;	user/ds1307.c: 279: data=I2C_ReceiveData();
-      008C61 CD 97 EE         [ 4]  920 	call	_I2C_ReceiveData
+      008C61 CD 97 F1         [ 4]  920 	call	_I2C_ReceiveData
       008C64 6B 01            [ 1]  921 	ld	(0x01, sp), a
                                     922 ;	user/ds1307.c: 282: while(I2C->CR2 & I2C_CR2_STOP);
       008C66                        923 00122$:
@@ -927,7 +927,7 @@
       008C6C 26 F8            [ 1]  927 	jrne	00122$
                                     928 ;	user/ds1307.c: 284: I2C_AcknowledgeConfig( I2C_ACK_CURR);
       008C6E 4B 01            [ 1]  929 	push	#0x01
-      008C70 CD 97 8D         [ 4]  930 	call	_I2C_AcknowledgeConfig
+      008C70 CD 97 90         [ 4]  930 	call	_I2C_AcknowledgeConfig
       008C73 84               [ 1]  931 	pop	a
                                     932 ;	user/ds1307.c: 285: return (data);
       008C74 7B 01            [ 1]  933 	ld	a, (0x01, sp)

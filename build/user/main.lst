@@ -233,15 +233,15 @@
                                     233 ;	 function GPIO_Config
                                     234 ;	-----------------------------------------
       000080                        235 _GPIO_Config:
-                                    236 ;	user/main.c: 50: GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_FAST);
-      000080 4B B0            [ 1]  237 	push	#0xb0
+                                    236 ;	user/main.c: 50: GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_IN_PU_NO_IT);
+      000080 4B 40            [ 1]  237 	push	#0x40
       000082 4B 10            [ 1]  238 	push	#0x10
       000084 4B 05            [ 1]  239 	push	#0x05
       000086 4B 50            [ 1]  240 	push	#0x50
       000088 CDr00r00         [ 4]  241 	call	_GPIO_Init
       00008B 5B 04            [ 2]  242 	addw	sp, #4
-                                    243 ;	user/main.c: 51: GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_OD_HIZ_FAST);
-      00008D 4B B0            [ 1]  244 	push	#0xb0
+                                    243 ;	user/main.c: 51: GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_IN_PU_NO_IT);
+      00008D 4B 40            [ 1]  244 	push	#0x40
       00008F 4B 20            [ 1]  245 	push	#0x20
       000091 4B 05            [ 1]  246 	push	#0x05
       000093 4B 50            [ 1]  247 	push	#0x50
@@ -307,231 +307,232 @@
       0000CD 52 16            [ 2]  307 	sub	sp, #22
                                     308 ;	user/main.c: 159: dateTime.second = 40;
       0000CF 96               [ 1]  309 	ldw	x, sp
-      0000D0 5C               [ 2]  310 	incw	x
-      0000D1 A6 28            [ 1]  311 	ld	a, #0x28
-      0000D3 F7               [ 1]  312 	ld	(x), a
-                                    313 ;	user/main.c: 160: dateTime.minute = 32;
-      0000D4 96               [ 1]  314 	ldw	x, sp
-      0000D5 5C               [ 2]  315 	incw	x
-      0000D6 1F 13            [ 2]  316 	ldw	(0x13, sp), x
-      0000D8 1E 13            [ 2]  317 	ldw	x, (0x13, sp)
-      0000DA 5C               [ 2]  318 	incw	x
-      0000DB A6 20            [ 1]  319 	ld	a, #0x20
-      0000DD F7               [ 1]  320 	ld	(x), a
-                                    321 ;	user/main.c: 161: dateTime.hour = 14;
-      0000DE 1E 13            [ 2]  322 	ldw	x, (0x13, sp)
-      0000E0 5C               [ 2]  323 	incw	x
-      0000E1 5C               [ 2]  324 	incw	x
-      0000E2 A6 0E            [ 1]  325 	ld	a, #0x0e
-      0000E4 F7               [ 1]  326 	ld	(x), a
-                                    327 ;	user/main.c: 162: dateTime.day = 22;
-      0000E5 1E 13            [ 2]  328 	ldw	x, (0x13, sp)
-      0000E7 A6 16            [ 1]  329 	ld	a, #0x16
-      0000E9 E7 03            [ 1]  330 	ld	(0x0003, x), a
-                                    331 ;	user/main.c: 163: dateTime.weekday = 6;
-      0000EB 1E 13            [ 2]  332 	ldw	x, (0x13, sp)
-      0000ED A6 06            [ 1]  333 	ld	a, #0x06
-      0000EF E7 04            [ 1]  334 	ld	(0x0004, x), a
-                                    335 ;	user/main.c: 164: dateTime.month = 12;
-      0000F1 1E 13            [ 2]  336 	ldw	x, (0x13, sp)
-      0000F3 A6 0C            [ 1]  337 	ld	a, #0x0c
-      0000F5 E7 05            [ 1]  338 	ld	(0x0005, x), a
-                                    339 ;	user/main.c: 165: dateTime.year = 2017;
-      0000F7 1E 13            [ 2]  340 	ldw	x, (0x13, sp)
-      0000F9 1C 00 06         [ 2]  341 	addw	x, #0x0006
-      0000FC 90 AE 07 E1      [ 2]  342 	ldw	y, #0x07e1
-      000100 FF               [ 2]  343 	ldw	(x), y
-                                    344 ;	user/main.c: 166: clock_setup();
-      000101 CDr00r00         [ 4]  345 	call	_clock_setup
-                                    346 ;	user/main.c: 170: PCF_Init(PCF_ALARM_INTERRUPT_ENABLE | PCF_TIMER_INTERRUPT_ENABLE);
-      000104 4B 03            [ 1]  347 	push	#0x03
-      000106 CDr00r00         [ 4]  348 	call	_PCF_Init
-      000109 84               [ 1]  349 	pop	a
-                                    350 ;	user/main.c: 173: max7Seg(GPIOC, GPIO_PIN_6, GPIO_PIN_4, GPIO_PIN_5, 8);
-      00010A 4B 08            [ 1]  351 	push	#0x08
-      00010C 4B 20            [ 1]  352 	push	#0x20
-      00010E 4B 10            [ 1]  353 	push	#0x10
-      000110 4B 40            [ 1]  354 	push	#0x40
-      000112 4B 0A            [ 1]  355 	push	#0x0a
-      000114 4B 50            [ 1]  356 	push	#0x50
-      000116 CDr00r00         [ 4]  357 	call	_max7Seg
-      000119 5B 06            [ 2]  358 	addw	sp, #6
-                                    359 ;	user/main.c: 174: Init();
-      00011B CDr00r00         [ 4]  360 	call	_Init
-                                    361 ;	user/main.c: 175: TIMER_Init();
-      00011E CDr00r00         [ 4]  362 	call	_TIMER_Init
-                                    363 ;	user/main.c: 176: PCF_setClockOut(PCF_CLKOUT_1HZ);
-      000121 4B 13            [ 1]  364 	push	#0x13
-      000123 CDr00r00         [ 4]  365 	call	_PCF_setClockOut
-      000126 84               [ 1]  366 	pop	a
-                                    367 ;	user/main.c: 177: delay(50);
-      000127 4B 32            [ 1]  368 	push	#0x32
-      000129 4B 00            [ 1]  369 	push	#0x00
-      00012B CDr00r9B         [ 4]  370 	call	_delay
-      00012E 85               [ 2]  371 	popw	x
-                                    372 ;	user/main.c: 178: PCF_setDateTime(&dateTime);
-      00012F 1E 13            [ 2]  373 	ldw	x, (0x13, sp)
-      000131 89               [ 2]  374 	pushw	x
-      000132 CDr00r00         [ 4]  375 	call	_PCF_setDateTime
-      000135 85               [ 2]  376 	popw	x
-                                    377 ;	user/main.c: 179: delay(50);
-      000136 4B 32            [ 1]  378 	push	#0x32
-      000138 4B 00            [ 1]  379 	push	#0x00
-      00013A CDr00r9B         [ 4]  380 	call	_delay
-      00013D 85               [ 2]  381 	popw	x
-                                    382 ;	user/main.c: 180: IWDG_Config();
-      00013E CDr00rB5         [ 4]  383 	call	_IWDG_Config
-                                    384 ;	user/main.c: 181: enableInterrupts();
-      000141 9A               [ 1]  385 	rim
-                                    386 ;	user/main.c: 182: setIntensity(0x03);
-      000142 4B 03            [ 1]  387 	push	#0x03
-      000144 CDr00r00         [ 4]  388 	call	_setIntensity
-      000147 84               [ 1]  389 	pop	a
-                                    390 ;	user/main.c: 183: TIMER_InitTime(&tick);
-      000148 AEr00r00         [ 2]  391 	ldw	x, #_tick+0
-      00014B 1F 11            [ 2]  392 	ldw	(0x11, sp), x
-      00014D 1E 11            [ 2]  393 	ldw	x, (0x11, sp)
-      00014F 89               [ 2]  394 	pushw	x
-      000150 CDr00r00         [ 4]  395 	call	_TIMER_InitTime
-      000153 85               [ 2]  396 	popw	x
-                                    397 ;	user/main.c: 184: send7Seg(DIG7, 0);
-      000154 4B 00            [ 1]  398 	push	#0x00
-      000156 4B 08            [ 1]  399 	push	#0x08
-      000158 CDr00r00         [ 4]  400 	call	_send7Seg
-      00015B 85               [ 2]  401 	popw	x
-                                    402 ;	user/main.c: 185: send7Seg(DIG6, 0);
-      00015C 4B 00            [ 1]  403 	push	#0x00
-      00015E 4B 07            [ 1]  404 	push	#0x07
-      000160 CDr00r00         [ 4]  405 	call	_send7Seg
-      000163 85               [ 2]  406 	popw	x
-                                    407 ;	user/main.c: 186: send7Seg(DIG5, 10);
-      000164 4B 0A            [ 1]  408 	push	#0x0a
-      000166 4B 06            [ 1]  409 	push	#0x06
-      000168 CDr00r00         [ 4]  410 	call	_send7Seg
-      00016B 85               [ 2]  411 	popw	x
-                                    412 ;	user/main.c: 187: send7Seg(DIG4, 0);
-      00016C 4B 00            [ 1]  413 	push	#0x00
-      00016E 4B 05            [ 1]  414 	push	#0x05
-      000170 CDr00r00         [ 4]  415 	call	_send7Seg
-      000173 85               [ 2]  416 	popw	x
-                                    417 ;	user/main.c: 188: send7Seg(DIG3, 0);
-      000174 4B 00            [ 1]  418 	push	#0x00
-      000176 4B 04            [ 1]  419 	push	#0x04
-      000178 CDr00r00         [ 4]  420 	call	_send7Seg
-      00017B 85               [ 2]  421 	popw	x
-                                    422 ;	user/main.c: 189: send7Seg(DIG2, 10);
-      00017C 4B 0A            [ 1]  423 	push	#0x0a
-      00017E 4B 03            [ 1]  424 	push	#0x03
-      000180 CDr00r00         [ 4]  425 	call	_send7Seg
-      000183 85               [ 2]  426 	popw	x
-                                    427 ;	user/main.c: 190: send7Seg(DIG1, 0);
-      000184 4B 00            [ 1]  428 	push	#0x00
-      000186 4B 02            [ 1]  429 	push	#0x02
-      000188 CDr00r00         [ 4]  430 	call	_send7Seg
-      00018B 85               [ 2]  431 	popw	x
-                                    432 ;	user/main.c: 191: send7Seg(DIG0, 0);
-      00018C 4B 00            [ 1]  433 	push	#0x00
-      00018E 4B 01            [ 1]  434 	push	#0x01
-      000190 CDr00r00         [ 4]  435 	call	_send7Seg
-      000193 85               [ 2]  436 	popw	x
-                                    437 ;	user/main.c: 192: while(TRUE) 
-      000194                        438 00104$:
-                                    439 ;	user/main.c: 214: if(TIMER_CheckTimeMS(&tick, 50) == 0)
-      000194 16 11            [ 2]  440 	ldw	y, (0x11, sp)
-      000196 4B 32            [ 1]  441 	push	#0x32
-      000198 5F               [ 1]  442 	clrw	x
-      000199 89               [ 2]  443 	pushw	x
-      00019A 4B 00            [ 1]  444 	push	#0x00
-      00019C 90 89            [ 2]  445 	pushw	y
-      00019E CDr00r00         [ 4]  446 	call	_TIMER_CheckTimeMS
-      0001A1 5B 06            [ 2]  447 	addw	sp, #6
-      0001A3 4D               [ 1]  448 	tnz	a
-      0001A4 26 EE            [ 1]  449 	jrne	00104$
-                                    450 ;	user/main.c: 216: PCF_getDateTime(&pcfDateTime);  
-      0001A6 96               [ 1]  451 	ldw	x, sp
-      0001A7 1C 00 09         [ 2]  452 	addw	x, #9
-      0001AA 1F 15            [ 2]  453 	ldw	(0x15, sp), x
-      0001AC 1E 15            [ 2]  454 	ldw	x, (0x15, sp)
-      0001AE 89               [ 2]  455 	pushw	x
-      0001AF CDr00r00         [ 4]  456 	call	_PCF_getDateTime
-      0001B2 85               [ 2]  457 	popw	x
-                                    458 ;	user/main.c: 217: send7Seg(DIG0, pcfDateTime.second%10);
-      0001B3 1E 15            [ 2]  459 	ldw	x, (0x15, sp)
-      0001B5 F6               [ 1]  460 	ld	a, (x)
-      0001B6 5F               [ 1]  461 	clrw	x
-      0001B7 97               [ 1]  462 	ld	xl, a
-      0001B8 A6 0A            [ 1]  463 	ld	a, #0x0a
-      0001BA 62               [ 2]  464 	div	x, a
-      0001BB 88               [ 1]  465 	push	a
-      0001BC 4B 01            [ 1]  466 	push	#0x01
-      0001BE CDr00r00         [ 4]  467 	call	_send7Seg
-      0001C1 85               [ 2]  468 	popw	x
-                                    469 ;	user/main.c: 218: send7Seg(DIG1, pcfDateTime.second/10);
-      0001C2 1E 15            [ 2]  470 	ldw	x, (0x15, sp)
-      0001C4 F6               [ 1]  471 	ld	a, (x)
-      0001C5 5F               [ 1]  472 	clrw	x
-      0001C6 97               [ 1]  473 	ld	xl, a
-      0001C7 A6 0A            [ 1]  474 	ld	a, #0x0a
-      0001C9 62               [ 2]  475 	div	x, a
-      0001CA 9F               [ 1]  476 	ld	a, xl
-      0001CB 88               [ 1]  477 	push	a
-      0001CC 4B 02            [ 1]  478 	push	#0x02
-      0001CE CDr00r00         [ 4]  479 	call	_send7Seg
-      0001D1 85               [ 2]  480 	popw	x
-                                    481 ;	user/main.c: 219: send7Seg(DIG3, pcfDateTime.minute%10);
-      0001D2 1E 15            [ 2]  482 	ldw	x, (0x15, sp)
-      0001D4 5C               [ 2]  483 	incw	x
-      0001D5 F6               [ 1]  484 	ld	a, (x)
-      0001D6 89               [ 2]  485 	pushw	x
-      0001D7 5F               [ 1]  486 	clrw	x
-      0001D8 97               [ 1]  487 	ld	xl, a
-      0001D9 A6 0A            [ 1]  488 	ld	a, #0x0a
-      0001DB 62               [ 2]  489 	div	x, a
-      0001DC 88               [ 1]  490 	push	a
-      0001DD 4B 04            [ 1]  491 	push	#0x04
-      0001DF CDr00r00         [ 4]  492 	call	_send7Seg
-      0001E2 85               [ 2]  493 	popw	x
-      0001E3 85               [ 2]  494 	popw	x
-                                    495 ;	user/main.c: 220: send7Seg(DIG4, pcfDateTime.minute/10);
-      0001E4 F6               [ 1]  496 	ld	a, (x)
-      0001E5 5F               [ 1]  497 	clrw	x
-      0001E6 97               [ 1]  498 	ld	xl, a
-      0001E7 A6 0A            [ 1]  499 	ld	a, #0x0a
-      0001E9 62               [ 2]  500 	div	x, a
-      0001EA 9F               [ 1]  501 	ld	a, xl
-      0001EB 88               [ 1]  502 	push	a
-      0001EC 4B 05            [ 1]  503 	push	#0x05
-      0001EE CDr00r00         [ 4]  504 	call	_send7Seg
-      0001F1 85               [ 2]  505 	popw	x
-                                    506 ;	user/main.c: 221: send7Seg(DIG6, pcfDateTime.hour%10);
-      0001F2 1E 15            [ 2]  507 	ldw	x, (0x15, sp)
-      0001F4 5C               [ 2]  508 	incw	x
-      0001F5 5C               [ 2]  509 	incw	x
-      0001F6 F6               [ 1]  510 	ld	a, (x)
-      0001F7 89               [ 2]  511 	pushw	x
-      0001F8 5F               [ 1]  512 	clrw	x
-      0001F9 97               [ 1]  513 	ld	xl, a
-      0001FA A6 0A            [ 1]  514 	ld	a, #0x0a
-      0001FC 62               [ 2]  515 	div	x, a
-      0001FD 88               [ 1]  516 	push	a
-      0001FE 4B 07            [ 1]  517 	push	#0x07
-      000200 CDr00r00         [ 4]  518 	call	_send7Seg
-      000203 85               [ 2]  519 	popw	x
-      000204 85               [ 2]  520 	popw	x
-                                    521 ;	user/main.c: 222: send7Seg(DIG7, pcfDateTime.hour/10);
-      000205 F6               [ 1]  522 	ld	a, (x)
-      000206 5F               [ 1]  523 	clrw	x
-      000207 97               [ 1]  524 	ld	xl, a
-      000208 A6 0A            [ 1]  525 	ld	a, #0x0a
-      00020A 62               [ 2]  526 	div	x, a
-      00020B 9F               [ 1]  527 	ld	a, xl
-      00020C 88               [ 1]  528 	push	a
-      00020D 4B 08            [ 1]  529 	push	#0x08
-      00020F CDr00r00         [ 4]  530 	call	_send7Seg
-      000212 85               [ 2]  531 	popw	x
-      000213 CCr01r94         [ 2]  532 	jp	00104$
-      000216 5B 16            [ 2]  533 	addw	sp, #22
-      000218 81               [ 4]  534 	ret
-                                    535 	.area CODE
-                                    536 	.area INITIALIZER
-                                    537 	.area CABS (ABS)
+      0000D0 A6 28            [ 1]  310 	ld	a, #0x28
+      0000D2 E7 09            [ 1]  311 	ld	(9, x), a
+                                    312 ;	user/main.c: 160: dateTime.minute = 32;
+      0000D4 96               [ 1]  313 	ldw	x, sp
+      0000D5 1C 00 09         [ 2]  314 	addw	x, #9
+      0000D8 1F 15            [ 2]  315 	ldw	(0x15, sp), x
+      0000DA 1E 15            [ 2]  316 	ldw	x, (0x15, sp)
+      0000DC 5C               [ 2]  317 	incw	x
+      0000DD A6 20            [ 1]  318 	ld	a, #0x20
+      0000DF F7               [ 1]  319 	ld	(x), a
+                                    320 ;	user/main.c: 161: dateTime.hour = 15;
+      0000E0 1E 15            [ 2]  321 	ldw	x, (0x15, sp)
+      0000E2 5C               [ 2]  322 	incw	x
+      0000E3 5C               [ 2]  323 	incw	x
+      0000E4 A6 0F            [ 1]  324 	ld	a, #0x0f
+      0000E6 F7               [ 1]  325 	ld	(x), a
+                                    326 ;	user/main.c: 162: dateTime.day = 22;
+      0000E7 1E 15            [ 2]  327 	ldw	x, (0x15, sp)
+      0000E9 A6 16            [ 1]  328 	ld	a, #0x16
+      0000EB E7 03            [ 1]  329 	ld	(0x0003, x), a
+                                    330 ;	user/main.c: 163: dateTime.weekday = 6;
+      0000ED 1E 15            [ 2]  331 	ldw	x, (0x15, sp)
+      0000EF A6 06            [ 1]  332 	ld	a, #0x06
+      0000F1 E7 04            [ 1]  333 	ld	(0x0004, x), a
+                                    334 ;	user/main.c: 164: dateTime.month = 12;
+      0000F3 1E 15            [ 2]  335 	ldw	x, (0x15, sp)
+      0000F5 A6 0C            [ 1]  336 	ld	a, #0x0c
+      0000F7 E7 05            [ 1]  337 	ld	(0x0005, x), a
+                                    338 ;	user/main.c: 165: dateTime.year = 2017;
+      0000F9 1E 15            [ 2]  339 	ldw	x, (0x15, sp)
+      0000FB 1C 00 06         [ 2]  340 	addw	x, #0x0006
+      0000FE 90 AE 07 E1      [ 2]  341 	ldw	y, #0x07e1
+      000102 FF               [ 2]  342 	ldw	(x), y
+                                    343 ;	user/main.c: 166: clock_setup();
+      000103 CDr00r00         [ 4]  344 	call	_clock_setup
+                                    345 ;	user/main.c: 167: GPIO_Config();
+      000106 CDr00r80         [ 4]  346 	call	_GPIO_Config
+                                    347 ;	user/main.c: 170: PCF_Init(PCF_ALARM_INTERRUPT_ENABLE | PCF_TIMER_INTERRUPT_ENABLE);
+      000109 4B 03            [ 1]  348 	push	#0x03
+      00010B CDr00r00         [ 4]  349 	call	_PCF_Init
+      00010E 84               [ 1]  350 	pop	a
+                                    351 ;	user/main.c: 173: max7Seg(GPIOC, GPIO_PIN_6, GPIO_PIN_4, GPIO_PIN_5, 8);
+      00010F 4B 08            [ 1]  352 	push	#0x08
+      000111 4B 20            [ 1]  353 	push	#0x20
+      000113 4B 10            [ 1]  354 	push	#0x10
+      000115 4B 40            [ 1]  355 	push	#0x40
+      000117 4B 0A            [ 1]  356 	push	#0x0a
+      000119 4B 50            [ 1]  357 	push	#0x50
+      00011B CDr00r00         [ 4]  358 	call	_max7Seg
+      00011E 5B 06            [ 2]  359 	addw	sp, #6
+                                    360 ;	user/main.c: 174: Init();
+      000120 CDr00r00         [ 4]  361 	call	_Init
+                                    362 ;	user/main.c: 175: TIMER_Init();
+      000123 CDr00r00         [ 4]  363 	call	_TIMER_Init
+                                    364 ;	user/main.c: 176: PCF_setClockOut(PCF_CLKOUT_1HZ);
+      000126 4B 13            [ 1]  365 	push	#0x13
+      000128 CDr00r00         [ 4]  366 	call	_PCF_setClockOut
+      00012B 84               [ 1]  367 	pop	a
+                                    368 ;	user/main.c: 177: delay(50);
+      00012C 4B 32            [ 1]  369 	push	#0x32
+      00012E 4B 00            [ 1]  370 	push	#0x00
+      000130 CDr00r9B         [ 4]  371 	call	_delay
+      000133 85               [ 2]  372 	popw	x
+                                    373 ;	user/main.c: 178: PCF_setDateTime(&dateTime);
+      000134 1E 15            [ 2]  374 	ldw	x, (0x15, sp)
+      000136 89               [ 2]  375 	pushw	x
+      000137 CDr00r00         [ 4]  376 	call	_PCF_setDateTime
+      00013A 85               [ 2]  377 	popw	x
+                                    378 ;	user/main.c: 179: delay(50);
+      00013B 4B 32            [ 1]  379 	push	#0x32
+      00013D 4B 00            [ 1]  380 	push	#0x00
+      00013F CDr00r9B         [ 4]  381 	call	_delay
+      000142 85               [ 2]  382 	popw	x
+                                    383 ;	user/main.c: 180: IWDG_Config();
+      000143 CDr00rB5         [ 4]  384 	call	_IWDG_Config
+                                    385 ;	user/main.c: 181: enableInterrupts();
+      000146 9A               [ 1]  386 	rim
+                                    387 ;	user/main.c: 182: setIntensity(0x03);
+      000147 4B 03            [ 1]  388 	push	#0x03
+      000149 CDr00r00         [ 4]  389 	call	_setIntensity
+      00014C 84               [ 1]  390 	pop	a
+                                    391 ;	user/main.c: 183: TIMER_InitTime(&tick);
+      00014D AEr00r00         [ 2]  392 	ldw	x, #_tick+0
+      000150 1F 11            [ 2]  393 	ldw	(0x11, sp), x
+      000152 1E 11            [ 2]  394 	ldw	x, (0x11, sp)
+      000154 89               [ 2]  395 	pushw	x
+      000155 CDr00r00         [ 4]  396 	call	_TIMER_InitTime
+      000158 85               [ 2]  397 	popw	x
+                                    398 ;	user/main.c: 184: send7Seg(DIG7, 0);
+      000159 4B 00            [ 1]  399 	push	#0x00
+      00015B 4B 08            [ 1]  400 	push	#0x08
+      00015D CDr00r00         [ 4]  401 	call	_send7Seg
+      000160 85               [ 2]  402 	popw	x
+                                    403 ;	user/main.c: 185: send7Seg(DIG6, 0);
+      000161 4B 00            [ 1]  404 	push	#0x00
+      000163 4B 07            [ 1]  405 	push	#0x07
+      000165 CDr00r00         [ 4]  406 	call	_send7Seg
+      000168 85               [ 2]  407 	popw	x
+                                    408 ;	user/main.c: 186: send7Seg(DIG5, 10);
+      000169 4B 0A            [ 1]  409 	push	#0x0a
+      00016B 4B 06            [ 1]  410 	push	#0x06
+      00016D CDr00r00         [ 4]  411 	call	_send7Seg
+      000170 85               [ 2]  412 	popw	x
+                                    413 ;	user/main.c: 187: send7Seg(DIG4, 0);
+      000171 4B 00            [ 1]  414 	push	#0x00
+      000173 4B 05            [ 1]  415 	push	#0x05
+      000175 CDr00r00         [ 4]  416 	call	_send7Seg
+      000178 85               [ 2]  417 	popw	x
+                                    418 ;	user/main.c: 188: send7Seg(DIG3, 0);
+      000179 4B 00            [ 1]  419 	push	#0x00
+      00017B 4B 04            [ 1]  420 	push	#0x04
+      00017D CDr00r00         [ 4]  421 	call	_send7Seg
+      000180 85               [ 2]  422 	popw	x
+                                    423 ;	user/main.c: 189: send7Seg(DIG2, 10);
+      000181 4B 0A            [ 1]  424 	push	#0x0a
+      000183 4B 03            [ 1]  425 	push	#0x03
+      000185 CDr00r00         [ 4]  426 	call	_send7Seg
+      000188 85               [ 2]  427 	popw	x
+                                    428 ;	user/main.c: 190: send7Seg(DIG1, 0);
+      000189 4B 00            [ 1]  429 	push	#0x00
+      00018B 4B 02            [ 1]  430 	push	#0x02
+      00018D CDr00r00         [ 4]  431 	call	_send7Seg
+      000190 85               [ 2]  432 	popw	x
+                                    433 ;	user/main.c: 191: send7Seg(DIG0, 0);
+      000191 4B 00            [ 1]  434 	push	#0x00
+      000193 4B 01            [ 1]  435 	push	#0x01
+      000195 CDr00r00         [ 4]  436 	call	_send7Seg
+      000198 85               [ 2]  437 	popw	x
+                                    438 ;	user/main.c: 192: while(TRUE) 
+      000199                        439 00104$:
+                                    440 ;	user/main.c: 214: if(TIMER_CheckTimeMS(&tick, 50) == 0)
+      000199 16 11            [ 2]  441 	ldw	y, (0x11, sp)
+      00019B 4B 32            [ 1]  442 	push	#0x32
+      00019D 5F               [ 1]  443 	clrw	x
+      00019E 89               [ 2]  444 	pushw	x
+      00019F 4B 00            [ 1]  445 	push	#0x00
+      0001A1 90 89            [ 2]  446 	pushw	y
+      0001A3 CDr00r00         [ 4]  447 	call	_TIMER_CheckTimeMS
+      0001A6 5B 06            [ 2]  448 	addw	sp, #6
+      0001A8 4D               [ 1]  449 	tnz	a
+      0001A9 26 EE            [ 1]  450 	jrne	00104$
+                                    451 ;	user/main.c: 216: PCF_getDateTime(&pcfDateTime);  
+      0001AB 96               [ 1]  452 	ldw	x, sp
+      0001AC 5C               [ 2]  453 	incw	x
+      0001AD 1F 13            [ 2]  454 	ldw	(0x13, sp), x
+      0001AF 1E 13            [ 2]  455 	ldw	x, (0x13, sp)
+      0001B1 89               [ 2]  456 	pushw	x
+      0001B2 CDr00r00         [ 4]  457 	call	_PCF_getDateTime
+      0001B5 85               [ 2]  458 	popw	x
+                                    459 ;	user/main.c: 217: send7Seg(DIG0, pcfDateTime.second%10);
+      0001B6 1E 13            [ 2]  460 	ldw	x, (0x13, sp)
+      0001B8 F6               [ 1]  461 	ld	a, (x)
+      0001B9 5F               [ 1]  462 	clrw	x
+      0001BA 97               [ 1]  463 	ld	xl, a
+      0001BB A6 0A            [ 1]  464 	ld	a, #0x0a
+      0001BD 62               [ 2]  465 	div	x, a
+      0001BE 88               [ 1]  466 	push	a
+      0001BF 4B 01            [ 1]  467 	push	#0x01
+      0001C1 CDr00r00         [ 4]  468 	call	_send7Seg
+      0001C4 85               [ 2]  469 	popw	x
+                                    470 ;	user/main.c: 218: send7Seg(DIG1, pcfDateTime.second/10);
+      0001C5 1E 13            [ 2]  471 	ldw	x, (0x13, sp)
+      0001C7 F6               [ 1]  472 	ld	a, (x)
+      0001C8 5F               [ 1]  473 	clrw	x
+      0001C9 97               [ 1]  474 	ld	xl, a
+      0001CA A6 0A            [ 1]  475 	ld	a, #0x0a
+      0001CC 62               [ 2]  476 	div	x, a
+      0001CD 9F               [ 1]  477 	ld	a, xl
+      0001CE 88               [ 1]  478 	push	a
+      0001CF 4B 02            [ 1]  479 	push	#0x02
+      0001D1 CDr00r00         [ 4]  480 	call	_send7Seg
+      0001D4 85               [ 2]  481 	popw	x
+                                    482 ;	user/main.c: 219: send7Seg(DIG3, pcfDateTime.minute%10);
+      0001D5 1E 13            [ 2]  483 	ldw	x, (0x13, sp)
+      0001D7 5C               [ 2]  484 	incw	x
+      0001D8 F6               [ 1]  485 	ld	a, (x)
+      0001D9 89               [ 2]  486 	pushw	x
+      0001DA 5F               [ 1]  487 	clrw	x
+      0001DB 97               [ 1]  488 	ld	xl, a
+      0001DC A6 0A            [ 1]  489 	ld	a, #0x0a
+      0001DE 62               [ 2]  490 	div	x, a
+      0001DF 88               [ 1]  491 	push	a
+      0001E0 4B 04            [ 1]  492 	push	#0x04
+      0001E2 CDr00r00         [ 4]  493 	call	_send7Seg
+      0001E5 85               [ 2]  494 	popw	x
+      0001E6 85               [ 2]  495 	popw	x
+                                    496 ;	user/main.c: 220: send7Seg(DIG4, pcfDateTime.minute/10);
+      0001E7 F6               [ 1]  497 	ld	a, (x)
+      0001E8 5F               [ 1]  498 	clrw	x
+      0001E9 97               [ 1]  499 	ld	xl, a
+      0001EA A6 0A            [ 1]  500 	ld	a, #0x0a
+      0001EC 62               [ 2]  501 	div	x, a
+      0001ED 9F               [ 1]  502 	ld	a, xl
+      0001EE 88               [ 1]  503 	push	a
+      0001EF 4B 05            [ 1]  504 	push	#0x05
+      0001F1 CDr00r00         [ 4]  505 	call	_send7Seg
+      0001F4 85               [ 2]  506 	popw	x
+                                    507 ;	user/main.c: 221: send7Seg(DIG6, pcfDateTime.hour%10);
+      0001F5 1E 13            [ 2]  508 	ldw	x, (0x13, sp)
+      0001F7 5C               [ 2]  509 	incw	x
+      0001F8 5C               [ 2]  510 	incw	x
+      0001F9 F6               [ 1]  511 	ld	a, (x)
+      0001FA 89               [ 2]  512 	pushw	x
+      0001FB 5F               [ 1]  513 	clrw	x
+      0001FC 97               [ 1]  514 	ld	xl, a
+      0001FD A6 0A            [ 1]  515 	ld	a, #0x0a
+      0001FF 62               [ 2]  516 	div	x, a
+      000200 88               [ 1]  517 	push	a
+      000201 4B 07            [ 1]  518 	push	#0x07
+      000203 CDr00r00         [ 4]  519 	call	_send7Seg
+      000206 85               [ 2]  520 	popw	x
+      000207 85               [ 2]  521 	popw	x
+                                    522 ;	user/main.c: 222: send7Seg(DIG7, pcfDateTime.hour/10);
+      000208 F6               [ 1]  523 	ld	a, (x)
+      000209 5F               [ 1]  524 	clrw	x
+      00020A 97               [ 1]  525 	ld	xl, a
+      00020B A6 0A            [ 1]  526 	ld	a, #0x0a
+      00020D 62               [ 2]  527 	div	x, a
+      00020E 9F               [ 1]  528 	ld	a, xl
+      00020F 88               [ 1]  529 	push	a
+      000210 4B 08            [ 1]  530 	push	#0x08
+      000212 CDr00r00         [ 4]  531 	call	_send7Seg
+      000215 85               [ 2]  532 	popw	x
+      000216 CCr01r99         [ 2]  533 	jp	00104$
+      000219 5B 16            [ 2]  534 	addw	sp, #22
+      00021B 81               [ 4]  535 	ret
+                                    536 	.area CODE
+                                    537 	.area INITIALIZER
+                                    538 	.area CABS (ABS)
