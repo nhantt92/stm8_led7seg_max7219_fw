@@ -22,7 +22,7 @@
 #include "RTC_pcf8563.h"
 #include "stm8s_i2c.h"
 
-TIME tick; 
+TIME tick;
 
 void clock_setup(void)
 {
@@ -32,7 +32,7 @@ void clock_setup(void)
    CLK_HSICmd(ENABLE);
    while(CLK_GetFlagStatus(CLK_FLAG_HSIRDY) == FALSE);
    CLK_ClockSwitchCmd(ENABLE);
-   CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV8);
+   CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
    CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV2);
    CLK_ClockSwitchConfig(CLK_SWITCHMODE_AUTO, CLK_SOURCE_HSI, DISABLE, CLK_CURRENTCLOCKSTATE_ENABLE);
    CLK_PeripheralClockConfig(CLK_PERIPHERAL_SPI, DISABLE);
@@ -81,34 +81,29 @@ void IWDG_Config(void)
 }
 
 void main() 
-{
-  uint8_t hh = 0, mm = 0, ss = 0;
-  PCF_DateTime dateTime;
-  PCF_DateTime pcfDateTime;
-  dateTime.second = 40;
-  dateTime.minute = 32;
-  dateTime.hour = 15;
-  dateTime.day = 22;
-  dateTime.weekday = 6;
-  dateTime.month = 12;
-  dateTime.year = 2017;
+{ 
+  DateTime dateTimeSet;
+  DateTime dateTimeGet;
+  dateTimeSet.second = 0;
+  dateTimeSet.minute = 25;
+  dateTimeSet.hour = 16;
+  dateTimeSet.day = 27;
+  dateTimeSet.weekday = 4;
+  dateTimeSet.month = 12;
+  dateTimeSet.year = 2017;
   clock_setup();
   GPIO_Config();
-  //I2C_setup();
-  //I2C_Write_Byte(0x00);
   PCF_Init(PCF_ALARM_INTERRUPT_ENABLE | PCF_TIMER_INTERRUPT_ENABLE);
-  //PCF_Init(PCF_ALARM_INTERRUPT_ENABLE);
-  // SPI_setup(); 
   max7Seg(GPIOC, GPIO_PIN_6, GPIO_PIN_4, GPIO_PIN_5, 8);
   Init();
   TIMER_Init();
   PCF_setClockOut(PCF_CLKOUT_1HZ);
   delay(50);
-  PCF_setDateTime(&dateTime);
+  PCF_setDateTime(&dateTimeSet);
   delay(50);
   IWDG_Config();
   enableInterrupts();
-  setIntensity(0x03);
+  setIntensity(0x0F);
   TIMER_InitTime(&tick);
   send7Seg(DIG7, 0);
   send7Seg(DIG6, 0);
@@ -119,36 +114,17 @@ void main()
   send7Seg(DIG1, 0);
   send7Seg(DIG0, 0);
   while(TRUE) 
-  {
-      // if(TIMER_CheckTimeMS(&tick, 100) == 0)
-      // {
-      //   if(++ss >=60)
-      //   {
-      //     ss=0;
-      //     if(++mm >=60)
-      //     {
-      //       mm=0;
-      //       if(++hh >= 24)
-      //         hh = 0;
-      //     }
-      //   }
-      //   send7Seg(DIG0, ss%10);
-      //   send7Seg(DIG1, ss/10);
-      //   send7Seg(DIG3, mm%10);
-      //   send7Seg(DIG4, mm/10);
-      //   send7Seg(DIG6, hh%10);
-      //   send7Seg(DIG7, hh/10);
-      // }
-    
-    if(TIMER_CheckTimeMS(&tick, 50) == 0)
+  { 
+    if(TIMER_CheckTimeMS(&tick, 100) == 0)
     {
-      PCF_getDateTime(&pcfDateTime);  
-      send7Seg(DIG0, pcfDateTime.second%10);
-      send7Seg(DIG1, pcfDateTime.second/10);
-      send7Seg(DIG3, pcfDateTime.minute%10);
-      send7Seg(DIG4, pcfDateTime.minute/10);
-      send7Seg(DIG6, pcfDateTime.hour%10);
-      send7Seg(DIG7, pcfDateTime.hour/10);
+      PCF_getDateTime(&dateTimeGet);  
+      send7Seg(DIG0, dateTimeGet.second%10);
+      send7Seg(DIG1, dateTimeGet.second/10);
+      send7Seg(DIG3, dateTimeGet.minute%10);
+      send7Seg(DIG4, dateTimeGet.minute/10);
+      send7Seg(DIG6, dateTimeGet.hour%10);
+      send7Seg(DIG7, dateTimeGet.hour/10);
+      IWDG_ReloadCounter();
     }
   }
 }

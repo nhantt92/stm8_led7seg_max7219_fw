@@ -8,8 +8,6 @@ Symbol Table
     .__.CPU.                                                    =  000000 L
     .__.H$L.                                                    =  000001 L
     _CLK_GetClockFreq                                              ****** GX
-  7 _EnterCriticalSection_UserCallback                             000038 GR
-  7 _ExitCriticalSection_UserCallback                              00003A GR
     _I2C_AcknowledgeConfig                                         ****** GX
     _I2C_CheckEvent                                                ****** GX
     _I2C_ClearFlag                                                 ****** GX
@@ -22,22 +20,19 @@ Symbol Table
     _I2C_ReceiveData                                               ****** GX
     _I2C_Send7bitAddress                                           ****** GX
     _I2C_SendData                                                  ****** GX
-  7 _I2C_setup                                                     000000 GR
-  7 _PCF_Init                                                      00055C GR
-  7 _PCF_Read                                                      0001D1 GR
-  7 _PCF_Write                                                     00003C GR
-  7 _PCF_getAlarm                                                  000836 GR
-  7 _PCF_getAndClearFlags                                          0008CE GR
-  7 _PCF_getDateTime                                               00044D GR
-  7 _PCF_getTimer                                                  000824 GR
-  7 _PCF_setAlarm                                                  000722 GR
-  7 _PCF_setClockOut                                               0008F4 GR
-  7 _PCF_setDateTime                                               000583 GR
-  7 _PCF_setTimer                                                  000801 GR
+  7 _I2C_setup                                                     000000 R
+  7 _PCF_Init                                                      000449 GR
+  7 _PCF_Read                                                      0001CB GR
+  7 _PCF_Write                                                     000036 GR
+  7 _PCF_getAlarm                                                  000833 GR
+  7 _PCF_getAndClearFlags                                          0008CB GR
+  7 _PCF_getDateTime                                               00060F GR
+  7 _PCF_getTimer                                                  000821 GR
+  7 _PCF_setAlarm                                                  00071F GR
+  7 _PCF_setClockOut                                               0008F1 GR
+  7 _PCF_setDateTime                                               000470 GR
+  7 _PCF_setTimer                                                  0007FE GR
     __divulong                                                     ****** GX
-  8 __xinit__timeout                                               000000 R
-  2 _timeout                                                       000000 GR
-
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 2.
 Hexadecimal [24-Bits]
@@ -46,12 +41,12 @@ Area Table
 
    0 _CODE                                      size      0   flags    0
    1 DATA                                       size      0   flags    0
-   2 INITIALIZED                                size      4   flags    0
+   2 INITIALIZED                                size      0   flags    0
    3 DABS                                       size      0   flags    8
    4 HOME                                       size      0   flags    0
    5 GSINIT                                     size      0   flags    0
    6 GSFINAL                                    size      0   flags    0
-   7 CODE                                       size    909   flags    0
-   8 INITIALIZER                                size      4   flags    0
+   7 CODE                                       size    906   flags    0
+   8 INITIALIZER                                size      0   flags    0
    9 CABS                                       size      0   flags    8
 

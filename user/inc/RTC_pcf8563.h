@@ -26,15 +26,12 @@
 
 #define PCF_DISABLE_ALARM 80
 
-#define I2C_FLAG_TIMEOUT ((uint32_t)0x1000)
-#define I2C_LONG_TIMEOUT ((uint32_t)(10*I2C_FLAG_TIMEOUT))
-
 typedef struct {
 	uint8_t minute;
 	uint8_t hour;
 	uint8_t day;
 	uint8_t weekday;
-} PCF_Alarm;
+} Alarm;
 
 typedef struct {
 	uint8_t second;
@@ -44,10 +41,9 @@ typedef struct {
 	uint8_t weekday;
 	uint8_t month;
 	uint16_t year;
-} PCF_DateTime;
+} DateTime;
 
-//void I2C_setup(void);
-//void I2C_Write_Byte(uint8_t data);
+extern DateTime localTime;
 
 uint8_t PCF_Write(uint8_t addr, uint8_t *data, uint8_t count);
 uint8_t PCF_Read(uint8_t addr, uint8_t *data, uint8_t count);
@@ -59,10 +55,10 @@ void PCF_setClockOut(uint8_t mode);
 void PCF_setTimer(uint8_t mode, uint8_t count);
 uint8_t PCF_getTimer(void);
 
-uint8_t PCF_setAlarm(PCF_Alarm *alarm);
-uint8_t PCF_getAlarm(PCF_Alarm *alarm);
+uint8_t PCF_setAlarm(Alarm *alarm);
+uint8_t PCF_getAlarm(Alarm *alarm);
 
-uint8_t PCF_setDateTime(PCF_DateTime *dataTime);
-uint8_t PCF_getDateTime(PCF_DateTime *dataTime);
+uint8_t PCF_setDateTime(DateTime *dataTime);
+uint8_t PCF_getDateTime(DateTime *dataTime);
 
 #endif /*PCF8563_H_*/
