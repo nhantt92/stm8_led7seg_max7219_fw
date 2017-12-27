@@ -2,10 +2,11 @@
 #include "stm8s_i2c.h"
 #include "stm8s_gpio.h"
 #include "stm8s_clk.h"
+#include "timerTick.h"
 
 #define BinToBCD(bin) ((((bin) / 10) << 4) + ((bin) % 10))
 
-uint32_t I2C_TimeOut = I2C_LONG_TIMEOUT;
+uint32_t timeout = I2C_LONG_TIMEOUT;
 
 void I2C_setup(void)
 {
@@ -16,37 +17,108 @@ void I2C_setup(void)
  I2C_Init(100000, PCF8563_WRITE_ADDR, I2C_DUTYCYCLE_2, I2C_ACK_CURR, I2C_ADDMODE_7BIT, Input_Clock);
 }
 
-void I2C_Write_Byte(uint8_t data)
+void EnterCriticalSection_UserCallback(void)
 {
-  I2C_GenerateSTART(ENABLE);
-  while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
-  I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
-  while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
-  I2C_SendData(data);
-  while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
-  I2C_GenerateSTOP(ENABLE);
+  disableInterrupts();  
 }
 
-void PCF_Write(uint8_t addr, uint8_t *data, uint8_t count)
+void ExitCriticalSection_UserCallback(void)
 {
-	//while(!I2C_GetFlagStatus(I2C_FLAG_BUSBUSY));
+  enableInterrupts();
+}
+
+/*Check write byte I2C*/
+// void I2C_Write_Byte(uint8_t data)
+// {
+//   I2C_GenerateSTART(ENABLE);
+//   while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
+//   I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
+//   while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+//   I2C_SendData(data);
+//   while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+//   I2C_GenerateSTOP(ENABLE);
+// }
+
+
+uint8_t PCF_Write(uint8_t addr, uint8_t *data, uint8_t count)
+{
+	uint8_t res = 1;
+	volatile uint32_t timeout;
+	/*Config ACK current*/
+	I2C_AcknowledgeConfig(I2C_ACK_CURR);
+	timeout = 0x0FFF;
+	/* Check bus Busy */
+	while(I2C_GetFlagStatus(I2C_FLAG_BUSBUSY))
+	{
+		if(!timeout--)
+		{	
+			res = 0;
+			return res;
+		} 
+	}
+	/* Master send Start*/
 	I2C_GenerateSTART(ENABLE);
 	//while(I2C_GetFlagStatus(I2C_FLAG_STARTDETECTION)==SET);
-	while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
-
-	I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
-	while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
-
-	I2C_SendData(addr);
-	while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
-
-	while(count){
-		count--;
-		I2C_SendData(*data);
-		while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
-		data++;
+	timeout = 0x0FFF;
+	/* Check EV5 */
+	while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT))
+	{
+		if(!timeout--) 
+		{
+			res = 0;
+			goto stop;
+		}
 	}
-	I2C_GenerateSTOP(ENABLE);
+	/*Send 7bit addr, mode Write*/
+	I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
+	timeout = 0x0FFF;
+	/* check EV6 */
+	while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+	{
+		if(!timeout--)
+		{
+			res = 0;
+			goto stop;
+		}
+		else if(I2C_GetFlagStatus(I2C_FLAG_ACKNOWLEDGEFAILURE))
+		{
+			I2C_ClearFlag(I2C_FLAG_ACKNOWLEDGEFAILURE);
+			res = 0;
+			goto stop;
+		}
+	}
+	/* Send addr slave */
+	I2C_SendData(addr);
+	timeout = 0x0FFF;
+	/*  check EV8 */
+	while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+	{
+		if(!timeout--)
+		{
+			res = 0;
+			goto stop;
+		}
+	}
+	/* Repeat write data */
+	while(count)
+	{
+		I2C_SendData(*data);
+		timeout = 0x0FFF;
+		/* Check EV8 */
+		while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+		{
+			if(!timeout--)
+			{
+				res = 0;
+				goto stop;
+			}
+		}
+		data++;
+		count--;
+	}
+	/* Send the STOP condition */ 
+	stop: I2C_GenerateSTOP(ENABLE);
+	return res;
 }
 
 void PCF_Read(uint8_t addr, uint8_t *data, uint8_t count)
@@ -65,97 +137,131 @@ void PCF_Read(uint8_t addr, uint8_t *data, uint8_t count)
 	//restart i2c
 	I2C_GenerateSTART(ENABLE);
   	while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
-  	//send ds1307 address for read
   	I2C_Send7bitAddress(PCF8563_READ_ADDR, I2C_DIRECTION_RX);
-  	/* Wait on ADDR flag to be set (ADDR is still not cleared at this level */
+  	// Wait on ADDR flag to be set (ADDR is still not cleared at this level 
   	while(!I2C_CheckEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
   	while(count)
   	{
   		//while(I2C_GetFlagStatus(I2C_FLAG_ADDRESSSENTMATCHED) == RESET);
-  		count--;
-  		I2C_AcknowledgeConfig(I2C_ACK_NONE);
+  		while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET);
+  		
+  		if(count == 0)
+  		{
+  			I2C_AcknowledgeConfig(I2C_ACK_NONE);
+  			I2C_GenerateSTOP(ENABLE);
+  		}
+  		I2C_AcknowledgeConfig(I2C_ACK_CURR);
   		 //Clear ADDR flag
   		/* Clear ADDR register by reading SR1 then SR3 register (SR1 has already been read) */
-  		I2C->SR1;        
-  		I2C->SR3;
+  		//I2C->SR1;        
+  		//I2C->SR3;
   		while (I2C_GetFlagStatus(I2C_FLAG_RXNOTEMPTY) == RESET);
+  		while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_RECEIVED));
+  		//I2C_AcknowledgeConfig(I2C_ACK_CURR);
   		*data = I2C_ReceiveData();
-  		I2C_AcknowledgeConfig(I2C_ACK_CURR);
   		data++;
+  		count--;
   	}
-  	I2C_GenerateSTOP(ENABLE);
 }
 
 
-uint8_t read_pcf(uint8_t regadd)
-{
-  uint8_t data=0;
-  //start i2c
-  while(I2C_GetFlagStatus( I2C_FLAG_BUSBUSY)==SET);
+// uint8_t read_pcf(uint8_t regadd)
+// {
+//   uint8_t data=0;
+//   //start i2c
+//   while(I2C_GetFlagStatus( I2C_FLAG_BUSBUSY)==SET);
  
-  I2C_GenerateSTART(ENABLE);
-// while(I2C_GetFlagStatus(I2C_FLAG_STARTDETECTION)==SET);
+//   I2C_GenerateSTART(ENABLE);
+// // while(I2C_GetFlagStatus(I2C_FLAG_STARTDETECTION)==SET);
  
-  while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
+//   while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
 
-  //send ds1307 address
-  I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
-  while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+//   //send ds1307 address
+//   I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
+//   while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
 
-  //send ds1307's register address to read
-  I2C_SendData(regadd);
-  while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET);
+//   //send ds1307's register address to read
+//   I2C_SendData(regadd);
+//   while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET);
 
-  //restart i2c
-  I2C_GenerateSTART( ENABLE);
-  while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
+//   //restart i2c
+//   I2C_GenerateSTART( ENABLE);
+//   while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
 
-  //send ds1307 address for read
-  I2C_Send7bitAddress(PCF8563_READ_ADDR,I2C_DIRECTION_RX);
+//   //send ds1307 address for read
+//   I2C_Send7bitAddress(PCF8563_READ_ADDR,I2C_DIRECTION_RX);
  
-  /* Wait on ADDR flag to be set (ADDR is still not cleared at this level */
-  while(I2C_GetFlagStatus(I2C_FLAG_ADDRESSSENTMATCHED) == RESET);
+//   /* Wait on ADDR flag to be set (ADDR is still not cleared at this level */
+//   while(I2C_GetFlagStatus(I2C_FLAG_ADDRESSSENTMATCHED) == RESET);
  
-  //clear ACK
-  I2C_AcknowledgeConfig(I2C_ACK_NONE);
-  //Clear ADDR flag
-  /* Clear ADDR register by reading SR1 then SR3 register (SR1 has already been read) */
-  I2C->SR1;        I2C->SR3;
-  //set stop
-  I2C_GenerateSTOP(ENABLE);
+//   //clear ACK
+//   I2C_AcknowledgeConfig(I2C_ACK_NONE);
+//   //Clear ADDR flag
+//   /* Clear ADDR register by reading SR1 then SR3 register (SR1 has already been read) */
+//   I2C->SR1;        I2C->SR3;
+//   //set stop
+//   I2C_GenerateSTOP(ENABLE);
  
-  //Poll RXNE
-  while (I2C_GetFlagStatus( I2C_FLAG_RXNOTEMPTY) == RESET);
+//   //Poll RXNE
+//   while (I2C_GetFlagStatus( I2C_FLAG_RXNOTEMPTY) == RESET);
  
-  //read byte
-  data=I2C_ReceiveData();
-// while(I2C_GetFlagStatus( I2C_FLAG_STOPDETECTION ) == SET);
-  /* Wait to make sure that STOP control bit has been cleared */
-    while(I2C->CR2 & I2C_CR2_STOP);
-    /* Re-Enable Acknowledgement to be ready for another reception */
-    I2C_AcknowledgeConfig( I2C_ACK_CURR);
-  return (data);
-}
+//   //read byte
+//   data=I2C_ReceiveData();
+// // while(I2C_GetFlagStatus( I2C_FLAG_STOPDETECTION ) == SET);
+//   /* Wait to make sure that STOP control bit has been cleared */
+//     while(I2C->CR2 & I2C_CR2_STOP);
+//     /* Re-Enable Acknowledgement to be ready for another reception */
+//     I2C_AcknowledgeConfig( I2C_ACK_CURR);
+//   return (data);
+// }
+
+// uint8_t PCF_getDateTime(PCF_DateTime *dateTime)
+// {
+// 	uint8_t buffer[7];
+
+// 	//PCF_Read(0x02, buffer, sizeof(buffer));
+// 	buffer[0] = read_pcf(0x02);
+
+// 	dateTime->second = (((buffer[0] >> 4) & 0x07) * 10) + (buffer[0] & 0x0F);
+// 	buffer[1] = read_pcf(0x03);
+// 	dateTime->minute = (((buffer[1] >> 4) & 0x07) * 10) + (buffer[1] & 0x0F);
+// 	buffer[2] = read_pcf(0x04);
+// 	dateTime->hour = (((buffer[2] >> 4) & 0x03) * 10) + (buffer[2] & 0x0F);
+// 	buffer[3] = read_pcf(0x05);
+// 	dateTime->day = (((buffer[3] >> 4) & 0x03) * 10) + (buffer[3] & 0x0F);
+// 	buffer[4] = read_pcf(0x06);
+// 	dateTime->weekday = (buffer[4] & 0x07);
+// 	buffer[5] = read_pcf(0x07);
+// 	dateTime->month = ((buffer[5] >> 4) & 0x01) * 10 + (buffer[5] & 0x0F);
+// 	buffer[6] = read_pcf(0x08);
+// 	dateTime->year = 1900 + ((buffer[6] >> 4) & 0x0F) * 10 + (buffer[6] & 0x0F);
+
+// 	if (buffer[5] &  0x80)
+// 	{
+// 		dateTime->year += 100;
+// 	}
+
+// 	if (buffer[0] & 0x80) //Clock integrity not guaranted
+// 	{
+// 		return 1;
+// 	}
+
+// 	return 0;
+
+// }
 
 uint8_t PCF_getDateTime(PCF_DateTime *dateTime)
 {
 	uint8_t buffer[7];
 
-	//PCF_Read(0x02, buffer, sizeof(buffer));
-	buffer[0] = read_pcf(0x02);
-
+	PCF_Read(0x02, buffer, sizeof(buffer));
+	//pcf_read(buffer, 0x02, sizeof(buffer));
 	dateTime->second = (((buffer[0] >> 4) & 0x07) * 10) + (buffer[0] & 0x0F);
-	buffer[1] = read_pcf(0x03);
 	dateTime->minute = (((buffer[1] >> 4) & 0x07) * 10) + (buffer[1] & 0x0F);
-	buffer[2] = read_pcf(0x04);
 	dateTime->hour = (((buffer[2] >> 4) & 0x03) * 10) + (buffer[2] & 0x0F);
-	buffer[3] = read_pcf(0x05);
 	dateTime->day = (((buffer[3] >> 4) & 0x03) * 10) + (buffer[3] & 0x0F);
-	buffer[4] = read_pcf(0x06);
 	dateTime->weekday = (buffer[4] & 0x07);
-	buffer[5] = read_pcf(0x07);
 	dateTime->month = ((buffer[5] >> 4) & 0x01) * 10 + (buffer[5] & 0x0F);
-	buffer[6] = read_pcf(0x08);
 	dateTime->year = 1900 + ((buffer[6] >> 4) & 0x0F) * 10 + (buffer[6] & 0x0F);
 
 	if (buffer[5] &  0x80)
@@ -171,6 +277,7 @@ uint8_t PCF_getDateTime(PCF_DateTime *dateTime)
 	return 0;
 
 }
+
 
 void PCF_Init(uint8_t mode)
 {
@@ -307,62 +414,142 @@ void PCF_setClockOut(uint8_t mode)
 	PCF_Write(0x0D, &mode, 1);				//CLKOUT_control
 }
 
-uint32_t pcf_read(uint8_t *buffer, uint8_t readAddr, uint16_t* NumByteToRead)
-{
-	I2C_TimeOut = I2C_LONG_TIMEOUT;
-	/* While the bus is busy */
-	while(I2C_GetFlagStatus(I2C_FLAG_BUSBUSY))
-	{
-		if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
-	}
+// uint32_t pcf_read(uint8_t *buffer, uint8_t readAddr, uint8_t NumByteToRead)
+// {
+// 	I2C_Timeout = I2C_LONG_TIMEOUT;
+// 	/* While the bus is busy */
+// 	while(I2C_GetFlagStatus(I2C_FLAG_BUSBUSY))
+// 	{
+// 		if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+// 	}
 
-	/* Send START */
-	I2C_GenerateSTART(ENABLE);
+// 	/* Send START */
+// 	I2C_GenerateSTART(ENABLE);
 
-	/* Check EV5 */
-	I2C_Timeout = I2C_FLAG_TIMEOUT;
-	while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT))
-	{
-		if((I2C_Timeout--) == 0) return TIMEOUT_UserCallback();
-	}
+// 	/* Check EV5 */
+// 	I2C_Timeout = I2C_FLAG_TIMEOUT;
+// 	while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT))
+// 	{
+// 		if((I2C_Timeout--) == 0) return TIMEOUT_UserCallback();
+// 	}
 
-	/* Send Slave Address for write */
-	I2C_Send7bitAddress((uint8_t)PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
-	/* Check EV6 */
-	I2C_Timeout = I2C_FLAG_TIMEOUT;
-	while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
-	{
-		if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
-	}
+// 	/* Send Slave Address for write */
+// 	I2C_Send7bitAddress((uint8_t)PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
+// 	/* Check EV6 */
+// 	I2C_Timeout = I2C_FLAG_TIMEOUT;
+// 	while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+// 	{
+// 		if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+// 	}
 
-	I2C_SendData((uint8_t)readAddr);
-	/* Check EV8 */
-	I2C_Timeout = I2C_FLAG_TIMEOUT;
-	while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET);
-	{
-		if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
-	}
+// 	I2C_SendData((uint8_t)readAddr);
+// 	/* Check EV8 */
+// 	I2C_Timeout = I2C_FLAG_TIMEOUT;
+// 	while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET);
+// 	{
+// 		if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+// 	}
 
-	/* Send START second */
-	I2C_GenerateSTART(ENABLE);
-	/* Check EV5 */
-	I2C_Timeout = I2C_FLAG_TIMEOUT;
-	while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT))
-	{
-		if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
-	}
+// 	/* Send START second */
+// 	I2C_GenerateSTART(ENABLE);
+// 	/* Check EV5 */
+// 	I2C_Timeout = I2C_FLAG_TIMEOUT;
+// 	while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT))
+// 	{
+// 		if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+// 	}
 
-	I2C_Send7bitAddress((uint8_t)PCF8563_READ_ADDR, I2C_DIRECTION_TX);
+// 	I2C_Send7bitAddress((uint8_t)PCF8563_READ_ADDR, I2C_DIRECTION_RX);
 
-	if((uint16_t)(*NumByteToRead) > 3)
-	{
-		I2C_Timeout = I2C_FLAG_TIMEOUT;
-		while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET)
-		{
-			if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
-		}
-		/* Read a byte from the EEPROM */
-		
-	}
+// 	if(NumByteToRead > 3)
+// 	{
+// 		I2C_Timeout = I2C_FLAG_TIMEOUT;
+// 		while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET)
+// 		{
+// 			if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+// 		}
+// 		/* Read a byte from pcf */
+// 		*buffer = I2C_ReceiveData();
+// 		/*point to the next location where the byte read will saved*/
+// 		*buffer++;
+// 		/* decrement the read bytes counter */
+// 		NumByteToRead--;
+// 	}
+// 	if(NumByteToRead == 3)
+// 	{
+// 		I2C_Timeout = I2C_FLAG_TIMEOUT;
+// 		while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET)
+// 		{
+// 			if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+// 		}
+// 		/*Clear ACK*/
+// 		I2C_AcknowledgeConfig(I2C_ACK_NONE);
+// 		/* Call User callback, disable interrupt */
+// 		EnterCriticalSection_UserCallback();
+// 		/*Read Data N-2*/
+// 		*buffer = I2C_ReceiveData();
+// 		*buffer++;
+// 		I2C_GenerateSTOP(ENABLE);
+// 		*buffer = I2C_ReceiveData();
+// 		ExitCriticalSection_UserCallback();
+// 		*buffer++;
+// 		I2C_Timeout = I2C_FLAG_TIMEOUT;
+// 		while(I2C_GetFlagStatus(I2C_FLAG_RXNOTEMPTY)== RESET)
+// 		{
+// 			if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+// 		}
+// 		*buffer = I2C_ReceiveData();
+// 		NumByteToRead = 0;
+// 	}
+// 	if(NumByteToRead==2)
+// 	{
+// 		I2C_AcknowledgeConfig(I2C_ACK_NEXT);
+// 		I2C_Timeout = I2C_FLAG_TIMEOUT;
+// 		while(I2C_GetFlagStatus(I2C_FLAG_ADDRESSSENTMATCHED)==RESET)
+// 		{
+// 			if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+// 		}
+// 		I2C->SR3;
+// 		I2C_AcknowledgeConfig(I2C_ACK_NONE);
+// 		I2C_Timeout=I2C_FLAG_TIMEOUT;
+// 		while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED)==RESET)
+// 		{
+// 			if((I2C_Timeout--)==0)  return TIMEOUT_UserCallback();
+// 		}
+// 		EnterCriticalSection_UserCallback();
+// 		I2C_GenerateSTOP(ENABLE);
+// 		*buffer = I2C_ReceiveData();
+// 		*buffer++;
+// 		ExitCriticalSection_UserCallback();
+// 		*buffer = I2C_ReceiveData();
+// 		NumByteToRead = 0;
+// 	}
+// 	if(NumByteToRead < 2)
+// 	{
+// 		I2C_Timeout = I2C_FLAG_TIMEOUT;
+// 		while(I2C_GetFlagStatus(I2C_FLAG_ADDRESSSENTMATCHED)== RESET)
+// 		{
+// 			if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+// 		}
+// 		I2C_AcknowledgeConfig(I2C_ACK_NONE);
+// 		EnterCriticalSection_UserCallback();
+// 		I2C->SR3;
+// 		I2C_GenerateSTOP(ENABLE);
+// 		ExitCriticalSection_UserCallback();
+// 		I2C_Timeout = I2C_FLAG_TIMEOUT;
+// 		while(I2C_GetFlagStatus(I2C_FLAG_RXNOTEMPTY)== RESET)
+// 		{
+// 			if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+// 		}
+// 		*buffer = I2C_ReceiveData();
+// 		NumByteToRead--;
+// 		I2C_Timeout = I2C_FLAG_TIMEOUT;
+// 		while(I2C->CR2 & I2C_CR2_STOP)
+// 		{
+// 			if((I2C_Timeout--)==0) return TIMEOUT_UserCallback();
+// 		}
+// 		I2C_AcknowledgeConfig(I2C_ACK_CURR);
+// 	}
+// 	return 1;
+// }
 
-}

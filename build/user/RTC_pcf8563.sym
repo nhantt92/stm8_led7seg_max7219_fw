@@ -8,8 +8,11 @@ Symbol Table
     .__.CPU.                                                    =  000000 L
     .__.H$L.                                                    =  000001 L
     _CLK_GetClockFreq                                              ****** GX
+  7 _EnterCriticalSection_UserCallback                             000038 GR
+  7 _ExitCriticalSection_UserCallback                              00003A GR
     _I2C_AcknowledgeConfig                                         ****** GX
     _I2C_CheckEvent                                                ****** GX
+    _I2C_ClearFlag                                                 ****** GX
     _I2C_Cmd                                                       ****** GX
     _I2C_DeInit                                                    ****** GX
     _I2C_GenerateSTART                                             ****** GX
@@ -19,21 +22,21 @@ Symbol Table
     _I2C_ReceiveData                                               ****** GX
     _I2C_Send7bitAddress                                           ****** GX
     _I2C_SendData                                                  ****** GX
-  7 _I2C_Write_Byte                                                000038 GR
   7 _I2C_setup                                                     000000 GR
-  7 _PCF_Init                                                      000362 GR
-  7 _PCF_Read                                                      0000D8 GR
-  7 _PCF_Write                                                     000075 GR
-  7 _PCF_getAlarm                                                  00063C GR
-  7 _PCF_getAndClearFlags                                          0006D4 GR
-  7 _PCF_getDateTime                                               000214 GR
-  7 _PCF_getTimer                                                  00062A GR
-  7 _PCF_setAlarm                                                  000528 GR
-  7 _PCF_setClockOut                                               0006FA GR
-  7 _PCF_setDateTime                                               000389 GR
-  7 _PCF_setTimer                                                  000607 GR
+  7 _PCF_Init                                                      000391 GR
+  7 _PCF_Read                                                      0001D1 GR
+  7 _PCF_Write                                                     00003C GR
+  7 _PCF_getAlarm                                                  00066B GR
+  7 _PCF_getAndClearFlags                                          000703 GR
+  7 _PCF_getDateTime                                               000282 GR
+  7 _PCF_getTimer                                                  000659 GR
+  7 _PCF_setAlarm                                                  000557 GR
+  7 _PCF_setClockOut                                               000729 GR
+  7 _PCF_setDateTime                                               0003B8 GR
+  7 _PCF_setTimer                                                  000636 GR
     __divulong                                                     ****** GX
-  7 _read_pcf                                                      000176 GR
+  8 __xinit__timeout                                               000000 R
+  2 _timeout                                                       000000 GR
 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 2.
@@ -43,12 +46,12 @@ Area Table
 
    0 _CODE                                      size      0   flags    0
    1 DATA                                       size      0   flags    0
-   2 INITIALIZED                                size      0   flags    0
+   2 INITIALIZED                                size      4   flags    0
    3 DABS                                       size      0   flags    8
    4 HOME                                       size      0   flags    0
    5 GSINIT                                     size      0   flags    0
    6 GSFINAL                                    size      0   flags    0
-   7 CODE                                       size    70F   flags    0
-   8 INITIALIZER                                size      0   flags    0
+   7 CODE                                       size    73E   flags    0
+   8 INITIALIZER                                size      4   flags    0
    9 CABS                                       size      0   flags    8
 

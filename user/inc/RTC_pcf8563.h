@@ -2,6 +2,8 @@
 #define __RTC_PCF8563_H_
 #include "stm8s.h"
 
+#define RTC_HOLDER 0xA5
+
 #define PCF8563_READ_ADDR 0xA3
 #define PCF8563_WRITE_ADDR 0xA2
 
@@ -44,10 +46,10 @@ typedef struct {
 	uint16_t year;
 } PCF_DateTime;
 
-void I2C_setup(void);
-void I2C_Write_Byte(uint8_t data);
+//void I2C_setup(void);
+//void I2C_Write_Byte(uint8_t data);
 
-void PCF_Write(uint8_t addr, uint8_t *data, uint8_t count);
+uint8_t PCF_Write(uint8_t addr, uint8_t *data, uint8_t count);
 void PCF_Read(uint8_t addr, uint8_t *data, uint8_t count);
 
 void PCF_Init(uint8_t mode);

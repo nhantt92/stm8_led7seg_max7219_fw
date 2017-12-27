@@ -299,56 +299,56 @@ _IWDG_Config:
 	call	_IWDG_ReloadCounter
 ;	user/main.c: 80: IWDG_Enable();
 	jp	_IWDG_Enable
-;	user/main.c: 154: void main() 
+;	user/main.c: 83: void main() 
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
 	sub	sp, #22
-;	user/main.c: 159: dateTime.second = 40;
+;	user/main.c: 88: dateTime.second = 40;
 	ldw	x, sp
 	ld	a, #0x28
 	ld	(9, x), a
-;	user/main.c: 160: dateTime.minute = 32;
+;	user/main.c: 89: dateTime.minute = 32;
 	ldw	x, sp
 	addw	x, #9
-	ldw	(0x15, sp), x
-	ldw	x, (0x15, sp)
+	ldw	(0x11, sp), x
+	ldw	x, (0x11, sp)
 	incw	x
 	ld	a, #0x20
 	ld	(x), a
-;	user/main.c: 161: dateTime.hour = 15;
-	ldw	x, (0x15, sp)
+;	user/main.c: 90: dateTime.hour = 15;
+	ldw	x, (0x11, sp)
 	incw	x
 	incw	x
 	ld	a, #0x0f
 	ld	(x), a
-;	user/main.c: 162: dateTime.day = 22;
-	ldw	x, (0x15, sp)
+;	user/main.c: 91: dateTime.day = 22;
+	ldw	x, (0x11, sp)
 	ld	a, #0x16
 	ld	(0x0003, x), a
-;	user/main.c: 163: dateTime.weekday = 6;
-	ldw	x, (0x15, sp)
+;	user/main.c: 92: dateTime.weekday = 6;
+	ldw	x, (0x11, sp)
 	ld	a, #0x06
 	ld	(0x0004, x), a
-;	user/main.c: 164: dateTime.month = 12;
-	ldw	x, (0x15, sp)
+;	user/main.c: 93: dateTime.month = 12;
+	ldw	x, (0x11, sp)
 	ld	a, #0x0c
 	ld	(0x0005, x), a
-;	user/main.c: 165: dateTime.year = 2017;
-	ldw	x, (0x15, sp)
+;	user/main.c: 94: dateTime.year = 2017;
+	ldw	x, (0x11, sp)
 	addw	x, #0x0006
 	ldw	y, #0x07e1
 	ldw	(x), y
-;	user/main.c: 166: clock_setup();
+;	user/main.c: 95: clock_setup();
 	call	_clock_setup
-;	user/main.c: 167: GPIO_Config();
+;	user/main.c: 96: GPIO_Config();
 	call	_GPIO_Config
-;	user/main.c: 170: PCF_Init(PCF_ALARM_INTERRUPT_ENABLE | PCF_TIMER_INTERRUPT_ENABLE);
+;	user/main.c: 99: PCF_Init(PCF_ALARM_INTERRUPT_ENABLE | PCF_TIMER_INTERRUPT_ENABLE);
 	push	#0x03
 	call	_PCF_Init
 	pop	a
-;	user/main.c: 173: max7Seg(GPIOC, GPIO_PIN_6, GPIO_PIN_4, GPIO_PIN_5, 8);
+;	user/main.c: 102: max7Seg(GPIOC, GPIO_PIN_6, GPIO_PIN_4, GPIO_PIN_5, 8);
 	push	#0x08
 	push	#0x20
 	push	#0x10
@@ -357,88 +357,88 @@ _main:
 	push	#0x50
 	call	_max7Seg
 	addw	sp, #6
-;	user/main.c: 174: Init();
+;	user/main.c: 103: Init();
 	call	_Init
-;	user/main.c: 175: TIMER_Init();
+;	user/main.c: 104: TIMER_Init();
 	call	_TIMER_Init
-;	user/main.c: 176: PCF_setClockOut(PCF_CLKOUT_1HZ);
+;	user/main.c: 105: PCF_setClockOut(PCF_CLKOUT_1HZ);
 	push	#0x13
 	call	_PCF_setClockOut
 	pop	a
-;	user/main.c: 177: delay(50);
+;	user/main.c: 106: delay(50);
 	push	#0x32
 	push	#0x00
 	call	_delay
 	popw	x
-;	user/main.c: 178: PCF_setDateTime(&dateTime);
-	ldw	x, (0x15, sp)
+;	user/main.c: 107: PCF_setDateTime(&dateTime);
+	ldw	x, (0x11, sp)
 	pushw	x
 	call	_PCF_setDateTime
 	popw	x
-;	user/main.c: 179: delay(50);
+;	user/main.c: 108: delay(50);
 	push	#0x32
 	push	#0x00
 	call	_delay
 	popw	x
-;	user/main.c: 180: IWDG_Config();
+;	user/main.c: 109: IWDG_Config();
 	call	_IWDG_Config
-;	user/main.c: 181: enableInterrupts();
+;	user/main.c: 110: enableInterrupts();
 	rim
-;	user/main.c: 182: setIntensity(0x03);
+;	user/main.c: 111: setIntensity(0x03);
 	push	#0x03
 	call	_setIntensity
 	pop	a
-;	user/main.c: 183: TIMER_InitTime(&tick);
+;	user/main.c: 112: TIMER_InitTime(&tick);
 	ldw	x, #_tick+0
-	ldw	(0x11, sp), x
-	ldw	x, (0x11, sp)
+	ldw	(0x13, sp), x
+	ldw	x, (0x13, sp)
 	pushw	x
 	call	_TIMER_InitTime
 	popw	x
-;	user/main.c: 184: send7Seg(DIG7, 0);
+;	user/main.c: 113: send7Seg(DIG7, 0);
 	push	#0x00
 	push	#0x08
 	call	_send7Seg
 	popw	x
-;	user/main.c: 185: send7Seg(DIG6, 0);
+;	user/main.c: 114: send7Seg(DIG6, 0);
 	push	#0x00
 	push	#0x07
 	call	_send7Seg
 	popw	x
-;	user/main.c: 186: send7Seg(DIG5, 10);
+;	user/main.c: 115: send7Seg(DIG5, 10);
 	push	#0x0a
 	push	#0x06
 	call	_send7Seg
 	popw	x
-;	user/main.c: 187: send7Seg(DIG4, 0);
+;	user/main.c: 116: send7Seg(DIG4, 0);
 	push	#0x00
 	push	#0x05
 	call	_send7Seg
 	popw	x
-;	user/main.c: 188: send7Seg(DIG3, 0);
+;	user/main.c: 117: send7Seg(DIG3, 0);
 	push	#0x00
 	push	#0x04
 	call	_send7Seg
 	popw	x
-;	user/main.c: 189: send7Seg(DIG2, 10);
+;	user/main.c: 118: send7Seg(DIG2, 10);
 	push	#0x0a
 	push	#0x03
 	call	_send7Seg
 	popw	x
-;	user/main.c: 190: send7Seg(DIG1, 0);
+;	user/main.c: 119: send7Seg(DIG1, 0);
 	push	#0x00
 	push	#0x02
 	call	_send7Seg
 	popw	x
-;	user/main.c: 191: send7Seg(DIG0, 0);
+;	user/main.c: 120: send7Seg(DIG0, 0);
 	push	#0x00
 	push	#0x01
 	call	_send7Seg
 	popw	x
-;	user/main.c: 192: while(TRUE) 
+;	user/main.c: 121: while(TRUE) 
 00104$:
-;	user/main.c: 214: if(TIMER_CheckTimeMS(&tick, 50) == 0)
-	ldw	y, (0x11, sp)
+;	user/main.c: 143: if(TIMER_CheckTimeMS(&tick, 50) == 0)
+	ldw	y, (0x13, sp)
 	push	#0x32
 	clrw	x
 	pushw	x
@@ -448,16 +448,16 @@ _main:
 	addw	sp, #6
 	tnz	a
 	jrne	00104$
-;	user/main.c: 216: PCF_getDateTime(&pcfDateTime);  
+;	user/main.c: 145: PCF_getDateTime(&pcfDateTime);  
 	ldw	x, sp
 	incw	x
-	ldw	(0x13, sp), x
-	ldw	x, (0x13, sp)
+	ldw	(0x15, sp), x
+	ldw	x, (0x15, sp)
 	pushw	x
 	call	_PCF_getDateTime
 	popw	x
-;	user/main.c: 217: send7Seg(DIG0, pcfDateTime.second%10);
-	ldw	x, (0x13, sp)
+;	user/main.c: 146: send7Seg(DIG0, pcfDateTime.second%10);
+	ldw	x, (0x15, sp)
 	ld	a, (x)
 	clrw	x
 	ld	xl, a
@@ -467,8 +467,8 @@ _main:
 	push	#0x01
 	call	_send7Seg
 	popw	x
-;	user/main.c: 218: send7Seg(DIG1, pcfDateTime.second/10);
-	ldw	x, (0x13, sp)
+;	user/main.c: 147: send7Seg(DIG1, pcfDateTime.second/10);
+	ldw	x, (0x15, sp)
 	ld	a, (x)
 	clrw	x
 	ld	xl, a
@@ -479,8 +479,8 @@ _main:
 	push	#0x02
 	call	_send7Seg
 	popw	x
-;	user/main.c: 219: send7Seg(DIG3, pcfDateTime.minute%10);
-	ldw	x, (0x13, sp)
+;	user/main.c: 148: send7Seg(DIG3, pcfDateTime.minute%10);
+	ldw	x, (0x15, sp)
 	incw	x
 	ld	a, (x)
 	pushw	x
@@ -493,7 +493,7 @@ _main:
 	call	_send7Seg
 	popw	x
 	popw	x
-;	user/main.c: 220: send7Seg(DIG4, pcfDateTime.minute/10);
+;	user/main.c: 149: send7Seg(DIG4, pcfDateTime.minute/10);
 	ld	a, (x)
 	clrw	x
 	ld	xl, a
@@ -504,8 +504,8 @@ _main:
 	push	#0x05
 	call	_send7Seg
 	popw	x
-;	user/main.c: 221: send7Seg(DIG6, pcfDateTime.hour%10);
-	ldw	x, (0x13, sp)
+;	user/main.c: 150: send7Seg(DIG6, pcfDateTime.hour%10);
+	ldw	x, (0x15, sp)
 	incw	x
 	incw	x
 	ld	a, (x)
@@ -519,7 +519,7 @@ _main:
 	call	_send7Seg
 	popw	x
 	popw	x
-;	user/main.c: 222: send7Seg(DIG7, pcfDateTime.hour/10);
+;	user/main.c: 151: send7Seg(DIG7, pcfDateTime.hour/10);
 	ld	a, (x)
 	clrw	x
 	ld	xl, a

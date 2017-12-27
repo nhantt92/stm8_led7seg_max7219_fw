@@ -7,7 +7,6 @@
 -l stm8
 -l stm8
 build/user/RTC_pcf8563.rel
-build/user/ds1307.rel
 build/user/main.rel
 build/user/max7219.rel
 build/user/timerTick.rel

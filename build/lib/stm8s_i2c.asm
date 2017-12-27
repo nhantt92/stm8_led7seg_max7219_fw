@@ -87,7 +87,7 @@ _I2C_DeInit:
 _I2C_Init:
 	sub	sp, #10
 ;	lib/stm8s_i2c.c: 76: uint8_t tmpccrh = 0;
-	clr	(0x01, sp)
+	clr	(0x03, sp)
 ;	lib/stm8s_i2c.c: 82: I2C->FREQR &= (uint8_t)(~I2C_FREQR_FREQ);
 	ldw	x, #0x5212
 	ld	a, (x)
@@ -123,8 +123,8 @@ _I2C_Init:
 	push	#0x00
 	call	__mullong
 	addw	sp, #8
-	ldw	(0x09, sp), x
-	ldw	(0x07, sp), y
+	ldw	(0x06, sp), x
+	ldw	(0x04, sp), y
 ;	lib/stm8s_i2c.c: 95: if (OutputClockFrequencyHz > I2C_MAX_STANDARD_FREQ) /* FAST MODE */
 	ldw	x, #0x86a0
 	cpw	x, (0x0f, sp)
@@ -135,7 +135,7 @@ _I2C_Init:
 	jrnc	00109$
 ;	lib/stm8s_i2c.c: 98: tmpccrh = I2C_CCRH_FS;
 	ld	a, #0x80
-	ld	(0x01, sp), a
+	ld	(0x03, sp), a
 ;	lib/stm8s_i2c.c: 100: if (I2C_DutyCycle == I2C_DUTYCYCLE_2)
 	tnz	(0x13, sp)
 	jrne	00102$
@@ -152,13 +152,13 @@ _I2C_Init:
 	addw	sp, #8
 	pushw	x
 	pushw	y
-	ldw	x, (0x0d, sp)
+	ldw	x, (0x0a, sp)
 	pushw	x
-	ldw	x, (0x0d, sp)
+	ldw	x, (0x0a, sp)
 	pushw	x
 	call	__divulong
 	addw	sp, #8
-	ldw	(0x02, sp), x
+	ldw	(0x01, sp), x
 	jra	00103$
 00102$:
 ;	lib/stm8s_i2c.c: 108: result = (uint16_t) ((InputClockFrequencyMHz * 1000000) / (OutputClockFrequencyHz * 25));
@@ -177,24 +177,24 @@ _I2C_Init:
 	ld	a, xh
 	push	a
 	pushw	y
-	ldw	x, (0x0d, sp)
+	ldw	x, (0x0a, sp)
 	pushw	x
-	ldw	x, (0x0d, sp)
+	ldw	x, (0x0a, sp)
 	pushw	x
 	call	__divulong
 	addw	sp, #8
-	ldw	(0x02, sp), x
+	ldw	(0x01, sp), x
 ;	lib/stm8s_i2c.c: 110: tmpccrh |= I2C_CCRH_DUTY;
 	ld	a, #0xc0
-	ld	(0x01, sp), a
+	ld	(0x03, sp), a
 00103$:
 ;	lib/stm8s_i2c.c: 114: if (result < (uint16_t)0x01)
-	ldw	x, (0x02, sp)
+	ldw	x, (0x01, sp)
 	cpw	x, #0x0001
 	jrnc	00105$
 ;	lib/stm8s_i2c.c: 117: result = (uint16_t)0x0001;
 	ldw	x, #0x0001
-	ldw	(0x02, sp), x
+	ldw	(0x01, sp), x
 00105$:
 ;	lib/stm8s_i2c.c: 123: tmpval = ((InputClockFrequencyMHz * 3) / 10) + 1;
 	ld	a, (0x16, sp)
@@ -220,20 +220,20 @@ _I2C_Init:
 	rlcw	y
 	pushw	x
 	pushw	y
-	ldw	x, (0x0d, sp)
+	ldw	x, (0x0a, sp)
 	pushw	x
-	ldw	x, (0x0d, sp)
+	ldw	x, (0x0a, sp)
 	pushw	x
 	call	__divulong
 	addw	sp, #8
-	ldw	(0x02, sp), x
+	ldw	(0x01, sp), x
 ;	lib/stm8s_i2c.c: 134: if (result < (uint16_t)0x0004)
-	ldw	x, (0x02, sp)
+	ldw	x, (0x01, sp)
 	cpw	x, #0x0004
 	jrnc	00107$
 ;	lib/stm8s_i2c.c: 137: result = (uint16_t)0x0004;
 	ldw	x, #0x0004
-	ldw	(0x02, sp), x
+	ldw	(0x01, sp), x
 00107$:
 ;	lib/stm8s_i2c.c: 143: I2C->TRISER = (uint8_t)(InputClockFrequencyMHz + (uint8_t)1);
 	ld	a, (0x16, sp)
@@ -242,14 +242,14 @@ _I2C_Init:
 	ld	(x), a
 00110$:
 ;	lib/stm8s_i2c.c: 148: I2C->CCRL = (uint8_t)result;
-	ld	a, (0x03, sp)
+	ld	a, (0x02, sp)
 	ldw	x, #0x521b
 	ld	(x), a
 ;	lib/stm8s_i2c.c: 149: I2C->CCRH = (uint8_t)((uint8_t)((uint8_t)(result >> 8) & I2C_CCRH_CCR) | tmpccrh);
-	ld	a, (0x02, sp)
-	clr	(0x05, sp)
+	ld	a, (0x01, sp)
+	clr	(0x09, sp)
 	and	a, #0x0f
-	or	a, (0x01, sp)
+	or	a, (0x03, sp)
 	ldw	x, #0x521c
 	ld	(x), a
 ;	lib/stm8s_i2c.c: 152: I2C->CR1 |= I2C_CR1_PE;
@@ -266,7 +266,7 @@ _I2C_Init:
 ;	lib/stm8s_i2c.c: 159: I2C->OARH = (uint8_t)((uint8_t)(AddMode | I2C_OARH_ADDCONF) |
 	ld	a, (0x15, sp)
 	or	a, #0x40
-	ld	(0x04, sp), a
+	ld	(0x08, sp), a
 ;	lib/stm8s_i2c.c: 160: (uint8_t)((OwnAddress & (uint16_t)0x0300) >> (uint8_t)7));
 	clr	a
 	ld	xl, a
@@ -276,7 +276,7 @@ _I2C_Init:
 	ld	a, #0x80
 	div	x, a
 	ld	a, xl
-	or	a, (0x04, sp)
+	or	a, (0x08, sp)
 	ldw	x, #0x5214
 	ld	(x), a
 	addw	sp, #10
@@ -537,13 +537,13 @@ _I2C_CheckEvent:
 	ld	xl, a
 	pop	a
 ;	lib/stm8s_i2c.c: 530: lastevent = ((uint16_t)((uint16_t)flag2 << (uint16_t)8) | (uint16_t)flag1);
+	clr	(0x03, sp)
+	clr	(0x08, sp)
 	clr	(0x05, sp)
-	clr	(0x04, sp)
-	clr	(0x07, sp)
-	or	a, (0x04, sp)
+	or	a, (0x08, sp)
 	ld	(0x0a, sp), a
 	ld	a, xl
-	or	a, (0x07, sp)
+	or	a, (0x05, sp)
 	ld	(0x09, sp), a
 	ldw	y, (0x09, sp)
 	ldw	(0x01, sp), y
