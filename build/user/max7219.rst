@@ -53,285 +53,285 @@
                                      53 ;	-----------------------------------------
                                      54 ;	 function delay_ms
                                      55 ;	-----------------------------------------
-      0089FA                         56 _delay_ms:
-      0089FA 88               [ 1]   57 	push	a
+      008BC5                         56 _delay_ms:
+      008BC5 88               [ 1]   57 	push	a
                                      58 ;	user/max7219.c: 9: while(x--);
-      0089FB 7B 04            [ 1]   59 	ld	a, (0x04, sp)
-      0089FD                         60 00101$:
-      0089FD 6B 01            [ 1]   61 	ld	(0x01, sp), a
-      0089FF 4A               [ 1]   62 	dec	a
-      008A00 0D 01            [ 1]   63 	tnz	(0x01, sp)
-      008A02 26 F9            [ 1]   64 	jrne	00101$
-      008A04 84               [ 1]   65 	pop	a
-      008A05 81               [ 4]   66 	ret
+      008BC6 7B 04            [ 1]   59 	ld	a, (0x04, sp)
+      008BC8                         60 00101$:
+      008BC8 6B 01            [ 1]   61 	ld	(0x01, sp), a
+      008BCA 4A               [ 1]   62 	dec	a
+      008BCB 0D 01            [ 1]   63 	tnz	(0x01, sp)
+      008BCD 26 F9            [ 1]   64 	jrne	00101$
+      008BCF 84               [ 1]   65 	pop	a
+      008BD0 81               [ 4]   66 	ret
                                      67 ;	user/max7219.c: 12: void max7Seg(GPIO_TypeDef* port, uint8_t data, uint8_t cs, uint8_t clk, uint8_t numLed)
                                      68 ;	-----------------------------------------
                                      69 ;	 function max7Seg
                                      70 ;	-----------------------------------------
-      008A06                         71 _max7Seg:
-      008A06 89               [ 2]   72 	pushw	x
+      008BD1                         71 _max7Seg:
+      008BD1 89               [ 2]   72 	pushw	x
                                      73 ;	user/max7219.c: 14: max7seg.port = port;
-      008A07 AE 00 07         [ 2]   74 	ldw	x, #_max7seg+0
-      008A0A 16 05            [ 2]   75 	ldw	y, (0x05, sp)
-      008A0C FF               [ 2]   76 	ldw	(x), y
+      008BD2 AE 00 07         [ 2]   74 	ldw	x, #_max7seg+0
+      008BD5 16 05            [ 2]   75 	ldw	y, (0x05, sp)
+      008BD7 FF               [ 2]   76 	ldw	(x), y
                                      77 ;	user/max7219.c: 15: max7seg.data = data;
-      008A0D AE 00 07         [ 2]   78 	ldw	x, #_max7seg+0
-      008A10 1F 01            [ 2]   79 	ldw	(0x01, sp), x
-      008A12 1E 01            [ 2]   80 	ldw	x, (0x01, sp)
-      008A14 5C               [ 2]   81 	incw	x
-      008A15 5C               [ 2]   82 	incw	x
-      008A16 7B 07            [ 1]   83 	ld	a, (0x07, sp)
-      008A18 F7               [ 1]   84 	ld	(x), a
+      008BD8 AE 00 07         [ 2]   78 	ldw	x, #_max7seg+0
+      008BDB 1F 01            [ 2]   79 	ldw	(0x01, sp), x
+      008BDD 1E 01            [ 2]   80 	ldw	x, (0x01, sp)
+      008BDF 5C               [ 2]   81 	incw	x
+      008BE0 5C               [ 2]   82 	incw	x
+      008BE1 7B 07            [ 1]   83 	ld	a, (0x07, sp)
+      008BE3 F7               [ 1]   84 	ld	(x), a
                                      85 ;	user/max7219.c: 16: max7seg.cs = cs;
-      008A19 1E 01            [ 2]   86 	ldw	x, (0x01, sp)
-      008A1B 7B 08            [ 1]   87 	ld	a, (0x08, sp)
-      008A1D E7 03            [ 1]   88 	ld	(0x0003, x), a
+      008BE4 1E 01            [ 2]   86 	ldw	x, (0x01, sp)
+      008BE6 7B 08            [ 1]   87 	ld	a, (0x08, sp)
+      008BE8 E7 03            [ 1]   88 	ld	(0x0003, x), a
                                      89 ;	user/max7219.c: 17: max7seg.clk = clk;
-      008A1F 1E 01            [ 2]   90 	ldw	x, (0x01, sp)
-      008A21 7B 09            [ 1]   91 	ld	a, (0x09, sp)
-      008A23 E7 04            [ 1]   92 	ld	(0x0004, x), a
+      008BEA 1E 01            [ 2]   90 	ldw	x, (0x01, sp)
+      008BEC 7B 09            [ 1]   91 	ld	a, (0x09, sp)
+      008BEE E7 04            [ 1]   92 	ld	(0x0004, x), a
                                      93 ;	user/max7219.c: 18: max7seg.numLed =  numLed;
-      008A25 1E 01            [ 2]   94 	ldw	x, (0x01, sp)
-      008A27 7B 0A            [ 1]   95 	ld	a, (0x0a, sp)
-      008A29 E7 05            [ 1]   96 	ld	(0x0005, x), a
+      008BF0 1E 01            [ 2]   94 	ldw	x, (0x01, sp)
+      008BF2 7B 0A            [ 1]   95 	ld	a, (0x0a, sp)
+      008BF4 E7 05            [ 1]   96 	ld	(0x0005, x), a
                                      97 ;	user/max7219.c: 19: memset(max7seg.buffer, 0x00, sizeof(max7seg.buffer));
-      008A2B 1E 01            [ 2]   98 	ldw	x, (0x01, sp)
-      008A2D 1C 00 06         [ 2]   99 	addw	x, #0x0006
-      008A30 4B 08            [ 1]  100 	push	#0x08
-      008A32 4B 00            [ 1]  101 	push	#0x00
-      008A34 4B 00            [ 1]  102 	push	#0x00
-      008A36 4B 00            [ 1]  103 	push	#0x00
-      008A38 89               [ 2]  104 	pushw	x
-      008A39 CD 96 A2         [ 4]  105 	call	_memset
-      008A3C 5B 08            [ 2]  106 	addw	sp, #8
-      008A3E 81               [ 4]  107 	ret
+      008BF6 1E 01            [ 2]   98 	ldw	x, (0x01, sp)
+      008BF8 1C 00 06         [ 2]   99 	addw	x, #0x0006
+      008BFB 4B 08            [ 1]  100 	push	#0x08
+      008BFD 4B 00            [ 1]  101 	push	#0x00
+      008BFF 4B 00            [ 1]  102 	push	#0x00
+      008C01 4B 00            [ 1]  103 	push	#0x00
+      008C03 89               [ 2]  104 	pushw	x
+      008C04 CD 98 6D         [ 4]  105 	call	_memset
+      008C07 5B 08            [ 2]  106 	addw	sp, #8
+      008C09 81               [ 4]  107 	ret
                                     108 ;	user/max7219.c: 22: void Max7219_Write_Byte(uint8_t dat)
                                     109 ;	-----------------------------------------
                                     110 ;	 function Max7219_Write_Byte
                                     111 ;	-----------------------------------------
-      008A3F                        112 _Max7219_Write_Byte:
-      008A3F 52 06            [ 2]  113 	sub	sp, #6
+      008C0A                        112 _Max7219_Write_Byte:
+      008C0A 52 06            [ 2]  113 	sub	sp, #6
                                     114 ;	user/max7219.c: 26: dsent = dat;
-      008A41 7B 09            [ 1]  115 	ld	a, (0x09, sp)
-      008A43 6B 02            [ 1]  116 	ld	(0x02, sp), a
+      008C0C 7B 09            [ 1]  115 	ld	a, (0x09, sp)
+      008C0E 6B 02            [ 1]  116 	ld	(0x02, sp), a
                                     117 ;	user/max7219.c: 27: for(cnt=0; cnt<8; cnt++)
-      008A45 AE 00 07         [ 2]  118 	ldw	x, #_max7seg+0
-      008A48 1F 05            [ 2]  119 	ldw	(0x05, sp), x
-      008A4A 1E 05            [ 2]  120 	ldw	x, (0x05, sp)
-      008A4C 1C 00 04         [ 2]  121 	addw	x, #0x0004
-      008A4F 1F 03            [ 2]  122 	ldw	(0x03, sp), x
-      008A51 0F 01            [ 1]  123 	clr	(0x01, sp)
-      008A53                        124 00105$:
+      008C10 AE 00 07         [ 2]  118 	ldw	x, #_max7seg+0
+      008C13 1F 05            [ 2]  119 	ldw	(0x05, sp), x
+      008C15 1E 05            [ 2]  120 	ldw	x, (0x05, sp)
+      008C17 1C 00 04         [ 2]  121 	addw	x, #0x0004
+      008C1A 1F 03            [ 2]  122 	ldw	(0x03, sp), x
+      008C1C 0F 01            [ 1]  123 	clr	(0x01, sp)
+      008C1E                        124 00105$:
                                     125 ;	user/max7219.c: 29: GPIO_WriteLow(max7seg.port, max7seg.clk);
-      008A53 1E 03            [ 2]  126 	ldw	x, (0x03, sp)
-      008A55 F6               [ 1]  127 	ld	a, (x)
-      008A56 1E 05            [ 2]  128 	ldw	x, (0x05, sp)
-      008A58 FE               [ 2]  129 	ldw	x, (x)
-      008A59 88               [ 1]  130 	push	a
-      008A5A 89               [ 2]  131 	pushw	x
-      008A5B CD 90 CC         [ 4]  132 	call	_GPIO_WriteLow
-      008A5E 5B 03            [ 2]  133 	addw	sp, #3
-      008A60 1E 05            [ 2]  134 	ldw	x, (0x05, sp)
-      008A62 FE               [ 2]  135 	ldw	x, (x)
+      008C1E 1E 03            [ 2]  126 	ldw	x, (0x03, sp)
+      008C20 F6               [ 1]  127 	ld	a, (x)
+      008C21 1E 05            [ 2]  128 	ldw	x, (0x05, sp)
+      008C23 FE               [ 2]  129 	ldw	x, (x)
+      008C24 88               [ 1]  130 	push	a
+      008C25 89               [ 2]  131 	pushw	x
+      008C26 CD 92 97         [ 4]  132 	call	_GPIO_WriteLow
+      008C29 5B 03            [ 2]  133 	addw	sp, #3
+      008C2B 1E 05            [ 2]  134 	ldw	x, (0x05, sp)
+      008C2D FE               [ 2]  135 	ldw	x, (x)
                                     136 ;	user/max7219.c: 31: GPIO_WriteHigh(max7seg.port, max7seg.data);
-      008A63 16 05            [ 2]  137 	ldw	y, (0x05, sp)
-      008A65 90 E6 02         [ 1]  138 	ld	a, (0x2, y)
+      008C2E 16 05            [ 2]  137 	ldw	y, (0x05, sp)
+      008C30 90 E6 02         [ 1]  138 	ld	a, (0x2, y)
                                     139 ;	user/max7219.c: 30: if(dsent&0x80)
-      008A68 0D 02            [ 1]  140 	tnz	(0x02, sp)
-      008A6A 2A 09            [ 1]  141 	jrpl	00102$
+      008C33 0D 02            [ 1]  140 	tnz	(0x02, sp)
+      008C35 2A 09            [ 1]  141 	jrpl	00102$
                                     142 ;	user/max7219.c: 31: GPIO_WriteHigh(max7seg.port, max7seg.data);
-      008A6C 88               [ 1]  143 	push	a
-      008A6D 89               [ 2]  144 	pushw	x
-      008A6E CD 90 C5         [ 4]  145 	call	_GPIO_WriteHigh
-      008A71 5B 03            [ 2]  146 	addw	sp, #3
-      008A73 20 07            [ 2]  147 	jra	00103$
-      008A75                        148 00102$:
+      008C37 88               [ 1]  143 	push	a
+      008C38 89               [ 2]  144 	pushw	x
+      008C39 CD 92 90         [ 4]  145 	call	_GPIO_WriteHigh
+      008C3C 5B 03            [ 2]  146 	addw	sp, #3
+      008C3E 20 07            [ 2]  147 	jra	00103$
+      008C40                        148 00102$:
                                     149 ;	user/max7219.c: 33: GPIO_WriteLow(max7seg.port, max7seg.data);
-      008A75 88               [ 1]  150 	push	a
-      008A76 89               [ 2]  151 	pushw	x
-      008A77 CD 90 CC         [ 4]  152 	call	_GPIO_WriteLow
-      008A7A 5B 03            [ 2]  153 	addw	sp, #3
-      008A7C                        154 00103$:
+      008C40 88               [ 1]  150 	push	a
+      008C41 89               [ 2]  151 	pushw	x
+      008C42 CD 92 97         [ 4]  152 	call	_GPIO_WriteLow
+      008C45 5B 03            [ 2]  153 	addw	sp, #3
+      008C47                        154 00103$:
                                     155 ;	user/max7219.c: 34: GPIO_WriteHigh(max7seg.port, max7seg.clk);
-      008A7C 1E 03            [ 2]  156 	ldw	x, (0x03, sp)
-      008A7E F6               [ 1]  157 	ld	a, (x)
-      008A7F 1E 05            [ 2]  158 	ldw	x, (0x05, sp)
-      008A81 FE               [ 2]  159 	ldw	x, (x)
-      008A82 88               [ 1]  160 	push	a
-      008A83 89               [ 2]  161 	pushw	x
-      008A84 CD 90 C5         [ 4]  162 	call	_GPIO_WriteHigh
-      008A87 5B 03            [ 2]  163 	addw	sp, #3
+      008C47 1E 03            [ 2]  156 	ldw	x, (0x03, sp)
+      008C49 F6               [ 1]  157 	ld	a, (x)
+      008C4A 1E 05            [ 2]  158 	ldw	x, (0x05, sp)
+      008C4C FE               [ 2]  159 	ldw	x, (x)
+      008C4D 88               [ 1]  160 	push	a
+      008C4E 89               [ 2]  161 	pushw	x
+      008C4F CD 92 90         [ 4]  162 	call	_GPIO_WriteHigh
+      008C52 5B 03            [ 2]  163 	addw	sp, #3
                                     164 ;	user/max7219.c: 35: dsent <<= 1;
-      008A89 08 02            [ 1]  165 	sll	(0x02, sp)
+      008C54 08 02            [ 1]  165 	sll	(0x02, sp)
                                     166 ;	user/max7219.c: 27: for(cnt=0; cnt<8; cnt++)
-      008A8B 0C 01            [ 1]  167 	inc	(0x01, sp)
-      008A8D 7B 01            [ 1]  168 	ld	a, (0x01, sp)
-      008A8F A1 08            [ 1]  169 	cp	a, #0x08
-      008A91 25 C0            [ 1]  170 	jrc	00105$
-      008A93 5B 06            [ 2]  171 	addw	sp, #6
-      008A95 81               [ 4]  172 	ret
+      008C56 0C 01            [ 1]  167 	inc	(0x01, sp)
+      008C58 7B 01            [ 1]  168 	ld	a, (0x01, sp)
+      008C5A A1 08            [ 1]  169 	cp	a, #0x08
+      008C5C 25 C0            [ 1]  170 	jrc	00105$
+      008C5E 5B 06            [ 2]  171 	addw	sp, #6
+      008C60 81               [ 4]  172 	ret
                                     173 ;	user/max7219.c: 39: void setCommand(uint8_t command, uint8_t value)
                                     174 ;	-----------------------------------------
                                     175 ;	 function setCommand
                                     176 ;	-----------------------------------------
-      008A96                        177 _setCommand:
-      008A96 52 04            [ 2]  178 	sub	sp, #4
+      008C61                        177 _setCommand:
+      008C61 52 04            [ 2]  178 	sub	sp, #4
                                     179 ;	user/max7219.c: 42: GPIO_WriteLow(max7seg.port, max7seg.cs);
-      008A98 AE 00 07         [ 2]  180 	ldw	x, #_max7seg+0
-      008A9B 1F 03            [ 2]  181 	ldw	(0x03, sp), x
-      008A9D 1E 03            [ 2]  182 	ldw	x, (0x03, sp)
-      008A9F 1C 00 03         [ 2]  183 	addw	x, #0x0003
-      008AA2 1F 01            [ 2]  184 	ldw	(0x01, sp), x
-      008AA4 1E 01            [ 2]  185 	ldw	x, (0x01, sp)
-      008AA6 F6               [ 1]  186 	ld	a, (x)
-      008AA7 1E 03            [ 2]  187 	ldw	x, (0x03, sp)
-      008AA9 FE               [ 2]  188 	ldw	x, (x)
-      008AAA 88               [ 1]  189 	push	a
-      008AAB 89               [ 2]  190 	pushw	x
-      008AAC CD 90 CC         [ 4]  191 	call	_GPIO_WriteLow
-      008AAF 5B 03            [ 2]  192 	addw	sp, #3
+      008C63 AE 00 07         [ 2]  180 	ldw	x, #_max7seg+0
+      008C66 1F 03            [ 2]  181 	ldw	(0x03, sp), x
+      008C68 1E 03            [ 2]  182 	ldw	x, (0x03, sp)
+      008C6A 1C 00 03         [ 2]  183 	addw	x, #0x0003
+      008C6D 1F 01            [ 2]  184 	ldw	(0x01, sp), x
+      008C6F 1E 01            [ 2]  185 	ldw	x, (0x01, sp)
+      008C71 F6               [ 1]  186 	ld	a, (x)
+      008C72 1E 03            [ 2]  187 	ldw	x, (0x03, sp)
+      008C74 FE               [ 2]  188 	ldw	x, (x)
+      008C75 88               [ 1]  189 	push	a
+      008C76 89               [ 2]  190 	pushw	x
+      008C77 CD 92 97         [ 4]  191 	call	_GPIO_WriteLow
+      008C7A 5B 03            [ 2]  192 	addw	sp, #3
                                     193 ;	user/max7219.c: 43: Max7219_Write_Byte(command);
-      008AB1 7B 07            [ 1]  194 	ld	a, (0x07, sp)
-      008AB3 88               [ 1]  195 	push	a
-      008AB4 CD 8A 3F         [ 4]  196 	call	_Max7219_Write_Byte
-      008AB7 84               [ 1]  197 	pop	a
+      008C7C 7B 07            [ 1]  194 	ld	a, (0x07, sp)
+      008C7E 88               [ 1]  195 	push	a
+      008C7F CD 8C 0A         [ 4]  196 	call	_Max7219_Write_Byte
+      008C82 84               [ 1]  197 	pop	a
                                     198 ;	user/max7219.c: 44: Max7219_Write_Byte(value);
-      008AB8 7B 08            [ 1]  199 	ld	a, (0x08, sp)
-      008ABA 88               [ 1]  200 	push	a
-      008ABB CD 8A 3F         [ 4]  201 	call	_Max7219_Write_Byte
-      008ABE 84               [ 1]  202 	pop	a
+      008C83 7B 08            [ 1]  199 	ld	a, (0x08, sp)
+      008C85 88               [ 1]  200 	push	a
+      008C86 CD 8C 0A         [ 4]  201 	call	_Max7219_Write_Byte
+      008C89 84               [ 1]  202 	pop	a
                                     203 ;	user/max7219.c: 45: GPIO_WriteLow(max7seg.port, max7seg.cs);
-      008ABF 1E 01            [ 2]  204 	ldw	x, (0x01, sp)
-      008AC1 F6               [ 1]  205 	ld	a, (x)
-      008AC2 1E 03            [ 2]  206 	ldw	x, (0x03, sp)
-      008AC4 FE               [ 2]  207 	ldw	x, (x)
-      008AC5 88               [ 1]  208 	push	a
-      008AC6 89               [ 2]  209 	pushw	x
-      008AC7 CD 90 CC         [ 4]  210 	call	_GPIO_WriteLow
-      008ACA 5B 03            [ 2]  211 	addw	sp, #3
+      008C8A 1E 01            [ 2]  204 	ldw	x, (0x01, sp)
+      008C8C F6               [ 1]  205 	ld	a, (x)
+      008C8D 1E 03            [ 2]  206 	ldw	x, (0x03, sp)
+      008C8F FE               [ 2]  207 	ldw	x, (x)
+      008C90 88               [ 1]  208 	push	a
+      008C91 89               [ 2]  209 	pushw	x
+      008C92 CD 92 97         [ 4]  210 	call	_GPIO_WriteLow
+      008C95 5B 03            [ 2]  211 	addw	sp, #3
                                     212 ;	user/max7219.c: 46: GPIO_WriteHigh(max7seg.port, max7seg.cs);
-      008ACC 1E 01            [ 2]  213 	ldw	x, (0x01, sp)
-      008ACE F6               [ 1]  214 	ld	a, (x)
-      008ACF 1E 03            [ 2]  215 	ldw	x, (0x03, sp)
-      008AD1 FE               [ 2]  216 	ldw	x, (x)
-      008AD2 88               [ 1]  217 	push	a
-      008AD3 89               [ 2]  218 	pushw	x
-      008AD4 CD 90 C5         [ 4]  219 	call	_GPIO_WriteHigh
-      008AD7 5B 07            [ 2]  220 	addw	sp, #7
-      008AD9 81               [ 4]  221 	ret
+      008C97 1E 01            [ 2]  213 	ldw	x, (0x01, sp)
+      008C99 F6               [ 1]  214 	ld	a, (x)
+      008C9A 1E 03            [ 2]  215 	ldw	x, (0x03, sp)
+      008C9C FE               [ 2]  216 	ldw	x, (x)
+      008C9D 88               [ 1]  217 	push	a
+      008C9E 89               [ 2]  218 	pushw	x
+      008C9F CD 92 90         [ 4]  219 	call	_GPIO_WriteHigh
+      008CA2 5B 07            [ 2]  220 	addw	sp, #7
+      008CA4 81               [ 4]  221 	ret
                                     222 ;	user/max7219.c: 49: void Init(void)
                                     223 ;	-----------------------------------------
                                     224 ;	 function Init
                                     225 ;	-----------------------------------------
-      008ADA                        226 _Init:
-      008ADA 52 04            [ 2]  227 	sub	sp, #4
+      008CA5                        226 _Init:
+      008CA5 52 04            [ 2]  227 	sub	sp, #4
                                     228 ;	user/max7219.c: 51: GPIO_Init(max7seg.port, max7seg.data|max7seg.cs|max7seg.clk, GPIO_MODE_OUT_PP_HIGH_FAST);
-      008ADC AE 00 07         [ 2]  229 	ldw	x, #_max7seg+0
-      008ADF 1F 03            [ 2]  230 	ldw	(0x03, sp), x
-      008AE1 1E 03            [ 2]  231 	ldw	x, (0x03, sp)
-      008AE3 E6 02            [ 1]  232 	ld	a, (0x2, x)
-      008AE5 6B 02            [ 1]  233 	ld	(0x02, sp), a
-      008AE7 1E 03            [ 2]  234 	ldw	x, (0x03, sp)
-      008AE9 E6 03            [ 1]  235 	ld	a, (0x3, x)
-      008AEB 1A 02            [ 1]  236 	or	a, (0x02, sp)
-      008AED 6B 01            [ 1]  237 	ld	(0x01, sp), a
-      008AEF 1E 03            [ 2]  238 	ldw	x, (0x03, sp)
-      008AF1 E6 04            [ 1]  239 	ld	a, (0x4, x)
-      008AF3 1A 01            [ 1]  240 	or	a, (0x01, sp)
-      008AF5 1E 03            [ 2]  241 	ldw	x, (0x03, sp)
-      008AF7 FE               [ 2]  242 	ldw	x, (x)
-      008AF8 4B F0            [ 1]  243 	push	#0xf0
-      008AFA 88               [ 1]  244 	push	a
-      008AFB 89               [ 2]  245 	pushw	x
-      008AFC CD 90 31         [ 4]  246 	call	_GPIO_Init
-      008AFF 5B 04            [ 2]  247 	addw	sp, #4
+      008CA7 AE 00 07         [ 2]  229 	ldw	x, #_max7seg+0
+      008CAA 1F 03            [ 2]  230 	ldw	(0x03, sp), x
+      008CAC 1E 03            [ 2]  231 	ldw	x, (0x03, sp)
+      008CAE E6 02            [ 1]  232 	ld	a, (0x2, x)
+      008CB0 6B 02            [ 1]  233 	ld	(0x02, sp), a
+      008CB2 1E 03            [ 2]  234 	ldw	x, (0x03, sp)
+      008CB4 E6 03            [ 1]  235 	ld	a, (0x3, x)
+      008CB6 1A 02            [ 1]  236 	or	a, (0x02, sp)
+      008CB8 6B 01            [ 1]  237 	ld	(0x01, sp), a
+      008CBA 1E 03            [ 2]  238 	ldw	x, (0x03, sp)
+      008CBC E6 04            [ 1]  239 	ld	a, (0x4, x)
+      008CBE 1A 01            [ 1]  240 	or	a, (0x01, sp)
+      008CC0 1E 03            [ 2]  241 	ldw	x, (0x03, sp)
+      008CC2 FE               [ 2]  242 	ldw	x, (x)
+      008CC3 4B F0            [ 1]  243 	push	#0xf0
+      008CC5 88               [ 1]  244 	push	a
+      008CC6 89               [ 2]  245 	pushw	x
+      008CC7 CD 91 FC         [ 4]  246 	call	_GPIO_Init
+      008CCA 5B 04            [ 2]  247 	addw	sp, #4
                                     248 ;	user/max7219.c: 52: setCommand(SCANLIMIT, 0x07); //scanf num led 7seg
-      008B01 4B 07            [ 1]  249 	push	#0x07
-      008B03 4B 0B            [ 1]  250 	push	#0x0b
-      008B05 CD 8A 96         [ 4]  251 	call	_setCommand
-      008B08 85               [ 2]  252 	popw	x
+      008CCC 4B 07            [ 1]  249 	push	#0x07
+      008CCE 4B 0B            [ 1]  250 	push	#0x0b
+      008CD0 CD 8C 61         [ 4]  251 	call	_setCommand
+      008CD3 85               [ 2]  252 	popw	x
                                     253 ;	user/max7219.c: 53: setCommand(DECODEMODE, 0xff); // decode digit 7 -0
-      008B09 4B FF            [ 1]  254 	push	#0xff
-      008B0B 4B 09            [ 1]  255 	push	#0x09
-      008B0D CD 8A 96         [ 4]  256 	call	_setCommand
-      008B10 85               [ 2]  257 	popw	x
+      008CD4 4B FF            [ 1]  254 	push	#0xff
+      008CD6 4B 09            [ 1]  255 	push	#0x09
+      008CD8 CD 8C 61         [ 4]  256 	call	_setCommand
+      008CDB 85               [ 2]  257 	popw	x
                                     258 ;	user/max7219.c: 54: setCommand(SHUTDOWN, 0x01); // normal operator
-      008B11 4B 01            [ 1]  259 	push	#0x01
-      008B13 4B 0C            [ 1]  260 	push	#0x0c
-      008B15 CD 8A 96         [ 4]  261 	call	_setCommand
-      008B18 85               [ 2]  262 	popw	x
+      008CDC 4B 01            [ 1]  259 	push	#0x01
+      008CDE 4B 0C            [ 1]  260 	push	#0x0c
+      008CE0 CD 8C 61         [ 4]  261 	call	_setCommand
+      008CE3 85               [ 2]  262 	popw	x
                                     263 ;	user/max7219.c: 55: setCommand(DISPLAYTEST, 0x00); //no display test
-      008B19 4B 00            [ 1]  264 	push	#0x00
-      008B1B 4B 0F            [ 1]  265 	push	#0x0f
-      008B1D CD 8A 96         [ 4]  266 	call	_setCommand
-      008B20 85               [ 2]  267 	popw	x
+      008CE4 4B 00            [ 1]  264 	push	#0x00
+      008CE6 4B 0F            [ 1]  265 	push	#0x0f
+      008CE8 CD 8C 61         [ 4]  266 	call	_setCommand
+      008CEB 85               [ 2]  267 	popw	x
                                     268 ;	user/max7219.c: 56: setCommand(INTENSITY, 0x01); // brightness 9/32
-      008B21 4B 01            [ 1]  269 	push	#0x01
-      008B23 4B 0A            [ 1]  270 	push	#0x0a
-      008B25 CD 8A 96         [ 4]  271 	call	_setCommand
-      008B28 5B 06            [ 2]  272 	addw	sp, #6
-      008B2A 81               [ 4]  273 	ret
+      008CEC 4B 01            [ 1]  269 	push	#0x01
+      008CEE 4B 0A            [ 1]  270 	push	#0x0a
+      008CF0 CD 8C 61         [ 4]  271 	call	_setCommand
+      008CF3 5B 06            [ 2]  272 	addw	sp, #6
+      008CF5 81               [ 4]  273 	ret
                                     274 ;	user/max7219.c: 59: void setIntensity(uint8_t intensity)
                                     275 ;	-----------------------------------------
                                     276 ;	 function setIntensity
                                     277 ;	-----------------------------------------
-      008B2B                        278 _setIntensity:
+      008CF6                        278 _setIntensity:
                                     279 ;	user/max7219.c: 61: setCommand(INTENSITY, intensity);
-      008B2B 7B 03            [ 1]  280 	ld	a, (0x03, sp)
-      008B2D 88               [ 1]  281 	push	a
-      008B2E 4B 0A            [ 1]  282 	push	#0x0a
-      008B30 CD 8A 96         [ 4]  283 	call	_setCommand
-      008B33 85               [ 2]  284 	popw	x
-      008B34 81               [ 4]  285 	ret
+      008CF6 7B 03            [ 1]  280 	ld	a, (0x03, sp)
+      008CF8 88               [ 1]  281 	push	a
+      008CF9 4B 0A            [ 1]  282 	push	#0x0a
+      008CFB CD 8C 61         [ 4]  283 	call	_setCommand
+      008CFE 85               [ 2]  284 	popw	x
+      008CFF 81               [ 4]  285 	ret
                                     286 ;	user/max7219.c: 64: void send7Seg(uint8_t led, uint8_t data)
                                     287 ;	-----------------------------------------
                                     288 ;	 function send7Seg
                                     289 ;	-----------------------------------------
-      008B35                        290 _send7Seg:
-      008B35 52 04            [ 2]  291 	sub	sp, #4
+      008D00                        290 _send7Seg:
+      008D00 52 04            [ 2]  291 	sub	sp, #4
                                     292 ;	user/max7219.c: 67: GPIO_WriteLow(max7seg.port, max7seg.cs);
-      008B37 AE 00 07         [ 2]  293 	ldw	x, #_max7seg+0
-      008B3A 1F 03            [ 2]  294 	ldw	(0x03, sp), x
-      008B3C 1E 03            [ 2]  295 	ldw	x, (0x03, sp)
-      008B3E 1C 00 03         [ 2]  296 	addw	x, #0x0003
-      008B41 1F 01            [ 2]  297 	ldw	(0x01, sp), x
-      008B43 1E 01            [ 2]  298 	ldw	x, (0x01, sp)
-      008B45 F6               [ 1]  299 	ld	a, (x)
-      008B46 1E 03            [ 2]  300 	ldw	x, (0x03, sp)
-      008B48 FE               [ 2]  301 	ldw	x, (x)
-      008B49 88               [ 1]  302 	push	a
-      008B4A 89               [ 2]  303 	pushw	x
-      008B4B CD 90 CC         [ 4]  304 	call	_GPIO_WriteLow
-      008B4E 5B 03            [ 2]  305 	addw	sp, #3
+      008D02 AE 00 07         [ 2]  293 	ldw	x, #_max7seg+0
+      008D05 1F 03            [ 2]  294 	ldw	(0x03, sp), x
+      008D07 1E 03            [ 2]  295 	ldw	x, (0x03, sp)
+      008D09 1C 00 03         [ 2]  296 	addw	x, #0x0003
+      008D0C 1F 01            [ 2]  297 	ldw	(0x01, sp), x
+      008D0E 1E 01            [ 2]  298 	ldw	x, (0x01, sp)
+      008D10 F6               [ 1]  299 	ld	a, (x)
+      008D11 1E 03            [ 2]  300 	ldw	x, (0x03, sp)
+      008D13 FE               [ 2]  301 	ldw	x, (x)
+      008D14 88               [ 1]  302 	push	a
+      008D15 89               [ 2]  303 	pushw	x
+      008D16 CD 92 97         [ 4]  304 	call	_GPIO_WriteLow
+      008D19 5B 03            [ 2]  305 	addw	sp, #3
                                     306 ;	user/max7219.c: 68: Max7219_Write_Byte(led);
-      008B50 7B 07            [ 1]  307 	ld	a, (0x07, sp)
-      008B52 88               [ 1]  308 	push	a
-      008B53 CD 8A 3F         [ 4]  309 	call	_Max7219_Write_Byte
-      008B56 84               [ 1]  310 	pop	a
+      008D1B 7B 07            [ 1]  307 	ld	a, (0x07, sp)
+      008D1D 88               [ 1]  308 	push	a
+      008D1E CD 8C 0A         [ 4]  309 	call	_Max7219_Write_Byte
+      008D21 84               [ 1]  310 	pop	a
                                     311 ;	user/max7219.c: 69: Max7219_Write_Byte(data);
-      008B57 7B 08            [ 1]  312 	ld	a, (0x08, sp)
-      008B59 88               [ 1]  313 	push	a
-      008B5A CD 8A 3F         [ 4]  314 	call	_Max7219_Write_Byte
-      008B5D 84               [ 1]  315 	pop	a
+      008D22 7B 08            [ 1]  312 	ld	a, (0x08, sp)
+      008D24 88               [ 1]  313 	push	a
+      008D25 CD 8C 0A         [ 4]  314 	call	_Max7219_Write_Byte
+      008D28 84               [ 1]  315 	pop	a
                                     316 ;	user/max7219.c: 70: GPIO_WriteLow(max7seg.port, max7seg.cs);
-      008B5E 1E 01            [ 2]  317 	ldw	x, (0x01, sp)
-      008B60 F6               [ 1]  318 	ld	a, (x)
-      008B61 1E 03            [ 2]  319 	ldw	x, (0x03, sp)
-      008B63 FE               [ 2]  320 	ldw	x, (x)
-      008B64 88               [ 1]  321 	push	a
-      008B65 89               [ 2]  322 	pushw	x
-      008B66 CD 90 CC         [ 4]  323 	call	_GPIO_WriteLow
-      008B69 5B 03            [ 2]  324 	addw	sp, #3
+      008D29 1E 01            [ 2]  317 	ldw	x, (0x01, sp)
+      008D2B F6               [ 1]  318 	ld	a, (x)
+      008D2C 1E 03            [ 2]  319 	ldw	x, (0x03, sp)
+      008D2E FE               [ 2]  320 	ldw	x, (x)
+      008D2F 88               [ 1]  321 	push	a
+      008D30 89               [ 2]  322 	pushw	x
+      008D31 CD 92 97         [ 4]  323 	call	_GPIO_WriteLow
+      008D34 5B 03            [ 2]  324 	addw	sp, #3
                                     325 ;	user/max7219.c: 71: GPIO_WriteHigh(max7seg.port, max7seg.cs);
-      008B6B 1E 01            [ 2]  326 	ldw	x, (0x01, sp)
-      008B6D F6               [ 1]  327 	ld	a, (x)
-      008B6E 1E 03            [ 2]  328 	ldw	x, (0x03, sp)
-      008B70 FE               [ 2]  329 	ldw	x, (x)
-      008B71 88               [ 1]  330 	push	a
-      008B72 89               [ 2]  331 	pushw	x
-      008B73 CD 90 C5         [ 4]  332 	call	_GPIO_WriteHigh
-      008B76 5B 07            [ 2]  333 	addw	sp, #7
-      008B78 81               [ 4]  334 	ret
+      008D36 1E 01            [ 2]  326 	ldw	x, (0x01, sp)
+      008D38 F6               [ 1]  327 	ld	a, (x)
+      008D39 1E 03            [ 2]  328 	ldw	x, (0x03, sp)
+      008D3B FE               [ 2]  329 	ldw	x, (x)
+      008D3C 88               [ 1]  330 	push	a
+      008D3D 89               [ 2]  331 	pushw	x
+      008D3E CD 92 90         [ 4]  332 	call	_GPIO_WriteHigh
+      008D41 5B 07            [ 2]  333 	addw	sp, #7
+      008D43 81               [ 4]  334 	ret
                                     335 	.area CODE
                                     336 	.area INITIALIZER
                                     337 	.area CABS (ABS)

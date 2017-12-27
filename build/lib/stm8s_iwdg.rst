@@ -45,48 +45,48 @@
                                      45 ;	-----------------------------------------
                                      46 ;	 function IWDG_WriteAccessCmd
                                      47 ;	-----------------------------------------
-      009454                         48 _IWDG_WriteAccessCmd:
+      00961F                         48 _IWDG_WriteAccessCmd:
                                      49 ;	lib/stm8s_iwdg.c: 15: IWDG->KR = (uint8_t)IWDG_WriteAccess; /* Write Access */
-      009454 AE 50 E0         [ 2]   50 	ldw	x, #0x50e0
-      009457 7B 03            [ 1]   51 	ld	a, (0x03, sp)
-      009459 F7               [ 1]   52 	ld	(x), a
-      00945A 81               [ 4]   53 	ret
+      00961F AE 50 E0         [ 2]   50 	ldw	x, #0x50e0
+      009622 7B 03            [ 1]   51 	ld	a, (0x03, sp)
+      009624 F7               [ 1]   52 	ld	(x), a
+      009625 81               [ 4]   53 	ret
                                      54 ;	lib/stm8s_iwdg.c: 18: void IWDG_SetPrescaler(IWDG_Prescaler_TypeDef IWDG_Prescaler)
                                      55 ;	-----------------------------------------
                                      56 ;	 function IWDG_SetPrescaler
                                      57 ;	-----------------------------------------
-      00945B                         58 _IWDG_SetPrescaler:
+      009626                         58 _IWDG_SetPrescaler:
                                      59 ;	lib/stm8s_iwdg.c: 20: IWDG->PR = (uint8_t)IWDG_Prescaler;
-      00945B AE 50 E1         [ 2]   60 	ldw	x, #0x50e1
-      00945E 7B 03            [ 1]   61 	ld	a, (0x03, sp)
-      009460 F7               [ 1]   62 	ld	(x), a
-      009461 81               [ 4]   63 	ret
+      009626 AE 50 E1         [ 2]   60 	ldw	x, #0x50e1
+      009629 7B 03            [ 1]   61 	ld	a, (0x03, sp)
+      00962B F7               [ 1]   62 	ld	(x), a
+      00962C 81               [ 4]   63 	ret
                                      64 ;	lib/stm8s_iwdg.c: 23: void IWDG_SetReload(uint8_t IWDG_Reload)
                                      65 ;	-----------------------------------------
                                      66 ;	 function IWDG_SetReload
                                      67 ;	-----------------------------------------
-      009462                         68 _IWDG_SetReload:
+      00962D                         68 _IWDG_SetReload:
                                      69 ;	lib/stm8s_iwdg.c: 25: IWDG->RLR = IWDG_Reload;
-      009462 AE 50 E2         [ 2]   70 	ldw	x, #0x50e2
-      009465 7B 03            [ 1]   71 	ld	a, (0x03, sp)
-      009467 F7               [ 1]   72 	ld	(x), a
-      009468 81               [ 4]   73 	ret
+      00962D AE 50 E2         [ 2]   70 	ldw	x, #0x50e2
+      009630 7B 03            [ 1]   71 	ld	a, (0x03, sp)
+      009632 F7               [ 1]   72 	ld	(x), a
+      009633 81               [ 4]   73 	ret
                                      74 ;	lib/stm8s_iwdg.c: 28: void IWDG_ReloadCounter(void)
                                      75 ;	-----------------------------------------
                                      76 ;	 function IWDG_ReloadCounter
                                      77 ;	-----------------------------------------
-      009469                         78 _IWDG_ReloadCounter:
+      009634                         78 _IWDG_ReloadCounter:
                                      79 ;	lib/stm8s_iwdg.c: 30: IWDG->KR = IWDG_KEY_REFRESH;
-      009469 35 AA 50 E0      [ 1]   80 	mov	0x50e0+0, #0xaa
-      00946D 81               [ 4]   81 	ret
+      009634 35 AA 50 E0      [ 1]   80 	mov	0x50e0+0, #0xaa
+      009638 81               [ 4]   81 	ret
                                      82 ;	lib/stm8s_iwdg.c: 33: void IWDG_Enable(void)
                                      83 ;	-----------------------------------------
                                      84 ;	 function IWDG_Enable
                                      85 ;	-----------------------------------------
-      00946E                         86 _IWDG_Enable:
+      009639                         86 _IWDG_Enable:
                                      87 ;	lib/stm8s_iwdg.c: 35: IWDG->KR = IWDG_KEY_ENABLE;
-      00946E 35 CC 50 E0      [ 1]   88 	mov	0x50e0+0, #0xcc
-      009472 81               [ 4]   89 	ret
+      009639 35 CC 50 E0      [ 1]   88 	mov	0x50e0+0, #0xcc
+      00963D 81               [ 4]   89 	ret
                                      90 	.area CODE
                                      91 	.area INITIALIZER
                                      92 	.area CABS (ABS)

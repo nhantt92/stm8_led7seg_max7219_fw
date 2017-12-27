@@ -121,47 +121,112 @@ uint8_t PCF_Write(uint8_t addr, uint8_t *data, uint8_t count)
 	return res;
 }
 
-void PCF_Read(uint8_t addr, uint8_t *data, uint8_t count)
-{
-	//while(!I2C_GetFlagStatus( I2C_FLAG_BUSBUSY));
+uint8_t PCF_Read(uint8_t addr, uint8_t *data, uint8_t count)
+{	
+	uint8_t res = 1;
+	volatile uint32_t timeout;
+	timeout = 0x0FFF;
+	/* Check bus busy */
+	while(I2C_GetFlagStatus( I2C_FLAG_BUSBUSY))
+	{
+		if(!timeout--)
+		{
+			res = 0;
+			return res;
+		}
+	}
+	/* send the START condition */
 	I2C_GenerateSTART(ENABLE);
+	timeout = 0x0FFF;
 	// while(I2C_GetFlagStatus(I2C_FLAG_STARTDETECTION)==SET);
-	while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT));
-
+	while(!I2C_CheckEvent(I2C_EVENT_MASTER_MODE_SELECT))
+	{
+		if(!timeout--)
+		{
+			res = 0;
+			goto stop;
+		}
+	}
+	/* Send slave addr, mode write */
 	I2C_Send7bitAddress(PCF8563_WRITE_ADDR, I2C_DIRECTION_TX);
-	while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
-
+	timeout = 0x0FFF;
+	while(!I2C_CheckEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+	{
+		if(!timeout--)
+		{
+			res = 0;
+			goto stop;
+		}
+		else if(I2C_GetFlagStatus(I2C_FLAG_ACKNOWLEDGEFAILURE))
+		{
+			I2C_ClearFlag(I2C_FLAG_ACKNOWLEDGEFAILURE);
+			res = 0;
+			goto stop;
+		}
+	}
+	/* Send addr */
 	I2C_SendData(addr);
-	while(!I2C_CheckEvent(I2C_FLAG_TRANSFERFINISHED));
+	timeout = 0x0FFF;
+	while(!I2C_CheckEvent(I2C_FLAG_TRANSFERFINISHED))
+	{
+		if(!timeout--)
+		{
+			res = 0;
+			goto stop;
+		}
+	}
 
-	//restart i2c
+	/*resend the START condition  */
 	I2C_GenerateSTART(ENABLE);
-  	while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT));
+	timeout = 0x0FFF;
+  	while(!I2C_CheckEvent( I2C_EVENT_MASTER_MODE_SELECT))
+  	{
+  		if(!timeout--)
+  		{
+  			res = 0;
+  			goto stop;
+  		}
+  	}
+  	/* send slave addr, mode READ */
   	I2C_Send7bitAddress(PCF8563_READ_ADDR, I2C_DIRECTION_RX);
-  	// Wait on ADDR flag to be set (ADDR is still not cleared at this level 
-  	while(!I2C_CheckEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
+  	timeout = 0x0FFF;
+  	while(!I2C_CheckEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
+  	{
+  		if(!timeout)
+  		{
+  			res = 0;
+  			goto stop;
+  		}
+  		else if(I2C_GetFlagStatus(I2C_FLAG_ACKNOWLEDGEFAILURE))
+		{
+			I2C_ClearFlag(I2C_FLAG_ACKNOWLEDGEFAILURE);
+			res = 0;
+			goto stop;
+		}
+  	}
   	while(count)
   	{
-  		//while(I2C_GetFlagStatus(I2C_FLAG_ADDRESSSENTMATCHED) == RESET);
-  		while(I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET);
-  		
+  		timeout = 0x0FFF;
+  		while(--timeout && I2C_GetFlagStatus(I2C_FLAG_TRANSFERFINISHED) == RESET);
   		if(count == 0)
   		{
   			I2C_AcknowledgeConfig(I2C_ACK_NONE);
   			I2C_GenerateSTOP(ENABLE);
   		}
   		I2C_AcknowledgeConfig(I2C_ACK_CURR);
-  		 //Clear ADDR flag
   		/* Clear ADDR register by reading SR1 then SR3 register (SR1 has already been read) */
   		//I2C->SR1;        
   		//I2C->SR3;
-  		while (I2C_GetFlagStatus(I2C_FLAG_RXNOTEMPTY) == RESET);
-  		while(!I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_RECEIVED));
-  		//I2C_AcknowledgeConfig(I2C_ACK_CURR);
+  		timeout = 0x0FFF;
+  		while (--timeout && I2C_GetFlagStatus(I2C_FLAG_RXNOTEMPTY) == RESET);
+  		timeout = 0x0FFF;
+  		while(--timeout && !I2C_CheckEvent(I2C_EVENT_MASTER_BYTE_RECEIVED));
   		*data = I2C_ReceiveData();
   		data++;
   		count--;
   	}
+  	stop: I2C_GenerateSTOP(ENABLE);
+  	return res;
 }
 
 

@@ -50,7 +50,7 @@ typedef struct {
 //void I2C_Write_Byte(uint8_t data);
 
 uint8_t PCF_Write(uint8_t addr, uint8_t *data, uint8_t count);
-void PCF_Read(uint8_t addr, uint8_t *data, uint8_t count);
+uint8_t PCF_Read(uint8_t addr, uint8_t *data, uint8_t count);
 
 void PCF_Init(uint8_t mode);
 uint8_t PCF_GetAndClearFlags(void);
